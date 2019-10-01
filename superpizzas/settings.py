@@ -25,11 +25,7 @@ SECRET_KEY = '-rbu5i_pp=89l1$s6+42q0e*(0er@8ku)9q(hq8vb1re#&+5_^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-<<<<<<< HEAD
-ALLOWED_HOSTS = ['localhost']
-=======
 ALLOWED_HOSTS = ['.localhost']
->>>>>>> 0f8614208b8569ef82800369cd6f82dff814a726
 
 SHARED_APPS = (
     'django_tenants',  # mandatory
@@ -39,7 +35,7 @@ SHARED_APPS = (
     # everything below here is optional
     'django.contrib.auth',
     'django.contrib.sessions',
-    #'django.contrib.sites',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
@@ -51,7 +47,7 @@ TENANT_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
-    #'django.contrib.sites',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
@@ -107,7 +103,7 @@ WSGI_APPLICATION = 'superpizzas.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'tenant_schemas.postgresql_backend',        
+        'ENGINE': 'django_tenants.postgresql_backend',        
         'NAME': 'superpizzas',
         'USER': 'admin',
         'PASSWORD': 'admin',
@@ -121,6 +117,7 @@ DATABASE_ROUTERS = (
 )
 
 DOMAIN = '.localhost'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
