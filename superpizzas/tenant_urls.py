@@ -1,6 +1,7 @@
-from django.contrib import admin
+
 from django.urls import path
+from apps.franquicias.views import nada
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', nada, name='nada'),
 ]

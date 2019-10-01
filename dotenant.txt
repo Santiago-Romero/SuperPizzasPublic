@@ -3,3 +3,4 @@ python manage.py makemigrations
 python manage.py migrate_schemas --shared
 INSERT INTO "franquicias_franquicia" ("schema_name", "nombre","fecha_corte") VALUES ('public', 'public',CURRENT_DATE);
 INSERT INTO "franquicias_dominio" ("domain", "is_primary", "tenant_id") VALUES ('localhost', true, 1);
+http://localhost:8000

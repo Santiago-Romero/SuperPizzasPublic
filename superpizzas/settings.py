@@ -35,7 +35,7 @@ SHARED_APPS = (
     # everything below here is optional
     'django.contrib.auth',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    #'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
@@ -47,7 +47,7 @@ TENANT_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    #'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
