@@ -25,7 +25,7 @@ SECRET_KEY = '-rbu5i_pp=89l1$s6+42q0e*(0er@8ku)9q(hq8vb1re#&+5_^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'superpizzas.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',        
+        'ENGINE': 'tenant_schemas.postgresql_backend',        
         'NAME': 'superpizzas',
         'USER': 'admin',
         'PASSWORD': 'admin',
@@ -83,7 +83,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
