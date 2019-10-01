@@ -75,14 +75,14 @@ MIDDLEWARE = [
 
 ### esto para cuando tenga el archivo tenant_urls y las vistas de los tenants
 ROOT_URLCONF = 'superpizzas.tenant_urls'
-## ROOT_URLCONF = 'superpizzas.urls'
+#ROOT_URLCONF = 'superpizzas.urls'
 ### esto para cuando tenga el archivo public_urls y las vistas publicas
 PUBLIC_SCHEMA_URLCONF = 'superpizzas.public_urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
