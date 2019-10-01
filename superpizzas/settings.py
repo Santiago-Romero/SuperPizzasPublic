@@ -35,7 +35,7 @@ SHARED_APPS = (
     # everything below here is optional
     'django.contrib.auth',
     'django.contrib.sessions',
-    #'django.contrib.sites',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
@@ -48,7 +48,7 @@ TENANT_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
-    #'django.contrib.sites',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
@@ -105,7 +105,7 @@ WSGI_APPLICATION = 'superpizzas.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'tenant_schemas.postgresql_backend',        
+        'ENGINE': 'django_tenants.postgresql_backend',        
         'NAME': 'superpizzas',
         'USER': 'admin',
         'PASSWORD': 'admin',
@@ -119,6 +119,7 @@ DATABASE_ROUTERS = (
 )
 
 DOMAIN = '.localhost'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
