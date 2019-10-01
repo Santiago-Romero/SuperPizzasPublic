@@ -25,21 +25,49 @@ SECRET_KEY = '-rbu5i_pp=89l1$s6+42q0e*(0er@8ku)9q(hq8vb1re#&+5_^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['localhost']
+=======
+ALLOWED_HOSTS = ['.localhost']
+>>>>>>> 0f8614208b8569ef82800369cd6f82dff814a726
 
-
-# Application definition
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
+SHARED_APPS = (
+    'django_tenants',  # mandatory
+    'apps.franquicias', # you must list the app where your tenant model resides in
     'django.contrib.contenttypes',
+
+    # everything below here is optional
+    'django.contrib.auth',
     'django.contrib.sessions',
+    #'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.admin',
     'django.contrib.staticfiles',
-]
+    'bootstrap4',
+)
+
+TENANT_APPS = (
+    # The following Django contrib apps must be in TENANT_APPS
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'django.contrib.sessions',
+    #'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.admin',
+    'django.contrib.staticfiles',
+    'bootstrap4',
+    # your tenant-specific apps
+)
+
+INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
+
+TENANT_MODEL = "franquicias.Franquicia" # app.Model
+
+TENANT_DOMAIN_MODEL = "franquicias.Dominio"  # app.Model
+
 
 MIDDLEWARE = [
+    'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,17 +77,21 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'superpizzas.urls'
+### esto para cuando tenga el archivo tenant_urls y las vistas de los tenants
+ROOT_URLCONF = 'superpizzas.tenant_urls'
+#ROOT_URLCONF = 'superpizzas.urls'
+### esto para cuando tenga el archivo public_urls y las vistas publicas
+PUBLIC_SCHEMA_URLCONF = 'superpizzas.public_urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.debug',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -83,6 +115,12 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+DATABASE_ROUTERS = (
+    'django_tenants.routers.TenantSyncRouter',
+)
+
+DOMAIN = '.localhost'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -108,7 +146,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Bogota'
 
 USE_I18N = True
 
@@ -121,3 +159,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
+STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_collected')
