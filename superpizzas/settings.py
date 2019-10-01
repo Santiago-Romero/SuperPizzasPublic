@@ -25,11 +25,7 @@ SECRET_KEY = '-rbu5i_pp=89l1$s6+42q0e*(0er@8ku)9q(hq8vb1re#&+5_^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-<<<<<<< HEAD
-ALLOWED_HOSTS = ['localhost']
-=======
 ALLOWED_HOSTS = ['.localhost']
->>>>>>> 0f8614208b8569ef82800369cd6f82dff814a726
 
 SHARED_APPS = (
     'django_tenants',  # mandatory
@@ -44,6 +40,7 @@ SHARED_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'bootstrap4',
+    'rolepermissions',
 )
 
 TENANT_APPS = (
@@ -56,6 +53,7 @@ TENANT_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'bootstrap4',
+    'rolepermissions',
     # your tenant-specific apps
 )
 
