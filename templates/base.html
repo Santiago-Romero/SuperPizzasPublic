@@ -29,20 +29,20 @@
         <!-- partial:../../partials/_navbar.html -->
         <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-                <a class="navbar-brand brand-logo" href="{% url 'home' %}">
+                <!--<a class="navbar-brand brand-logo" href="{% url 'home' %}">
                     <img src="{% static 'images/logo.svg' %}" alt="logo"/>
                 </a>
                 <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}">
                     <img src="{% static 'images/logo-mini.svg' %}" alt="logo"/>
-                </a>
+                </a>-->
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center">
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item dropdown d-none d-xl-inline-block">
                         <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown"
                            aria-expanded="false">
-                            <span class="profile-text">Santiago Romero</span>
-                            <img class="img-xs rounded-circle" src="{% static 'images/faces/face1.jpg' %}"
+                            <span class="profile-text">{{request.tenant}}</span>
+                            <img class="img-xs rounded-circle" src="{% static 'images/faces-clipart/pic-4.png' %}"
                                  alt="Profile image">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
@@ -71,12 +71,12 @@
                         <div class="nav-link">
                             <div class="user-wrapper">
                                 <div class="profile-image">
-                                    <img src="{% static 'images/faces/face1.jpg' %}" alt="profile image">
+                                    <img src="{% static 'images/faces-clipart/pic-4.png' %}" alt="profile image">
                                 </div>
                                 <div class="text-wrapper">
-                                    <p class="profile-name">Richard V.Welsh</p>
+                                    <p class="profile-name">{{request.tenant.nombre}}</p>
                                     <div>
-                                        <small class="designation text-muted">Manager</small>
+                                        <small class="designation text-muted">{{request.tenant.tipo}}</small>
                                         <span class="status-indicator online"></span>
                                     </div>
                                 </div>
