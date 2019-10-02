@@ -8,7 +8,7 @@ class TipoFranquicia(models.Model):
         return self.nombre
 
 class Franquicia(TenantMixin):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=50)
     fecha_corte =  models.DateField(auto_now_add=True)
     tipo = models.ForeignKey(TipoFranquicia,default=None, on_delete=models.CASCADE)
     auto_create_schema = True
