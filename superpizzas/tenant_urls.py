@@ -1,7 +1,8 @@
 
-from django.urls import path
-from apps.franquicias.views import nada
+from django.urls import path, include
+from apps.franquicias.views import home
 
 urlpatterns = [
-    path('', nada, name='nada'),
+    path('', home, name='home'),
+    path('productos/', include('apps.productos.urls', namespace='productos')),
 ]

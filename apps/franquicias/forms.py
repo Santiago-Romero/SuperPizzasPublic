@@ -11,7 +11,7 @@ class FranquiciaForm(forms.ModelForm):
 
     class Meta:
         model = Franquicia
-        fields = ('nombre', 'schema_name')
+        fields = ('nombre', 'schema_name','tipo')
 
     def clean_schema_name(self):
         direccion_tenant = self.cleaned_data["schema_name"]
@@ -24,4 +24,4 @@ class FranquiciaForm(forms.ModelForm):
 class ModificarFranquiciaForm(forms.ModelForm):
     class Meta:
         model = Franquicia
-        fields = ('nombre', )
+        fields = ('nombre', 'tipo')

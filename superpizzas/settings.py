@@ -54,6 +54,7 @@ TENANT_APPS = (
     'django.contrib.staticfiles',
     'bootstrap4',
     'rolepermissions',
+    'apps.productos',
     # your tenant-specific apps
 )
 
