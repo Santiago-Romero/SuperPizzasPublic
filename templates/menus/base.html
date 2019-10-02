@@ -1,7 +1,8 @@
 <li class="nav-item">
-    <!--{% if request.tenant.schema_name == 'public' %}-->
+    {% if request.tenant.schema_name == 'public' %}
         {% include 'menus/apps/franquicias.html' %}
-    <!--{% else %}-->
+    {% else %}
         {% include 'menus/apps/productos.html' %}
-    <!--{% endif %}-->
+        {% include 'menus/apps/usuarios.html' %}
+    {% endif %}
 </li>
