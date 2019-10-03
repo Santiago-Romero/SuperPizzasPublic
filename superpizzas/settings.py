@@ -58,6 +58,7 @@ TENANT_APPS = (
     'rolepermissions',
     'apps.productos',
     'apps.usuarios',
+    'apps.ingredientes',
     # your tenant-specific apps
 )
 

@@ -2,7 +2,7 @@
 {% load bootstrap4 %}
 
 {% block page_title %}
-    Registro de pizzas
+    Registro de ingredientes
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Registrar pizzas</h4>
+                    <h4 class="card-title">Registrar ingrediente</h4>
                     <hr>
                     <form method="POST">{% csrf_token %}
                         {% bootstrap_form form %}
@@ -22,26 +22,22 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Listado de pizzas </h4>
+                    <h4 class="card-title">Listado de ingredientes </h4>
                     <hr>
                     <div class="table-responsive">
                         <table class="table table-bordered data-combine">
                             <thead>
                                 <tr>
-                                    <th>Producto</th>
-                                    <th>Ingredientes</th>
+                                    <th>Ingrediente</th>
                                     <th>Valor</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for producto in productos %}
+                                {% for ingrediente in ingredientes %}
                                     <tr>
-                                        <td>{{ producto }}</td>
-                                        <td>{% for ingrediente in producto.ingrediente.all %}
-                                        <p>{{ingrediente.nombre}}</p>
-                                        {% endfor %}</td>
-                                        <td>{{ producto.valor }}</td>
+                                        <td>{{ ingrediente }}</td>
+                                        <td>{{ ingrediente.valor }}</td>
                                         <td>
                                             <div class="dropdown">
                                                 <button class="btn btn-primary dropdown-toggle" type="button"
@@ -50,8 +46,8 @@
                                                     Opciones
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="{% url 'productos:modificar' producto.id %}">Modificar</a>
-                                                    <a class="dropdown-item" href="{% url 'productos:eliminar' producto.id %}">Eliminar</a>
+                                                    <a class="dropdown-item" href="{% url 'ingredientes:modificar' ingrediente.id %}">Modificar</a>
+                                                    <a class="dropdown-item" href="{% url 'ingredientes:eliminar' ingrediente.id %}">Eliminar</a>
                                                 </div>
                                             </div>
                                         </td>
