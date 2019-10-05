@@ -1,5 +1,9 @@
-tener además django-tenants y django-role-permissions
-hacer
+- Tener
+django-tenants
+psycopg2
+django-bootstrap4
+django-role-permissions
+- Hacer
 python manage.py makemigrations
 python manage.py migrate_schemas --shared
 INSERT INTO "franquicias_tipofranquicia" ("nombre") VALUES ('basico');
