@@ -9,7 +9,10 @@ def home(request):
     return render(request, 'base.html', {})
 
 def nada(request):
-    return HttpResponse("No hay nada aqui desde franquicias, (cambiar a otra app para cada tenant)")
+    return HttpResponse("<h2>Aqui iría la págia principal donde se venden franquicias, por ahora ir a <a href='http://localhost:8000/admin/'>http://localhost:8000/admin/</a> para gestionar franquicias</h2>")
+
+def nada_tenant(request):
+    return HttpResponse("<h2>Aqui iría la págia principal donde se venden las pizzas de cada tenant, por ahora ir a <a href='http://localhost:8000/admin/'>http://[nombre_tenant].localhost:8000/admin/</a> para gestionar la franquicia</h2>")
 
 
 def registrar_franquicia(request):
