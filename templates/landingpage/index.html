@@ -1,0 +1,371 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- * 
+ * Author: Stephany
+-->
+<html lang="en">
+    
+    <head>
+        <meta charset=utf-8>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Superpizzas</title>
+        <!-- Load Roboto font -->
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <!-- Load css styles -->
+        <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/bootstrap.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/bootstrap-responsive.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/style.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/pluton.css' %}" />
+        <!--[if IE 7]>
+            <link rel="stylesheet" type="text/css" href="css/pluton-ie7.css" />
+        <![endif]-->
+        <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/jquery.cslider.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/jquery.bxslider.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/animate.css' %}" />
+        <!-- Fav and touch icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/apple-touch-icon-72.png">
+        <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57.png">
+        <link rel="shortcut icon" href="images/ico/favicon.ico">
+    </head>
+    
+    <body>
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a href="#" class="brand">
+                        <img src="{% static 'landingpage/images/logo3.png' %}" width="80" height="130" alt="Logo" />
+                        <!-- This is website logo -->
+                    </a>
+                    <!-- Navigation button, visible on small resolution -->
+                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <i class="icon-menu"></i>
+                    </button>
+                    <!-- Main navigation -->
+                    <div class="nav-collapse collapse pull-right">
+                        <ul class="nav" id="top-navigation">
+                            <li class="active"><a href="#home">Inicio</a></li>
+                            <li><a href="#service">Servicios</a></li>    
+                            <li><a href="#price">Planes</a></li>                      
+                            <li><a href="#clients">Clientes</a></li>                            
+                            <li><a href="#contact">Contacto</a></li>
+                        </ul>
+                    </div>
+                    <!-- End main navigation -->
+                </div>
+            </div>
+        </div>
+        <!-- Start home section -->
+        <div id="home">
+            <!-- Start cSlider -->
+            <div id="da-slider" class="da-slider">
+                <div class="triangle"></div>
+                <!-- mask elemet use for masking background image -->
+                <div class="mask"></div>
+                <!-- All slides centred in container element -->
+                <div class="container">
+                    <!-- Start first slide -->
+                    <div class="da-slide">
+                        <h2>Sé dueño de tu Franquicia</h2>
+                        <h4>Fácil y Rentable</h4>
+                        <p>Cuenta con un sistema de pedidos de pizza en línea que permitirá que obtengas una mayor cantidad de pedidos y por ende mayor ganancias. Además de que te permite administrar y gestionar tu negocio y los clientes.</p>
+                        <div class="da-img">
+                            <img src="{% static 'landingpage/images/Slider01.png' %}" width="320" alt="image01">
+                        </div>
+                    </div>
+                    <!-- End First slide -->
+                    <!-- Start Second slide -->
+
+                    <div class="da-slide">
+                        <h2 class="fittext2">Crea tus propias pizzas personalizadas</h2>
+                        <h4>Pizzas únicas</h4>
+                        <p> Somos reconocidos por el exquisito sabor de nuestras pizzas, salsas y la elaboración de una gran variedad de pizzas de diferentes sabores, como son: la de pepperoni, doble queso y hawaiana; además de que tenemos la opción de agregar pizzas totalmente personalizadas. </p>
+                        <div class="da-img">
+                            <img src="{% static 'landingpage/images/Slider02.png' %}" alt="image02" width="320">
+                        </div>
+                    </div>
+
+                    <!-- End Second slide -->
+                    <!-- Start Third slide -->                  
+                    <div class="da-slide">
+                        <h2>Pedidos online</h2>
+                        <h4>Customizable</h4>
+                        <p>Tus clientes podrán realizar las compras de manera rápida y sencilla de manera online.</p>
+                        <div class="da-img">
+                            <img src="{% static 'landingpage/images/Slider03.png' %}" width="320" alt="image03">
+                        </div>
+                    </div>
+                    <!-- Start third slide -->
+                    <!-- Start cSlide navigation arrows -->
+                    <div class="da-arrows">
+                        <span class="da-arrows-prev"></span>
+                        <span class="da-arrows-next"></span>
+                    </div>
+                    <!-- End cSlide navigation arrows -->
+                </div>
+            </div>
+        </div>
+        <!-- End home section -->      
+
+
+        <!-- Service section start -->
+        <div class="section primary-section" id="service">
+            <div class="container">
+                <!-- Start title section -->
+                <div class="title">
+                    <h1>Que servicios ofrecemos?</h1>
+                    <!-- Section's title goes here -->
+                    <p>Franquicias de servicio online y administración de pizzas.</p>
+                    <!--Simple description for section goes here. -->
+                </div>
+                <div class="row-fluid">
+                    <div class="span4">
+                        <div class="centered service">
+                            <div class="circle-border zoom-in">
+                                <img class="img-circle" src="{% static 'landingpage/images/Service1.png' %}" alt="service 1">
+                            </div>
+                            <h3>Administración de pizzas y precios.</h3>
+                            <p>De una manera fácil y sencilla podrás administrar tu negocio.</p>
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <div class="centered service">
+                            <div class="circle-border zoom-in">
+                                <img class="img-circle" src="{% static 'landingpage/images/Service2.png' %}" alt="service 2" />
+                            </div>
+                            <h3>Gráficos estadísticos.</h3>
+                            <p>Gráficos que permiten conocer y tomar decisiones respecto al manejo de su negocio.</p>
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <div class="centered service">
+                            <div class="circle-border zoom-in">
+                                <img class="img-circle" src="{% static 'landingpage/images/Service3.png' %}" alt="service 3">
+                            </div>
+                            <h3>Administración de clientes.</h3>
+                            <p>Administrar el manejo y control de clientes. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Service section end -->                                  
+       
+        <!-- Price section start -->
+        <div id="price" class="section secondary-section">
+            <div class="container">
+                <div class="title">
+                    <h1>Nuestros planes</h1>
+                    <p>Superpizzas ofrece dos opciones de planes que se pueden elegir según las necesidades.</p>
+                </div>
+                <div class="price-table row-fluid">
+                    <div class="span4 price-column">
+                        <h3>Basico</h3>
+                        <ul class="list">
+                            <li class="price">$19,99</li>
+                            <li><strong>Ilimitado</strong> ingredientes</li>
+                            <li><strong>24/7</strong> Soporte</li>
+                            <li><strong>Ilimitada</strong> Creación de pizzas</li>
+                            <li><strong>Ilimitada</strong> Registro de clientes</li>
+                            <li><strong>Ilimitadas</strong> Compras online </li>
+                        </ul>
+                        <a href="#" class="button button-ps">COMPRAR</a>
+                    </div>                   
+                    <div class="span4 price-column">
+                        <h3>Premium</h3>
+                        <ul class="list">
+                            <li class="price">$79,99</li>
+                            <li><strong>Ilimitado</strong> ingredientes</li>
+                            <li><strong>24/7</strong> Soporte</li>
+                            <li><strong>Ilimitada</strong> Creación de pizzas</li>
+                            <li><strong>Ilimitada</strong> Registro de clientes</li>
+                            <li><strong>Ilimitadas</strong> Compras online </li>
+                            <li><strong>Ilimitados</strong> Gráficos estadísticos </li>
+
+                        </ul>
+                        <a href="#" class="button button-ps">COMPRAR</a>
+                    </div>
+                </div>                
+            </div>
+        </div>
+        <!-- Price section end -->
+
+        <!-- Client section start -->
+        <!-- Client section start -->
+        <div id="clients">
+            <div class="section primary-section">
+                <div class="triangle"></div>
+                <div class="container">
+                    <div class="title">
+                        <h1>Nuestros clientes</h1>
+                        <p>Clientes que están recibiendo el mejor servicio de franquicias de pizzas.</p>
+                    </div>
+                    <div class="row">                   
+                                        
+                </div>
+            </div>
+        </div>
+        <div class="section third-section">
+            <div class="container centered">
+                <div class="sub-section">
+                    <div class="title clearfix">
+                        <div class="pull-left">
+                            <h3>clientes actuales</h3>
+                        </div>
+                        <ul class="client-nav pull-right">
+                            <li id="client-prev"></li>
+                            <li id="client-next"></li>
+                        </ul>
+                    </div>
+                    <ul class="row client-slider" id="clint-slider">
+                        <li>
+                            <a href="">
+                                <img src="{% static 'landingpage/images/clients/ClientLogo01.png' %}" alt="client logo 1">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img src="{% static 'landingpage/images/clients/ClientLogo02.png' %}" alt="client logo 2">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img src="{% static 'landingpage/images/clients/ClientLogo03.png' %}" alt="client logo 3">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img src="{% static 'landingpage/images/clients/ClientLogo04.png' %}" alt="client logo 4">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img src="{% static 'landingpage/images/clients/ClientLogo05.png' %}" alt="client logo 5">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img src="{% static 'landingpage/images/clients/ClientLogo02.png' %}" alt="client logo 6">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img src="{% static 'landingpage/images/clients/ClientLogo04.png' %}" alt="client logo 7">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>       
+        <!-- Contact section start -->
+        <div id="contact" class="contact">
+            <div class="section secondary-section">
+                <div class="container">
+                    <div class="title">
+                        <h1>Contáctenos</h1>
+                        <p>Contacta con nosotros a través de nuestras plataformas digitales.</p>
+                    </div>
+                </div>
+                <div class="map-wrapper">
+                    <div class="map-canvas" id="map-canvas">Loading map...</div>
+                    <div class="container">
+                        <div class="row-fluid">
+                            <div class="span5 contact-form centered">
+                                <h3>Comunicate con nosotros. </h3>
+                                <div id="successSend" class="alert alert-success invisible">
+                                    <strong>Well done!</strong>Your message has been sent.</div>
+                                <div id="errorSend" class="alert alert-error invisible">There was an error.</div>
+                                <form id="contact-form" action="php/mail.php">
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <input class="span12" type="text" id="name" name="name" placeholder="* Nombre..." />
+                                            <div class="error left-align" id="err-name">Por favor introduce tu nombre.</div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <input class="span12" type="email" name="email" id="email" placeholder="* Correo electrónico..." />
+                                            <div class="error left-align" id="err-email">Por favor introduce un correo válido.</div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <textarea class="span12" name="comment" id="comment" placeholder="* dudas o comentarios..."></textarea>
+                                            <div class="error left-align" id="err-comment">Por favor introduce tus dudas o comentarios.</div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <button id="send-mail" class="message-btn">Enviar mensaje</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="span9 center contact-info">
+                        <p>Cl. 13 #100-00, Cali, Valle del Cauca</p>
+                        <p class="info-mail">superpizzas@gmail.com</p>
+                        <p>+11 234 567 890</p>
+                        <p>+11 286 543 850</p>
+                        <div class="title">
+                            <h3>Nuestras redes</h3>
+                        </div>
+                    </div>
+                    <div class="row-fluid centered">
+                        <ul class="social">
+                            <li>
+                                <a href="">
+                                    <span class="icon-facebook-circled"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <span class="icon-twitter-circled"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <span class="icon-linkedin-circled"></span>
+                                </a>
+                            </li>                           
+                           
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Contact section edn -->
+        <!-- Footer section start -->
+        <div class="footer">
+            <p>&copy; 2019 Superpizzas S.A</p>
+        </div>
+        <!-- Footer section end -->
+        <!-- ScrollUp button start -->
+        <div class="scrollup">
+            <a href="#">
+                <i class="icon-up-open"></i>
+            </a>
+        </div>
+        <!-- ScrollUp button end -->
+        <!-- Include javascript -->
+        <script src="{% static 'landingpage/js/jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'landingpage/js/jquery.mixitup.js' %}"></script>
+        <script type="text/javascript" src="{% static 'landingpage/js/bootstrap.js' %}"></script>
+        <script type="text/javascript" src="{% static 'landingpage/js/modernizr.custom.js' %}"></script>
+        <script type="text/javascript" src="{% static 'landingpage/js/jquery.bxslider.js' %}"></script>
+        <script type="text/javascript" src="{% static 'landingpage/js/jquery.cslider.js' %}"></script>
+        <script type="text/javascript" src="{% static 'landingpage/js/jquery.placeholder.js' %}"></script>
+        <script type="text/javascript" src="{% static 'landingpage/js/jquery.inview.js' %}"></script>
+        <!-- Load google maps api and call initializeMap function defined in app.js -->
+        <script async="" defer="" type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&callback=initializeMap"></script>
+        <!-- css3-mediaqueries.js for IE8 or older -->
+        <!--[if lt IE 9]>
+            <script src="js/respond.min.js"></script>
+        <![endif]-->
+        <script type="text/javascript" src="{% static 'landingpage/js/app.js' %}"></script>
+    </body>
+</html>
