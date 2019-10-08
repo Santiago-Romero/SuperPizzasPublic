@@ -6,8 +6,8 @@ django-role-permissions
 - Hacer
 python manage.py makemigrations
 python manage.py migrate_schemas --shared
-INSERT INTO "franquicias_tipofranquicia" ("nombre") VALUES ('basico');
-INSERT INTO "franquicias_tipofranquicia" ("nombre") VALUES ('premium');
+INSERT INTO "franquicias_tipofranquicia" ("nombre","precio") VALUES ('basico',79);
+INSERT INTO "franquicias_tipofranquicia" ("nombre","precio") VALUES ('premium',135);
 INSERT INTO "franquicias_franquicia" ("schema_name", "nombre","fecha_corte","tipo_id") VALUES ('public', 'public',CURRENT_DATE,1);
 INSERT INTO "franquicias_dominio" ("domain", "is_primary", "tenant_id") VALUES ('localhost', true, 1);
 http://localhost:8000

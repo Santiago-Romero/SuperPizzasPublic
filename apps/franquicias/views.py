@@ -8,8 +8,11 @@ from django.http import HttpResponse
 def home(request):
     return render(request, 'base.html', {})
 
-def nada(request):
-    return HttpResponse("<h2>Aqui iría la págia principal donde se venden franquicias, por ahora ir a <a href='http://localhost:8000/admin/'>http://localhost:8000/admin/</a> para gestionar franquicias</h2>")
+def inicio_franquicia(request):
+    return render(request, 'landingpage/index.html', {})
+
+def compra_franquicia(request):
+    return render(request, 'landingpage/compra.html', {})
 
 def nada_tenant(request):
     print(request.tenant)

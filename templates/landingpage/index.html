@@ -1,0 +1,208 @@
+{% extends 'landingpage/base.html' %}
+{% load static %}
+
+{% block inicio %}
+ <!-- Start home section -->
+ <div id="home">
+    <!-- Start cSlider -->
+    <div id="da-slider" class="da-slider">
+        <div class="triangle"></div>
+        <!-- mask elemet use for masking background image -->
+        <div class="mask"></div>
+        <!-- All slides centred in container element -->
+        <div class="container">
+            <!-- Start first slide -->
+            <div class="da-slide">
+                <h2>Sé dueño de tu Franquicia</h2>
+                <h4>Fácil y Rentable</h4>
+                <p>Cuenta con un sistema de pedidos de pizza en línea que permitirá que obtengas una mayor cantidad de pedidos y por ende mayor ganancias. Además de que te permite administrar y gestionar tu negocio y los clientes.</p>
+                <div class="da-img">
+                    <img src="{% static 'landingpage/images/Slider01.png' %}" width="320" alt="image01">
+                </div>
+            </div>
+            <!-- End First slide -->
+            <!-- Start Second slide -->
+
+            <div class="da-slide">
+                <h2 class="fittext2">Crea tus propias pizzas personalizadas</h2>
+                <h4>Pizzas únicas</h4>
+                <p> Somos reconocidos por el exquisito sabor de nuestras pizzas, salsas y la elaboración de una gran variedad de pizzas de diferentes sabores, como son: la de pepperoni, doble queso y hawaiana; además de que tenemos la opción de agregar pizzas totalmente personalizadas. </p>
+                <div class="da-img">
+                    <img src="{% static 'landingpage/images/Slider02.png' %}" alt="image02" width="320">
+                </div>
+            </div>
+
+            <!-- End Second slide -->
+            <!-- Start Third slide -->                  
+            <div class="da-slide">
+                <h2>Pedidos online</h2>
+                <h4>Customizable</h4>
+                <p>Tus clientes podrán realizar las compras de manera rápida y sencilla de manera online.</p>
+                <div class="da-img">
+                    <img src="{% static 'landingpage/images/Slider03.png' %}" width="320" alt="image03">
+                </div>
+            </div>
+            <!-- Start third slide -->
+            <!-- Start cSlide navigation arrows -->
+            <div class="da-arrows">
+                <span class="da-arrows-prev"></span>
+                <span class="da-arrows-next"></span>
+            </div>
+            <!-- End cSlide navigation arrows -->
+        </div>
+    </div>
+</div>
+<!-- End home section -->      
+
+
+<!-- Service section start -->
+<div class="section primary-section" id="service">
+    <div class="container">
+        <!-- Start title section -->
+        <div class="title">
+            <h1>Que servicios ofrecemos?</h1>
+            <!-- Section's title goes here -->
+            <p>Franquicias de servicio online y administración de pizzas.</p>
+            <!--Simple description for section goes here. -->
+        </div>
+        <div class="row-fluid">
+            <div class="span4">
+                <div class="centered service">
+                    <div class="circle-border zoom-in">
+                        <img class="img-circle" src="{% static 'landingpage/images/Service1.png' %}" alt="service 1">
+                    </div>
+                    <h3>Administración de pizzas y precios.</h3>
+                    <p>De una manera fácil y sencilla podrás administrar tu negocio.</p>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="centered service">
+                    <div class="circle-border zoom-in">
+                        <img class="img-circle" src="{% static 'landingpage/images/Service2.png' %}" alt="service 2" />
+                    </div>
+                    <h3>Gráficos estadísticos.</h3>
+                    <p>Gráficos que permiten conocer y tomar decisiones respecto al manejo de su negocio.</p>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="centered service">
+                    <div class="circle-border zoom-in">
+                        <img class="img-circle" src="{% static 'landingpage/images/Service3.png' %}" alt="service 3">
+                    </div>
+                    <h3>Administración de clientes.</h3>
+                    <p>Administrar el manejo y control de clientes. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Service section end -->                                  
+
+<!-- Price section start -->
+<div id="price" class="section secondary-section">
+    <div class="container">
+        <div class="title">
+            <h1>Nuestros planes</h1>
+            <p>Superpizzas ofrece dos opciones de planes que se pueden elegir según las necesidades.</p>
+        </div>
+        <div class="price-table row-fluid">
+            <div class="span4 price-column">
+                <h3>Basico</h3>
+                <ul class="list">
+                    <li class="price">$19,99</li>
+                    <li><strong>Ilimitado</strong> ingredientes</li>
+                    <li><strong>24/7</strong> Soporte</li>
+                    <li><strong>Ilimitada</strong> Creación de pizzas</li>
+                    <li><strong>Ilimitada</strong> Registro de clientes</li>
+                    <li><strong>Ilimitadas</strong> Compras online </li>
+                </ul>
+                <a href="{% url 'compra' %}" class="button button-ps">COMPRAR</a>
+            </div>                   
+            <div class="span4 price-column">
+                <h3>Premium</h3>
+                <ul class="list">
+                    <li class="price">$79,99</li>
+                    <li><strong>Ilimitado</strong> ingredientes</li>
+                    <li><strong>24/7</strong> Soporte</li>
+                    <li><strong>Ilimitada</strong> Creación de pizzas</li>
+                    <li><strong>Ilimitada</strong> Registro de clientes</li>
+                    <li><strong>Ilimitadas</strong> Compras online </li>
+                    <li><strong>Ilimitados</strong> Gráficos estadísticos </li>
+
+                </ul>
+                <a  href="{% url 'compra' %}" class="button button-ps">COMPRAR</a>
+            </div>
+        </div>                
+    </div>
+</div>
+<!-- Price section end -->
+
+<!-- Client section start -->
+<!-- Client section start -->
+<div id="clients">
+    <div class="section primary-section">
+        <div class="triangle"></div>
+        <div class="container">
+            <div class="title">
+                <h1>Nuestros clientes</h1>
+                <p>Clientes que están recibiendo el mejor servicio de franquicias de pizzas.</p>
+            </div>
+            <div class="row">                   
+                                
+        </div>
+    </div>
+</div>
+<div class="section third-section">
+    <div class="container centered">
+        <div class="sub-section">
+            <div class="title clearfix">
+                <div class="pull-left">
+                    <h3>clientes actuales</h3>
+                </div>
+                <ul class="client-nav pull-right">
+                    <li id="client-prev"></li>
+                    <li id="client-next"></li>
+                </ul>
+            </div>
+            <ul class="row client-slider" id="clint-slider">
+                <li>
+                    <a href="">
+                        <img src="{% static 'landingpage/images/clients/ClientLogo01.png' %}" alt="client logo 1">
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <img src="{% static 'landingpage/images/clients/ClientLogo02.png' %}" alt="client logo 2">
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <img src="{% static 'landingpage/images/clients/ClientLogo03.png' %}" alt="client logo 3">
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <img src="{% static 'landingpage/images/clients/ClientLogo04.png' %}" alt="client logo 4">
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <img src="{% static 'landingpage/images/clients/ClientLogo05.png' %}" alt="client logo 5">
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <img src="{% static 'landingpage/images/clients/ClientLogo02.png' %}" alt="client logo 6">
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <img src="{% static 'landingpage/images/clients/ClientLogo04.png' %}" alt="client logo 7">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div> 
+
+{% endblock %}
