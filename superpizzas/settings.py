@@ -35,8 +35,8 @@ SHARED_APPS = (
     # everything below here is optional
     'django.contrib.auth',
     'django.contrib.sessions',
-    # este sites se tira el superadmin no se porque
-    #'django.contrib.sites',
+    # este sites se tiraba el superadmin no se porque
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
@@ -49,14 +49,14 @@ TENANT_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
-    # este sites se tira el superadmin no se porque
-    #'django.contrib.sites',
+    # este sites se tiraba el superadmin no se porque
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'bootstrap4',
     'rolepermissions',
-    'apps.productos',
+    'apps.pizzas',
     'apps.usuarios',
     'apps.ingredientes',
     # your tenant-specific apps

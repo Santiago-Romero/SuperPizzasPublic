@@ -1,6 +1,6 @@
 from django.db import models
 
-class Producto(models.Model):
+class Pizza(models.Model):
     nombre = models.CharField(max_length=50)
     ingrediente = models.ManyToManyField('ingredientes.Ingrediente')
     valor = models.BigIntegerField()

@@ -3,10 +3,10 @@ from .models import *
 from apps.ingredientes.models import Ingrediente
 
 
-class ProductoForm(forms.ModelForm):
+class PizzaForm(forms.ModelForm):
     ingrediente = forms.ModelMultipleChoiceField(queryset=Ingrediente.objects.all(),
             widget=forms.CheckboxSelectMultiple,
             required=True)
     class Meta:
-        model = Producto
+        model = Pizza
         fields = ('nombre','ingrediente','valor')
