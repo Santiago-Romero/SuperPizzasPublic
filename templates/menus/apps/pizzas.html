@@ -1,0 +1,8 @@
+{% url 'pizzas:registrar' as registrar %}
+<li class="nav-item {% if registrar in request.path %}active{% endif %}">
+    <a class="nav-link" href="{{ registrar }}">
+        <i class="menu-icon mdi mdi-pizza"></i>
+        <span class="menu-title">Pizzas</span>
+    </a>
+</li>
+
