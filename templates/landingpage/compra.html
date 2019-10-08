@@ -20,8 +20,7 @@
         <div class="container">
             <h2>Registro compra de Franquicia</h2>
             <form method="POST" id="signup-form" class="signup-form">
-
-
+                    {% csrf_token %}
                      <!----------- Start First step------------>
                     
                      <h3>
@@ -48,7 +47,7 @@
                            <div class="form-select">
                                         <label for="type" class="form-label">Tipo plan</label>
                                         <div class="select-list">
-                                            <select name="country" id="country">
+                                            <select name="plan" id="plan">
                                                 <option value="">Básico</option>
                                                 <option value="Australia">Básico</option>
                                                 <option value="USA">Premium</option>
