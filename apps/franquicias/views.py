@@ -13,7 +13,6 @@ def inicio_franquicia(request):
 
 def compra_franquicia(request,tipo):
     tipoir=TipoFranquicia.objects.get(nombre=tipo)
-    print(tipoir.precio)
     return render(request, 'landingpage/compra.html', {'tipo': tipoir})
 
 def nada_tenant(request):
