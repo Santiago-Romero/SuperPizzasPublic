@@ -11,8 +11,10 @@ def home(request):
 def inicio_franquicia(request):
     return render(request, 'landingpage/index.html', {})
 
-def compra_franquicia(request):
-    return render(request, 'landingpage/compra.html', {})
+def compra_franquicia(request,tipo):
+    tipoir=TipoFranquicia.objects.get(nombre=tipo)
+    print(tipoir.precio)
+    return render(request, 'landingpage/compra.html', {'tipo': tipoir})
 
 def nada_tenant(request):
     print(request.tenant)
