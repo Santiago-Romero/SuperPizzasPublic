@@ -11,10 +11,3 @@ INSERT INTO "franquicias_tipofranquicia" ("nombre","precio") VALUES ('premium',1
 INSERT INTO "franquicias_franquicia" ("schema_name", "nombre","fecha_corte","tipo_id") VALUES ('public', 'public',CURRENT_DATE,1);
 INSERT INTO "franquicias_dominio" ("domain", "is_primary", "tenant_id") VALUES ('localhost', true, 1);
 http://localhost:8000
-
-De aqui para abajo solo es prueba no es necesario_____________________________
-cuando se cree una franquicia se creen los roles:
-esto deberia hacerse automatico cuando se crea franquicia
-INSERT INTO [nombre franquicia].usuarios_roles ("nombre") VALUES ('digitador');
-INSERT INTO [nombre franquicia].usuarios_roles ("nombre") VALUES ('vendedor');
-_______________________________________________________________________________
