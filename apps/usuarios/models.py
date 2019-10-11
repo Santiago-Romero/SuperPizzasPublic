@@ -1,11 +1,6 @@
 from django.db import models
 import datetime
 
-class Roles(models.Model):
-    nombre=models.CharField(max_length=100)
-    def __str__(self):
-        return self.nombre
-
 class Usuario(models.Model):
     Roles = (('d', 'Digitador'), ('v', 'Vendedor'), ('a', 'Admin'))     
     nombre=models.CharField(max_length=50)

@@ -4,6 +4,8 @@ from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.http import HttpResponse
+from apps.usuarios.forms import UsuarioForm
+from django_tenants.utils import schema_context
 
 def home(request):
     return render(request, 'base.html', {})
@@ -12,8 +14,33 @@ def inicio_franquicia(request):
     return render(request, 'landingpage/index.html', {})
 
 def compra_franquicia(request,tipo):
+    dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
     tipoir=TipoFranquicia.objects.get(nombre=tipo)
-    return render(request, 'landingpage/compra.html', {'tipo': tipoir})
+    form = FranquiciaForm(request.POST,prefix="form1")
+    formUser = UsuarioForm(request.POST,prefix="form2")
+    if request.method == 'POST':
+        if form.is_valid() or formUser.is_valid():
+            try:
+                with transaction.atomic():
+                    franquicia = form.save()
+                    Dominio.objects.create(domain='%s%s' % (franquicia.schema_name, settings.DOMAIN), is_primary=True, tenant=franquicia)
+                    messages.success(request, "Se ha registrado correctamente la franquicia")
+                    with schema_context(franquicia.schema_name):
+                        usuario=formUser.save() 
+            except Exception:
+                messages.error(request, 'Ha ocurrido un error durante la creación de la franquicia, se aborto la operación')
+            return redirect('/compra/{}'.format(tipoir))
+        else:
+            messages.error(request, "Por favor verificar los campos en rojo")
+    else:
+        form = FranquiciaForm(prefix="form1")
+        formUser = UsuarioForm(prefix="form2")
+    context = {
+    'form1': form,
+    'form2': formUser,
+    'dominios': dominios,
+    'tipo': tipoir}
+    return render(request, 'landingpage/compra.html', context)
 
 def nada_tenant(request):
     print(request.tenant)
