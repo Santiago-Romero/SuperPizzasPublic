@@ -1,14 +1,17 @@
 {% load static %}
+{% block doc %}
 <!DOCTYPE html>
-
-<html lang="en">
-    {% block head %}
+<html lang="en">    
     <head>
         <meta charset=utf-8>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% endblock %}
+
         {% block title %}
         <title>Superpizzas</title>
         {% endblock %}
+
+        {% block css %}
         <!-- Load Roboto font -->
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <!-- Load css styles -->
@@ -22,10 +25,9 @@
         <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/jquery.cslider.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/jquery.bxslider.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/animate.css' %}" />
-    {% block css %}
-    {% endblock %}
+        {% endblock %}
     </head>
-    {% endblock %}
+   
     
     <body>
         <div class="navbar">
@@ -158,6 +160,7 @@
         </div>
         <!-- ScrollUp button end -->
         <!-- Include javascript -->
+        {% block js %}
         <script src="{% static 'landingpage/js/jquery.js' %}"></script>
         <script type="text/javascript" src="{% static 'landingpage/js/jquery.mixitup.js' %}"></script>
         <script type="text/javascript" src="{% static 'landingpage/js/bootstrap.js' %}"></script>
@@ -166,7 +169,6 @@
         <script type="text/javascript" src="{% static 'landingpage/js/jquery.cslider.js' %}"></script>
         <script type="text/javascript" src="{% static 'landingpage/js/jquery.placeholder.js' %}"></script>
         <script type="text/javascript" src="{% static 'landingpage/js/jquery.inview.js' %}"></script>
-        {% block js %}
         {% endblock %}
         
         <!-- Load google maps api and call initializeMap function defined in app.js -->

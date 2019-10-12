@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{% static 'pago/css/style.css' %}">
 </head>
 <body>
-
+    {% include 'landingpage/nav.html' %}
     <div class="main">
         <div class="container">
             <h2>Registro compra de Franquicia</h2>
@@ -232,6 +232,7 @@
     <script src="{% static 'pago/vendor/jquery-steps/jquery.steps.min.js' %}"></script>
     <script src="{% static 'pago/vendor/minimalist-picker/dobpicker.js' %}"></script>
     <script src="{% static 'pago/js/main.js' %}"></script>
-  
+    <script type="text/javascript" src="{% static 'landingpage/js/app.js' %}"></script>
+    {% include 'landingpage/footer.html' %}
 </body>
 </html>
