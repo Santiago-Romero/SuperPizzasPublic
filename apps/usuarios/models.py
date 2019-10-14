@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from django.utils import timezone
 
 class Usuario(models.Model):
     Roles = (('d', 'Digitador'), ('v', 'Vendedor'), ('a', 'Admin'))     
@@ -12,7 +13,7 @@ class Usuario(models.Model):
     nickname=models.CharField(max_length=12)
     password=models.CharField(max_length=12)
     nombre_banco=models.CharField(max_length=50,default="bancolombia")
-    fecha_vencimiento=models.DateField(auto_now=True)
+    fecha_vencimiento=models.DateField(default=timezone.now)
     tipo_tarjeta=models.CharField(max_length=50,default="master card")
     numero_tarjeta=models.IntegerField(default=1546543214)
     cvv=models.IntegerField(default=4562)
