@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path,include
-from apps.franquicias.views import home, inicio_franquicia,compra_franquicia
+from apps.franquicias.views import *
 
 
 urlpatterns = [
