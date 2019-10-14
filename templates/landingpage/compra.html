@@ -22,7 +22,7 @@
             <form method="POST" id="signup-form" class="signup-form">
                     {% csrf_token %}               
 
-                     <!----------- Start First step------------>
+                     <!-- Start First step -->
                     
                      <h3>
                             <span class="icon"><i class="ti-home"></i></span>
@@ -34,7 +34,6 @@
                                 <span class="step-heading">Información de Franquicia: </span>
                                 <span class="step-number">Paso 1 / 4</span>
                             </legend>
-    
                             <div class="form-group">
                                 <label for="{{form1.nombre.name}}" class="form-label required">{{form1.nombre.label}}</label>
                                 {{form1.nombre}}
@@ -49,21 +48,20 @@
                                         <label for="{{form1.tipo.name}}" class="form-label required" class="form-label">Tipo Plan</label>
                                         {{form1.tipo}}
                                     </div>
-    
-                         <!--- <div class="form-group">
-                                            <label for="department" class="form-label required">Precio Mensual</label>
-                                            <input type="number" name="department" id="department" />
+                                    
+                            <div class="form-group">
+                                            <label >Precio Mensual</label>
+                                            <input type="number" name="department" id="department" value="{{tipo.precio}}" readonly />
+                                            
                                         </div>
-                                    -->
-          
                     </fieldset>
     
-                    <!-- -----------------End First step ----------------------->
+                    <!-- End First step -->
     
 
                 
 
-                    <!-------------------- Start Second step -------------------->
+                    <!-- Start Second step -->
 
                     <h3>
                         <span class="icon"><i class="ti-user"></i></span>
@@ -107,11 +105,11 @@
                         </div>
                         
                     </fieldset>
-                        <!--------------------- end Second step ----------------------->
+                        <!-- end Second step -->
 
                        
                                         
-                        <!-------------------- Start Third step -------------------->
+                        <!-- Start Third step -->
                     <h3>
                         <span class="icon"><i class="ti-cloud"></i></span>
                         <span class="title_text">Login</span>
@@ -131,19 +129,22 @@
                                 <label for="{{form2.password.name}}" class="form-label required">Password</label>
                                 {{form2.password}}
                             </div>
+                        
 <!--
                         <div class="form-group">
                                     <label for="password" class="form-label required"> Repita Password</label>
                                     <input type="password" name="password" id="password" />
-                                </div>
-     
-                   
-    ------>
+                                </div> -->
+
+                            <div class="form-group">
+                                <label for="{{form2.rol.name}}" class="form-label required">Rol</label>
+                                {{form2.rol}}
+                            </div>
                     </fieldset>
 
-                    <!-------------------- End Third step -------------------->
+                    <!-- End Third step -->
 
-                    <!-------------------- Start Fourth step -------------------->
+                    <!-- Start Fourth step -->
 
                     <h3>
                         <span class="icon"><i class="ti-credit-card"></i></span>
@@ -154,6 +155,12 @@
                             <span class="step-heading">Información del pago: </span>
                             <span class="step-number">Paso 4 / 4</span>
                         </legend>
+                        
+                            <div class="form-group">
+                                            <label>Total a pagar</label>
+                                            <input type="number" name="department" id="department" value="{{tipo.precio}}" readonly />
+                                            
+                                        </div>
 <!---
                         <div class="form-group">
                                 <label for="bank_name" class="form-label required">Cantidad a pagar</label>
@@ -208,15 +215,10 @@
                                 <label for="{{form2.cvv.name}}" class="form-label required">CVC/CVV</label>
                                 {{form2.cvv}}
                             </div>
-
-                            <div class="form-group">
-                                <label for="{{form2.rol.name}}" class="form-label required">Rol</label>
-                                {{form2.rol}}
-                            </div>
                                                     
                     </fieldset>
 
-            <!-------------------- End Fourth step -------------------->  
+            <!-- End Fourth step -->  
 
             </form>
         </div>

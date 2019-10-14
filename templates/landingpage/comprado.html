@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="colorlib.com">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Compra exitosa</title>
+    <link rel="stylesheet" href="{% static 'pago/fonts/themify-icons/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'pago/css/style.css' %}">
+</head>
+<body>
+    {% include 'landingpage/nav.html' %}
+    <div class="main">
+        <div class="container">
+            <h2>¡COMPRA EXITOSA!</h2>
+            {% csrf_token %}
+            <h2>Nombre: {{nombre}}</h2> 
+            <h2>Dominio: <a href="http://{{schema}}.localhost:8000">{{schema}}.localhost:8000</a></h2> 
+            <h3>Podrás acceder dentro de las siguientes 24 horas cuando %tenantadministrator% verfique y apruebe el dominio</h3>
+            <h3>Se ha enviado un correo con tu usuario y contraseña para acceder a administrar tu pizzeria</h3> 
+        </div>
+
+    </div>
+    <div class="footer">
+        
+    </div>
+    <script src="{% static 'pago/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/jquery-validation/dist/additional-methods.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/jquery-steps/jquery.steps.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/minimalist-picker/dobpicker.js' %}"></script>
+    <script src="{% static 'pago/js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'landingpage/js/app.js' %}"></script>
+    {% include 'landingpage/footer.html' %}
+</body>
+</html>
