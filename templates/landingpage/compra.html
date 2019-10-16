@@ -47,6 +47,7 @@
                            <div class="form-group">
                                         <label for="{{form1.tipo.name}}" class="form-label required" class="form-label">Tipo Plan</label>
                                         {{form1.tipo}}
+                                        <input type="text" value="{{tipo.nombre}}" disabled />
                                     </div>
                                     
                             <div class="form-group">
@@ -129,7 +130,7 @@
                                 <label for="{{form2.password.name}}" class="form-label required">Password</label>
                                 {{form2.password}}
                             </div>
-                        
+                                                                      
 <!--
                         <div class="form-group">
                                     <label for="password" class="form-label required"> Repita Password</label>
@@ -137,7 +138,7 @@
                                 </div> -->
 
                             <div class="form-group">
-                                <label for="{{form2.rol.name}}" class="form-label required">Rol</label>
+                                <label for="{{form2.rol.name}}" type="hidden" ></label>
                                 {{form2.rol}}
                             </div>
                     </fieldset>
