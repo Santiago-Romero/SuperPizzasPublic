@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['.localhost']
 
 SHARED_APPS = (
-    'django_tenants',  # mandatory
+    'django_tenants',  # obligatorio
     'apps.franquicias', # you must list the app where your tenant model resides in
     'django.contrib.contenttypes',
 
