@@ -1,14 +1,42 @@
 {% block body %}
+{% load static %}
 
-<div class="col-md-6 offset-md-3">
-<br>
-<h3>Login Page</h3>
-<hr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Admin</title>
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'login/css/style.css' %}">
+    
+</head>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+    <h2 class="active">Administrador de Franquicia</h2>
+
+    <!-- Icon -->
+    <div class="fadeIn first">
+      <img src="{% static 'landingpage\images\logo.png' %}" id="icon" alt="User Icon" />
+    </div>
+
+    <!-- Login Form -->
     <form method="post" action="">
-        {% csrf_token %}
-        {{form.as_p}}
-        <br>
-        <button type="submit" class="btn btn-danger">Login</button> 
+      {% csrf_token %}
+      <div class="fadeIn second">{{form.nickname}}</div>
+      <div class="fadeIn third">{{form.password}}</div>
+      <input type="submit" class="fadeIn third" value="Log In">
+      <h4>{{mensaje}}</h4>
     </form>
+
+    <!-- Remind Passowrd -->
+    <div id="formFooter">
+      <a class="underlineHover" href="#">Olvidaste la contraseña?</a>
+    </div>
+
+  </div>
 </div>
 {% endblock body %}
