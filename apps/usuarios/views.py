@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
+from .models import Usuario
 
 
 def gestionar_usuario(request, id_usuario=None):
@@ -39,3 +40,24 @@ def eliminar_usuario(request, id_usuario):
     messages.success(request, 'Usuario eliminado correctamente')
 
     return redirect('usuarios:registrar')
+
+def login_view(request):
+    form=LoginForm(request.POST or None)
+    context={
+        "form":form
+    }
+    if form.is_valid():
+        nickname=form.cleaned_data.get("nickname")
+        password=form.cleaned_data.get("password")    
+        user_exists = Usuario.objects.filter(nickname=nickname)
+        print(user_exists)
+        if user_exists:
+            db_password = str(user_exists[0].password)            
+            if password==db_password: 
+                return redirect('/admin')
+            else:
+                messages.error(request, 'Invalid email or password')
+        else:
+            messages.error(request, 'Invalid email or password')        
+        return redirect('/login')
+    return render(request,"tenant/login.html",context)

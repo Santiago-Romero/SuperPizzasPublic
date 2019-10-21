@@ -1,0 +1,14 @@
+{% block body %}
+
+<div class="col-md-6 offset-md-3">
+<br>
+<h3>Login Page</h3>
+<hr>
+    <form method="post" action="">
+        {% csrf_token %}
+        {{form.as_p}}
+        <br>
+        <button type="submit" class="btn btn-danger">Login</button> 
+    </form>
+</div>
+{% endblock body %}
