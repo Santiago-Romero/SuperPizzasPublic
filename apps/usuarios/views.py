@@ -44,8 +44,9 @@ def eliminar_usuario(request, id_usuario):
 def login_view(request):
     form=LoginForm(request.POST or None)
     context={
-        "form":form
-    }
+        "form":form,
+        "mensaje":''
+        }
     if form.is_valid():
         nickname=form.cleaned_data.get("nickname")
         password=form.cleaned_data.get("password")    
@@ -53,11 +54,15 @@ def login_view(request):
         print(user_exists)
         if user_exists:
             db_password = str(user_exists[0].password)            
-            if password==db_password: 
+            if password==db_password:
+                messages.info(request, "Bienvenido, "+nickname)
                 return redirect('/admin')
             else:
-                messages.error(request, 'Invalid email or password')
+                context["mensaje"]='Contraseña incorrecta'
+                return render(request,"tenant/login.html",context)
         else:
-            messages.error(request, 'Invalid email or password')        
+            context["mensaje"]='Nickname o contraseña incorrectos'
+            return render(request,"tenant/login.html",context)
         return redirect('/login')
+    context["mensaje"]=''    
     return render(request,"tenant/login.html",context)

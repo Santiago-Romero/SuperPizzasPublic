@@ -8,5 +8,4 @@ urlpatterns = [
     path('compra/<str:tipo>', compra_franquicia, name='compra'),
     path('admin/', home, name='home'),
     path('admin/franquicias/', include('apps.franquicias.urls', namespace='franquicias')),
-    #path('admin/', admin.site.urls),
 ]
