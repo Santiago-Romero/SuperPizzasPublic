@@ -21,29 +21,20 @@
     {% block css %}
     {% endblock css %}
     <!-- endinject -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}"/>
+    <link rel="shortcut icon" href="{% static 'landingpage\images\logo.png' %}"/>
 </head>
 
 <body>
     <div class="container-scroller">
         <!-- partial:../../partials/_navbar.html -->
         <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-            <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-                <!--<a class="navbar-brand brand-logo" href="{% url 'home' %}">
-                    <img src="{% static 'images/logo.svg' %}" alt="logo"/>
-                </a>
-                <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}">
-                    <img src="{% static 'images/logo-mini.svg' %}" alt="logo"/>
-                </a>-->
-            </div>
             <div class="navbar-menu-wrapper d-flex align-items-center">
                 <ul class="navbar-nav navbar-nav-right">
-                    <li class="nav-item dropdown d-none d-xl-inline-block">
+                    <li class="nav-item dropdown d-xl-inline-block">
                         <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown"
                            aria-expanded="false">
                             <span class="profile-text">{{request.tenant}}</span>
-                            <img class="img-xs rounded-circle" src="{% static 'images/faces-clipart/pic-4.png' %}"
-                                 alt="Profile image">
+                            <img class="img-xs rounded-circle" src="{% static 'images/faces-clipart/pic-4.png' %}" alt="Profile image">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                             <a class="dropdown-item">
@@ -57,7 +48,7 @@
                 </ul>
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
                         data-toggle="offcanvas">
-                    <span class="mdi mdi-menu"></span>
+                    <span class="mdi mdi-menu"> </span>
                 </button>
             </div>
         </nav>
@@ -71,13 +62,12 @@
                         <div class="nav-link">
                             <div class="user-wrapper">
                                 <div class="profile-image">
-                                    <img src="{% static 'images/faces-clipart/pic-4.png' %}" alt="profile image">
+                                    <img src="{% static 'images/favicon.png' %}" alt="profile image">
                                 </div>
                                 <div class="text-wrapper">
-                                    <p class="profile-name">{{request.tenant.nombre}}</p>
+                                    <big class="profile-name">{{request.tenant.nombre}}</big>
                                     <div>
-                                        <small class="designation text-muted">{{request.tenant.tipo}}</small>
-                                        <span class="status-indicator online"></span>
+                                        <small class="designation text-uppercase">{{request.tenant.tipo}}</small>
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +85,7 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="card-title">{% block card_title %}Bienvenido al tenant: <b>{{ request.tenant }}</b>{% endblock %}</h4>
+                                        <h1 class="card-title">{% block card_title %}Administración de franquicia{% endblock %}</h1>
                                         <hr>
                                         {% block card_content %}{% endblock %}
                                     </div>
@@ -108,10 +98,8 @@
                 <!-- partial:../../partials/_footer.html -->
                 <footer class="footer">
                     <div class="container-fluid clearfix">
-                <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2018
-                  <a href="http://www.bootstrapdash.com/" target="_blank">Bootstrapdash</a>. All rights reserved.</span>
-                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with
-                  <i class="mdi mdi-heart text-danger"></i>
+                <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2019
+                  <a href="" target="_blank">Superpizzas</a>. Todos los derechos reservados.</span>
                 </span>
                     </div>
                 </footer>
