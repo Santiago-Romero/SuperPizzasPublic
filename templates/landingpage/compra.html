@@ -13,6 +13,7 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="{% static 'pago/css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'landingpage\images\logo.png' %}"/>
 </head>
 <body>
     {% include 'landingpage/nav.html' %}
@@ -52,7 +53,7 @@
                                     
                             <div class="form-group">
                                             <label >Precio Mensual</label>
-                                            <input type="number" name="department" id="department" value="{{tipo.precio}}" readonly />
+                                            <input type="any" name="department" id="department" value="{{tipo.precio}} COP" readonly />
                                             
                                         </div>
                     </fieldset>
@@ -130,12 +131,6 @@
                                 <label for="{{form2.password.name}}" class="form-label required">Password</label>
                                 {{form2.password}}
                             </div>
-                                                                      
-<!--
-                        <div class="form-group">
-                                    <label for="password" class="form-label required"> Repita Password</label>
-                                    <input type="password" name="password" id="password" />
-                                </div> -->
 
                             <div class="form-group">
                                 <label for="{{form2.rol.name}}" type="hidden" ></label>
@@ -159,41 +154,15 @@
                         
                             <div class="form-group">
                                             <label>Total a pagar</label>
-                                            <input type="number" name="department" id="department" value="{{tipo.precio}}" readonly />
+                                            <input type="any" name="department" id="department" value="{{tipo.precio}} COP" readonly />
                                             
                                         </div>
-<!---
-                        <div class="form-group">
-                                <label for="bank_name" class="form-label required">Cantidad a pagar</label>
-                                <input type="text" name="bank_name" id="bank_name" />
-                            </div>
--->
 
                         <div class="form-group">
                             <label for="{{form2.nombre_banco.name}}" class="form-label required">Nombre Banco</label>
                             {{form2.nombre_banco}}
                         </div>
-          <!---    
-                        <div class="form-row">
-                            <div class="form-date">
-                                <label for="expiry_date" class="form-label">Fecha de vencimiento</label>
-                                <div class="form-date-group">
-                                    <div class="form-date-item">
-                                        <select id="expiry_date" name="expiry_date"></select>
-                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
-                                    </div>
-                                    <div class="form-date-item">
-                                        <select id="expiry_month" name="expiry_month"></select>
-                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
-                                    </div>
-                                    <div class="form-date-item">
-                                        <select id="expiry_year" name="expiry_year"></select>
-                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
-                                    </div>
-                                </div>
-                            </div>
- -->  
-                         
+         
                         <div class="form-group">
                                 <label for="{{form2.fecha_vencimiento.name}}" class="form-label required">{{form2.fecha_vencimiento.label}}</label>
                                 {{form2.fecha_vencimiento}}
