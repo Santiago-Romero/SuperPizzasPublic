@@ -27,9 +27,13 @@
     <!-- Login Form -->
     <form method="post" action="">
       {% csrf_token %}
+      <input type="text" id="login" class="fadeIn second" name="nickname" placeholder="username">
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
+      <input type="submit" class="fadeIn fourth" value="Log In">
+      <!--
       <div class="fadeIn second">{{form.nickname}}</div>
-      <div class="fadeIn third">{{form.password}}</div>
-      <input type="submit" class="fadeIn third" value="Log In">
+      <div class="fadeIn second">{{form.password}}</div>
+      <input type="submit" class="fadeIn third" value="Log In">-->
       <h4>{{mensaje}}</h4>
     </form>
 
