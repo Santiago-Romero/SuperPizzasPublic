@@ -1,10 +1,10 @@
 
 from django.urls import path, include
-from apps.franquicias.views import home, nada_tenant
+from apps.franquicias.views import home, inicio_tenants
 from apps.usuarios.views import login_view
 
 urlpatterns = [
-    path('', nada_tenant, name='nada_tenant'),
+    path('', inicio_tenants, name='inicio_t'),
     path('admin/', home, name='home'),
     path('login/', login_view,name='login'), 
     path('admin/pizzas/', include('apps.pizzas.urls', namespace='pizzas')),

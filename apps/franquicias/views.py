@@ -49,9 +49,8 @@ def compra_franquicia(request,tipo):
         'tipo': tipoir}
     return render(request, 'landingpage/compra.html', context)
 
-def nada_tenant(request):
-    print(request.tenant)
-    return HttpResponse("<h2>Aqui iría la págia principal donde se venden las pizzas de cada tenant, por ahora ir a <a href='http://{d}.localhost:8000/admin/'>http://{d}.localhost:8000/admin/</a> para gestionar la franquicia</h2>".format(d=request.tenant.schema_name))
+def inicio_tenants(request):
+    return render(request, 'tenant/index.html', {})
 
 
 def registrar_franquicia(request):
