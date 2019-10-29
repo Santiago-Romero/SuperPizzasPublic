@@ -102,7 +102,7 @@ body {
   font-weight: 400;
   font-family: 'Roboto Slab';
   margin: 0px;
-  background: #006491; }
+  background: #4F507E; }
 
 .main {
   padding: 60px 0; }
@@ -220,7 +220,7 @@ a {
   margin-top: -5px; }
 
 .current .title {
-  background: #006491; }
+  background: #4F507E; }
 
 .content h3 {
   display: none; }
@@ -245,7 +245,7 @@ fieldset {
       .actions ul li:first-child a {
         background: #adadad; }
       .actions ul li a {
-        background: #006491;
+        background: #4F507E;
         width: 130px;
         height: 50px;
         color: #fff;
@@ -265,7 +265,7 @@ fieldset {
         -o-align-items: center;
         -ms-align-items: center; }
         .actions ul li a:hover {
-          background-color: #006491; }
+          background-color: #4F507E; }
 
 label.error {
   display: block;
@@ -307,7 +307,7 @@ ul.list-item li:not(.init) {
   padding: 5px 20px; }
 
 ul.list-item li:not(.init):hover, ul.list-item li.selected:not(.init) {
-  background: #006491;
+  background: #4F507E;
   color: #fff; }
 
 li.init {
@@ -337,7 +337,7 @@ legend {
     display: inline-block; }
 
 .step-heading {
-  color: #006491;
+  color: #4F507E;
   float: left; }
 
 .step-number {
@@ -504,7 +504,7 @@ legend {
 }
 
 .footer a{
-    color:#006491;
+    color:#4F507E;
 }
 
 .footer a:hover, .footer a:focus{
