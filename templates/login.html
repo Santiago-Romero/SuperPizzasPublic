@@ -1,0 +1,53 @@
+{% block body %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Admin</title>
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'login/css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'landingpage\images\logo.png' %}"/>
+    
+</head>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+    <h2 class="active">Administrador de Franquicia</h2>
+
+    <!-- Icon -->
+    <div class="fadeIn first">
+      <img src="{% static 'landingpage\images\logo.png' %}" id="icon" alt="User Icon" />
+    </div>
+
+    <!-- Login Form -->
+    <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        <div class="form-row">
+            {{ formulario.username.errors }}
+            {{ formulario.username.label_tag }} {{ formulario.username }}
+        </div>
+        <div class="form-row">
+            {{ formulario.password.errors }}
+            {{ formulario.password.label_tag }} {{ formulario.password }}
+            <input type="hidden" name="next" value="{{ next }}" />
+        </div><br>
+        <div class="submit-row">
+            <label>&nbsp;</label><input class="btn btn-primary" type="submit" value="Entrar" />
+            <a href="/index" class="btn btn-default " >Volver</a>
+        </div>
+    </form> 
+  </div>
+</div>
+
+{% endblock body %}
