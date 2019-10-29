@@ -4,8 +4,10 @@ from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.http import HttpResponse
-from apps.usuarios.forms import UsuarioForm
+from apps.usuarios.forms import UsuarioForm, UserForm
 from django_tenants.utils import schema_context
+from django.contrib.auth.models import User
+from apps.usuarios.models import Usuario
 from apps.pizzas.models import Pizza
 
 
@@ -17,21 +19,48 @@ def inicio_franquicia(request):
     return render(request, 'landingpage/index.html', {})
 
 def compra_franquicia(request,tipo):
+    
     dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
+
     tipoir=TipoFranquicia.objects.get(nombre=tipo)
-    form = FranquiciaForm(request.POST,prefix="form1",initial={'tipo': tipoir})
-    formUser = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'a'})
+
     if request.method == 'POST':
-        if form.is_valid() or formUser.is_valid():
+
+        form = FranquiciaForm(request.POST,prefix="form1",initial={'tipo': tipoir})
+        formUsuario = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'a'})
+        formUserDjango = UserForm(request.POST,prefix="form3")
+
+        print(str(request.POST))
+
+        if form.is_valid() and formUserDjango.is_valid():
+            
             try:
+
                 with transaction.atomic():
                     franquicia = form.save()
+                   
                     Dominio.objects.create(domain='%s%s' % (franquicia.schema_name, settings.DOMAIN), is_primary=True, tenant=franquicia)
-                    
-                    messages.success(request, "Se ha registrado correctamente la franquicia")
+
                     with schema_context(franquicia.schema_name):
-                        usuario=formUser.save() 
-            except Exception:
+
+                        #CREACIÓN DEL USUARIO DJANGO
+                        
+                        usuario = formUserDjango.save(commit=False)
+                        
+                        usuario = User(username=request.POST['form3-username'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
+                        
+                        usuario.set_password(request.POST['form3-password1'])
+                        
+                        usuario.save()
+
+                        #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
+
+                        perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
+
+                        perfil.save()
+                        
+            except Exception as e: 
+                print(e,"error")
                 messages.error(request, 'Ha ocurrido un error durante la creación de la franquicia, se aborto la operación')
             context={
                 'nombre': form.data.get('form1-nombre'),
@@ -39,13 +68,17 @@ def compra_franquicia(request,tipo):
             }
             return render(request,'landingpage/comprado.html',context)
         else:
+            print(str(formUsuario.errors))
+            print("formulario paila")
             messages.error(request, "Por favor verificar los campos en rojo")
     else:
         form = FranquiciaForm(prefix="form1",initial={'tipo': tipoir})
-        formUser = UsuarioForm(prefix="form2",initial={'rol': 'a'})
+        formUsuario = UsuarioForm(prefix="form2",initial={'rol': 'a'})
+        formUserDjango = UserForm(prefix="form3")
     context = {
         'form1': form,
-        'form2': formUser,
+        'form2': formUsuario,
+        'form3': formUserDjango,
         'dominios': dominios,
         'tipo': tipoir}
     return render(request, 'landingpage/compra.html', context)

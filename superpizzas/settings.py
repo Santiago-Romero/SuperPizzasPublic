@@ -43,6 +43,7 @@ SHARED_APPS = (
     'django.contrib.staticfiles',
     'bootstrap4',
     'rolepermissions',
+    
 )
 
 TENANT_APPS = (
