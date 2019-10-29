@@ -14,14 +14,12 @@ from apps.pizzas.models import Pizza
 
 def home(request):
 
-    #Si usario no es anonimo? (ya esta log)
+    #Si usario es anonimo? 
     if request.user.is_anonymous:
         return redirect('/')
     #Validacion del Formulario a traves del metodo POST
     else:
         id_usuario = request.user.id
-
-        print(str(id_usuario))
 
         perfil = Usuario.objects.get(user=id_usuario)
 
@@ -29,6 +27,16 @@ def home(request):
             return render(request, 'base.html', {})
         else:
             return redirect('/login')
+
+def home_admin(request):
+    #Si usario es anonimo? 
+    if request.user.is_anonymous:
+        return redirect('/')
+    #Validacion si es superusuario
+    elif request.user.is_superuser:
+        return render(request, 'base.html', {})
+    else:
+        return redirect('/')
 
 def inicio_franquicia(request):
     return render(request, 'landingpage/index.html', {})
