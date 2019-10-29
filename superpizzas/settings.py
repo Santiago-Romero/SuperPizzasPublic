@@ -31,6 +31,7 @@ SHARED_APPS = (
     'django_tenants',  # obligatorio
     'apps.franquicias', # you must list the app where your tenant model resides in
     'django.contrib.contenttypes',
+    'captcha',
 
     # everything below here is optional
     'django.contrib.auth',
@@ -60,6 +61,7 @@ TENANT_APPS = (
     'apps.pizzas',
     'apps.usuarios',
     'apps.ingredientes',
+    'captcha',
     # your tenant-specific apps
 )
 
@@ -168,3 +170,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_collected')
+
+NORECAPTCHA_SITE_KEY = "6LduqL8UAAAAAFLmpECMTGr1qkCueUDg5NYDDFcr"
+NORECAPTCHA_SECRET_KEY = "6LduqL8UAAAAAM0P2SZslr4SJ9koM0ZWv9BOsU7"
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
