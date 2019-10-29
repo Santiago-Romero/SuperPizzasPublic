@@ -2,6 +2,10 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from .models import Usuario
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_protect 
 
 
 def gestionar_usuario(request, id_usuario=None):
@@ -41,28 +45,51 @@ def eliminar_usuario(request, id_usuario):
 
     return redirect('usuarios:registrar')
 
-def login_view(request):
-    form=LoginForm(request.POST or None)
-    context={
-        "form":form,
-        "mensaje":''
-        }
-    if form.is_valid():
-        nickname=form.cleaned_data.get("nickname")
-        password=form.cleaned_data.get("password")    
-        user_exists = Usuario.objects.filter(nickname=nickname)
-        print(user_exists)
-        if user_exists:
-            db_password = str(user_exists[0].password)            
-            if password==db_password:
-                messages.info(request, "Bienvenido, "+nickname)
-                return redirect('/admin')
+
+@csrf_protect
+def inicio_sesion(request):
+
+    #Si usario no es anonimo? (ya esta log)
+    if not request.user.is_anonymous:
+        #Redireccion a Raiz
+        return HttpResponseRedirect('/admin')
+    #Validacion del Formulario a traves del metodo POST
+    if request.method == 'POST':
+
+        formulario = UserAuthenticationForm(request.POST)
+
+        if formulario.is_valid:
+            username = request.POST['username']
+            password = request.POST['password']
+            acceso_user = authenticate(username = username, password = password)
+            # Si el log fue existoso?
+            if acceso_user is not None:
+                #si el usuario esta activo
+                if acceso_user.is_active:
+                    #Login
+                    login(request,acceso_user)
+                    #Redireccion al origen
+                    return redirect('/admin')
+                else:
+                    messages.add_message(request, messages.INFO, 'Error')
             else:
-                context["mensaje"]='Contraseña incorrecta'
-                return render(request,"tenant/login.html",context)
+                messages.add_message(request, messages.INFO, 'Por favor revisa tu usuario o password')
         else:
-            context["mensaje"]='Nickname o contraseña incorrectos'
-            return render(request,"tenant/login.html",context)
+            messages.add_message(request, messages.INFO, 'Error')
+    else:
+        formulario = UserAuthenticationForm()
+        
+    contexto = {
+        'formulario': formulario
+    }
+
+    return render(request,  'tenant/login.html', context=contexto) 
+
+
+
+def cerrar_sesion(request):
+    if not request.user.is_anonymous:
+        logout(request)
         return redirect('/login')
-    context["mensaje"]=''    
-    return render(request,"tenant/login.html",context)
+    else:
+        return redirect('/admin')
