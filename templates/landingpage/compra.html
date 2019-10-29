@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="author" content="colorlib.com">
+        <meta name="author" content="colorlib.com">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Registro compra de franquicia</title>
 
@@ -13,13 +13,27 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="{% static 'pago/css/style.css' %}">
-    <link rel="shortcut icon" href="{% static 'landingpage\images\logo.png' %}"/>
 </head>
 <body>
     {% include 'landingpage/nav.html' %}
     <div class="main">
         <div class="container">
             <h2>Registro compra de Franquicia</h2>
+            {% if form.errors %}
+                <!-- Error messaging -->
+                <div id="errors">
+                    <div class="inner">
+                        <p>There were some errors in the information you entered. Please correct the following:</p>
+                        {{ form3.non_field_errors }}
+                        <ul>
+                            {% for field in form3 %}
+                                {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- /Error messaging -->
+            {% endif %}
             <form method="POST" id="signup-form" class="signup-form">
                     {% csrf_token %}               
 
@@ -53,7 +67,7 @@
                                     
                             <div class="form-group">
                                             <label >Precio Mensual</label>
-                                            <input type="any" name="department" id="department" value="{{tipo.precio}} COP" readonly />
+                                            <input type="number" name="department" id="department" value="{{tipo.precio}}" readonly />
                                             
                                         </div>
                     </fieldset>
@@ -75,14 +89,15 @@
                             <span class="step-heading">Información personal: </span>
                             <span class="step-number">Paso 2 / 4</span>
                         </legend>
+
                         <div class="form-group">
-                            <label for="{{form2.nombre.name}}" class="form-label required">{{form2.nombre.label}}</label>                            
-                            {{form2.nombre}}
+                            <label for='{{form3.first_name.label_tag}}' class="form-label required">Nombre</label>
+                            {{form3.first_name}}
                         </div>
 
                         <div class="form-group">
-                            <label for="{{form2.apellido.name}}" class="form-label required">{{form2.apellido.label}}</label>
-                            {{form2.apellido}}
+                            <label for="{{form2.last_name.label_tag}}" class="form-label required">Apellido</label>
+                            {{form3.last_name}}
                         </div>                       
     
                     
@@ -97,8 +112,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="{{form2.email.name}}" class="form-label required">Email</label>
-                            {{form2.email}}
+                            <label for='{{form3.email.label_tag}}' class="form-label required">Correo Electronico</label>
+                            {{form3.email}}
                         </div>
 
                         <div class="form-group">
@@ -123,14 +138,24 @@
                         </legend>
 
                         <div class="form-group">
-                            <label for="{{form2.nickname.name}}" class="form-label required">Usuario</label>
-                            {{form2.nickname}}
+                            <label for="" class="form-label required">Nombre de Usuario</label>
+                            {{form3.username}}
                         </div>
 
                         <div class="form-group">
-                                <label for="{{form2.password.name}}" class="form-label required">Password</label>
-                                {{form2.password}}
-                            </div>
+                            <label for="" class="form-label required">Contraseña</label>
+                            {{form3.password1}}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="form-label required">Confirme Contraseña</label>
+                            {{form3.password2}}
+                        </div>                                                                      
+<!--
+                        <div class="form-group">
+                                    <label for="password" class="form-label required"> Repita Password</label>
+                                    <input type="password" name="password" id="password" />
+                                </div> -->
 
                             <div class="form-group">
                                 <label for="{{form2.rol.name}}" type="hidden" ></label>
@@ -154,15 +179,41 @@
                         
                             <div class="form-group">
                                             <label>Total a pagar</label>
-                                            <input type="any" name="department" id="department" value="{{tipo.precio}} COP" readonly />
+                                            <input type="number" name="department" id="department" value="{{tipo.precio}}" readonly />
                                             
                                         </div>
+<!---
+                        <div class="form-group">
+                                <label for="bank_name" class="form-label required">Cantidad a pagar</label>
+                                <input type="text" name="bank_name" id="bank_name" />
+                            </div>
+-->
 
                         <div class="form-group">
                             <label for="{{form2.nombre_banco.name}}" class="form-label required">Nombre Banco</label>
                             {{form2.nombre_banco}}
                         </div>
-         
+          <!---    
+                        <div class="form-row">
+                            <div class="form-date">
+                                <label for="expiry_date" class="form-label">Fecha de vencimiento</label>
+                                <div class="form-date-group">
+                                    <div class="form-date-item">
+                                        <select id="expiry_date" name="expiry_date"></select>
+                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
+                                    </div>
+                                    <div class="form-date-item">
+                                        <select id="expiry_month" name="expiry_month"></select>
+                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
+                                    </div>
+                                    <div class="form-date-item">
+                                        <select id="expiry_year" name="expiry_year"></select>
+                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+ -->  
+                         
                         <div class="form-group">
                                 <label for="{{form2.fecha_vencimiento.name}}" class="form-label required">{{form2.fecha_vencimiento.label}}</label>
                                 {{form2.fecha_vencimiento}}
