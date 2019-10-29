@@ -6,6 +6,7 @@ from .forms import *
 from django.http import HttpResponse
 from apps.usuarios.forms import UsuarioForm
 from django_tenants.utils import schema_context
+from apps.pizzas.models import Pizza
 
 
 
@@ -50,7 +51,11 @@ def compra_franquicia(request,tipo):
     return render(request, 'landingpage/compra.html', context)
 
 def inicio_tenants(request):
-    return render(request, 'tenant/index.html', {})
+    context = {
+        'pizzas':Pizza.objects.all(),
+        'franquicia':request,
+    }
+    return render(request, 'tenant/index.html', context)
 
 
 def registrar_franquicia(request):
