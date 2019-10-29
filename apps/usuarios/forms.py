@@ -6,7 +6,18 @@ from django.contrib.auth.forms import UserCreationForm
 class UsuarioForm(forms.ModelForm):    
     class Meta:
         model = Usuario
-        fields = '__all__'
+
+        fields = [
+        'cc',
+        'telefono',
+        'pais',
+        'nombre_banco',
+        'fecha_vencimiento',
+        'tipo_tarjeta',
+        'numero_tarjeta',
+        'cvv'
+        ]
+
         widgets = {'rol': forms.HiddenInput(),}
 
 class UserForm(UserCreationForm):

@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from apps.usuarios.forms import UsuarioForm, UserForm
 from django_tenants.utils import schema_context
 from django.contrib.auth.models import User
+from apps.usuarios.models import Usuario
 
 
 
@@ -28,6 +29,7 @@ def compra_franquicia(request,tipo):
         formUsuario = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'a'})
         formUserDjango = UserForm(request.POST,prefix="form3")
 
+        print(str(request.POST))
 
         if form.is_valid() and formUserDjango.is_valid():
             
@@ -39,6 +41,8 @@ def compra_franquicia(request,tipo):
                     Dominio.objects.create(domain='%s%s' % (franquicia.schema_name, settings.DOMAIN), is_primary=True, tenant=franquicia)
 
                     with schema_context(franquicia.schema_name):
+
+                        #CREACIÓN DEL USUARIO DJANGO
                         
                         usuario = formUserDjango.save(commit=False)
                         
@@ -47,6 +51,12 @@ def compra_franquicia(request,tipo):
                         usuario.set_password(request.POST['form3-password1'])
                         
                         usuario.save()
+
+                        #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
+
+                        perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
+
+                        perfil.save()
                         
             except Exception as e: 
                 print(e,"error")
@@ -57,7 +67,7 @@ def compra_franquicia(request,tipo):
             }
             return render(request,'landingpage/comprado.html',context)
         else:
-            print(str(formUserDjango.errors))
+            print(str(formUsuario.errors))
             print("formulario paila")
             messages.error(request, "Por favor verificar los campos en rojo")
     else:
