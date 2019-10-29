@@ -86,51 +86,12 @@ def inicio_sesion(request):
     return render(request,  'tenant/login.html', context=contexto) 
 
 
-@csrf_protect
-def inicio_sesiona_admin(request):
-
-    #Si usario no es anonimo? (ya esta log)
-    if not request.user.is_superuser:
-        #Redireccion a Raiz
-        return HttpResponseRedirect('/admin')
-    #Validacion del Formulario a traves del metodo POST
-    if request.method == 'POST':
-
-        formulario = UserAuthenticationForm(request.POST)
-
-        if formulario.is_valid:
-            username = request.POST['username']
-            password = request.POST['password']
-            acceso_user = authenticate(username = username, password = password)
-            # Si el log fue existoso?
-            if acceso_user is not None:
-                #si el usuario esta activo
-                if acceso_user.is_active:
-                    #Login
-                    login(request,acceso_user)
-                    #Redireccion al origen
-                    return redirect('/admin')
-                else:
-                    messages.add_message(request, messages.INFO, 'Error')
-            else:
-                messages.add_message(request, messages.INFO, 'Por favor revisa tu usuario o password')
-        else:
-            messages.add_message(request, messages.INFO, 'Error')
-    else:
-        formulario = UserAuthenticationForm()
-        
-    contexto = {
-        'formulario': formulario
-    }
-
-    return render(request,  'landingpage/login.html', context=contexto) 
-
 
 @csrf_protect
 def inicio_sesion_admin(request):
 
     #Si usario no es anonimo? (ya esta log)
-    if not request.user.is_superuser:
+    if request.user.is_superuser:
         #Redireccion a Raiz
         return HttpResponseRedirect('/admin')
     #Validacion del Formulario a traves del metodo POST
@@ -159,11 +120,11 @@ def inicio_sesion_admin(request):
     else:
         formulario = UserAuthenticationForm()
         
-    contexto = {
+        contexto = {
         'formulario': formulario
-    }
+        }
 
-    return render(request,  '/login.html', context=contexto) 
+        return render(request,  'landingpage/login.html', context=contexto) 
 
 
 
