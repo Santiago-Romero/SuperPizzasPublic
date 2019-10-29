@@ -25,23 +25,28 @@
     </div>
 
     <!-- Login Form -->
-    <form method="post" action="">
-      {% csrf_token %}
-      <input type="text" id="login" class="fadeIn second" name="nickname" placeholder="username">
-      <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
-      <!--
-      <div class="fadeIn second">{{form.nickname}}</div>
-      <div class="fadeIn second">{{form.password}}</div>
-      <input type="submit" class="fadeIn third" value="Log In">-->
-      <h4>{{mensaje}}</h4>
-    </form>
-
-    <!-- Remind Passowrd -->
-    <div id="formFooter">
-      <a class="underlineHover" href="#">Olvidaste la contraseña?</a>
-    </div>
-
+    <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        <div class="form-row">
+            {{ formulario.username.errors }}
+            {{ formulario.username.label_tag }} {{ formulario.username }}
+        </div>
+        <div class="form-row">
+            {{ formulario.password.errors }}
+            {{ formulario.password.label_tag }} {{ formulario.password }}
+            <input type="hidden" name="next" value="{{ next }}" />
+        </div><br>
+        <div class="submit-row">
+            <label>&nbsp;</label><input class="btn btn-primary" type="submit" value="Entrar" />
+            <a href="/index" class="btn btn-default " >Volver</a>
+        </div>
+    </form> 
   </div>
 </div>
 

@@ -13,7 +13,22 @@ from apps.pizzas.models import Pizza
 
 
 def home(request):
-    return render(request, 'base.html', {})
+
+    #Si usario no es anonimo? (ya esta log)
+    if request.user.is_anonymous:
+        return redirect('/')
+    #Validacion del Formulario a traves del metodo POST
+    else:
+        id_usuario = request.user.id
+
+        print(str(id_usuario))
+
+        perfil = Usuario.objects.get(user=id_usuario)
+
+        if perfil.rol == 'a':
+            return render(request, 'base.html', {})
+        else:
+            return redirect('/login')
 
 def inicio_franquicia(request):
     return render(request, 'landingpage/index.html', {})
@@ -69,7 +84,8 @@ def compra_franquicia(request,tipo):
             return render(request,'landingpage/comprado.html',context)
         else:
             print(str(formUsuario.errors))
-            print("formulario paila")
+            print(str(formUserDjango.errors))
+            print(str(formUserDjango.errors))
             messages.error(request, "Por favor verificar los campos en rojo")
     else:
         form = FranquiciaForm(prefix="form1",initial={'tipo': tipoir})

@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 
 class UsuarioForm(forms.ModelForm):    
@@ -51,6 +52,6 @@ class UserForm(UserCreationForm):
             'password2':forms.TextInput(attrs={'class':'form-label required','type':'password'}),
 		}
     
-class LoginForm(forms.Form):
-    nickname=forms.CharField(max_length=50,label="nickname")
-    password=forms.CharField(max_length=75,label="password",widget=forms.PasswordInput)    
+class UserAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control input-md','name':'username_login'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control input-md'}))
