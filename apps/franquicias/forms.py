@@ -1,8 +1,10 @@
 from django import forms
 from .models import *
+from captcha.fields import ReCaptchaField
 
 
 class FranquiciaForm(forms.ModelForm):
+    captcha = ReCaptchaField(label="Debe realizar la verificación captcha.")
     def __init__(self, *args, **kwargs):
         from django.conf import settings
         super(FranquiciaForm, self).__init__(*args, **kwargs)
