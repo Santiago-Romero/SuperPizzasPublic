@@ -58,67 +58,22 @@
     	</div>
     	<div class="container-wrap">
     		<div class="row no-gutters d-flex">
+			
+			{% for pizza in pizzas %}
     			<div class="col-lg-4 d-flex ftco-animate">
     				<div class="services-wrap d-flex">
     					<a href="#" class="img" style="background-image: url({% static 'landing-tenant/images/pizza-1.jpg' %});"></a>
     					<div class="text p-4">
-    						<h3>Pizza Italiana</h3>
-    						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia </p>
-    						<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-lg-4 d-flex ftco-animate">
-    				<div class="services-wrap d-flex">
-    					<a href="#" class="img" style="background-image: url({% static 'landing-tenant/images/pizza-2.jpg' %});"></a>
-    					<div class="text p-4">
-    						<h3>Pizza Hawaiana</h3>
+    						<h3>{{pizza.nombre}}</h3>
+							{% for ingrediente in pizza.ingrediente.all %}
+							<p>{{ingrediente.nombre}}</p>
+							{% endfor %}
     						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-    						<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
+    						<p class="price"><span>${{pizza.valor}}</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
     					</div>
     				</div>
     			</div>
-    			<div class="col-lg-4 d-flex ftco-animate">
-    				<div class="services-wrap d-flex">
-    					<a href="#" class="img" style="background-image: url({% static 'landing-tenant/images/pizza-3.jpg' %});"></a>
-    					<div class="text p-4">
-    						<h3>Pizza napolitana</h3>
-    						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-    						<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
-    					</div>
-    				</div>
-    			</div>
-
-    			<div class="col-lg-4 d-flex ftco-animate">
-    				<div class="services-wrap d-flex">
-    					<a href="#" class="img order-lg-last" style="background-image: url({% static 'landing-tenant/images/pizza-4.jpg' %});"></a>
-    					<div class="text p-4">
-    						<h3>Pizza de champiñones</h3>
-    						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia </p>
-    						<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-lg-4 d-flex ftco-animate">
-    				<div class="services-wrap d-flex">
-    					<a href="#" class="img order-lg-last" style="background-image: url({% static 'landing-tenant/images/pizza-5.jpg' %});"></a>
-    					<div class="text p-4">
-    						<h3>Pizza margarita</h3>
-    						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-    						<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-lg-4 d-flex ftco-animate">
-    				<div class="services-wrap d-flex">
-    					<a href="#" class="img order-lg-last" style="background-image: url({% static 'landing-tenant/images/pizza-6.jpg' %});"></a>
-    					<div class="text p-4">
-    						<h3>Pizza Crunchy</h3>
-    						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-    						<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
-    					</div>
-    				</div>
-    			</div>
+			{% endfor %}
     		</div>
     	</div>
 
@@ -132,107 +87,23 @@
         </div>
         <div class="row">
         	<div class="col-md-6">
+				{% for pizza in pizzas %}
         		<div class="pricing-entry d-flex ftco-animate">
         			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-1.jpg' %});"></div>
         			<div class="desc pl-3">
 	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza Italiana</span></h3>
-	        				<span class="price">$20.00</span>
+	        				<h3><span>{{pizza.nombre}}</span></h3>
+	        				<span class="price">${{pizza.valor}}</span>
 	        			</div>
 	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
+						{% for ingrediente in pizza.ingrediente.all %}
+							<p>{{ingrediente.nombre}}</p>
+							{% endfor %}
 	        			</div>
         			</div>
         		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-2.jpg' %});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza Hawaiana</span></h3>
-	        				<span class="price">$29.00</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-3.jpg' %});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza napolitana</span></h3>
-	        				<span class="price">$20.00</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-4.jpg' %});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza de champiñones</span></h3>
-	        				<span class="price">$20.00</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
-	        			</div>
-	        		</div>
-        		</div>
+				{% endfor  %}
         	</div>
-
-        	<div class="col-md-6">
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-5.jpg' %});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza margarita</span></h3>
-	        				<span class="price">$49.91</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url{% static 'landing-tenant/images/pizza-6.jpg' %});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza Crunchy</span></h3>
-	        				<span class="price">$20.00</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-7.jpg' %});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza de tocineta</span></h3>
-	        				<span class="price">$20.00</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-8.jpg' %});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza vegetariana</span></h3>
-	        				<span class="price">$20.00</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
-	        			</div>
-	        		</div>
-        		</div>
-        	</div>
-        </div>
     	</div>
     </section>
     
