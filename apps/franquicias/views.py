@@ -110,6 +110,8 @@ def compra_franquicia(request,tipo):
 def inicio_tenants(request):
     context = {
         'pizzas':Pizza.objects.all(),
+        'especiales': Pizza.objects.filter(especial=True,enventa=True),
+        'enventas': Pizza.objects.filter(enventa=True),
         'franquicia':request,
     }
     return render(request, 'tenant/index.html', context)

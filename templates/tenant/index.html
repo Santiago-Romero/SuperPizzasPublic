@@ -59,7 +59,7 @@
     	<div class="container-wrap">
     		<div class="row no-gutters d-flex">
 			
-			{% for pizza in pizzas %}
+			{% for pizza in especiales %}
     			<div class="col-lg-4 d-flex ftco-animate">
     				<div class="services-wrap d-flex">
     					<a href="#" class="img" style="background-image: url({% static 'landing-tenant/images/pizza-1.jpg' %});"></a>
@@ -68,7 +68,7 @@
 							{% for ingrediente in pizza.ingrediente.all %}
 							<p>{{ingrediente.nombre}}</p>
 							{% endfor %}
-    						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+              <p>| {{pizza.descripcion}}</p>
     						<p class="price"><span>${{pizza.valor}}</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
     					</div>
     				</div>
@@ -87,8 +87,31 @@
         </div>
         <div class="row">
         	<div class="col-md-6">
-				{% for pizza in pizzas %}
+				{% for pizza in enventas %}
+        {% if forloop.counter|divisibleby:2 %}
         		<div class="pricing-entry d-flex ftco-animate">
+        			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-1.jpg' %});"></div>
+        			<div class="desc pl-3">
+	        			<div class="d-flex text align-items-center">
+	        				<h3><span>{{pizza.nombre}}</span></h3>
+	        				<span class="price">${{pizza.valor}}</span>
+	        			</div>
+	        			<div class="d-block">
+						{% for ingrediente in pizza.ingrediente.all %}
+							<p>{{ingrediente.nombre}}</p>
+							{% endfor %}
+              <p>| {{pizza.descripcion}}</p>
+	        			</div>
+        			</div>
+        		</div>
+            {% endif %}
+				{% endfor  %}
+        	</div>
+          <div class="col-md-6">
+				{% for pizza in enventas %}
+        {% if forloop.counter|divisibleby:2 %}
+        {% else %}
+        <div class="pricing-entry d-flex ftco-animate">
         			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-1.jpg' %});"></div>
         			<div class="desc pl-3">
 	        			<div class="d-flex text align-items-center">
@@ -102,6 +125,7 @@
 	        			</div>
         			</div>
         		</div>
+        {% endif%}
 				{% endfor  %}
         	</div>
     	</div>
