@@ -3,6 +3,8 @@ django-tenants
 psycopg2
 django-bootstrap4
 django-role-permissions
+- Contraseña de prueba para compras
+Depf22KS2939
 - Hacer
 python manage.py makemigrations
 python manage.py migrate_schemas --shared
