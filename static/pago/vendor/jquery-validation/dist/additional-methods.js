@@ -681,7 +681,7 @@ $.validator.addMethod( "ipv6", function( value, element ) {
 }, "Please enter a valid IP v6 address." );
 
 $.validator.addMethod( "lettersonly", function( value, element ) {
-	return this.optional( element ) || /^[a-z]+$/i.test( value );
+	return this.optional( element ) || /^[a-z\s]+$/i.test( value );
 }, "Letters only please" );
 
 $.validator.addMethod( "letterswithbasicpunc", function( value, element ) {
@@ -811,6 +811,8 @@ $.validator.addMethod( "notEqualTo", function( value, element, param ) {
 $.validator.addMethod( "nowhitespace", function( value, element ) {
 	return this.optional( element ) || /^\S+$/i.test( value );
 }, "No white space please" );
+
+
 
 /**
 * Return true if the field value matches the given format RegExp
