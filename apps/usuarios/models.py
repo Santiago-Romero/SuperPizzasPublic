@@ -12,6 +12,6 @@ class Usuario(models.Model):
     nombre_banco=models.CharField(max_length=50,default="bancolombia")
     fecha_vencimiento=models.DateField(default=timezone.now)
     tipo_tarjeta=models.CharField(max_length=50,default="master card")
-    numero_tarjeta=models.IntegerField(default=1546543214)
+    numero_tarjeta=models.BigIntegerField(default=1115087926)
     cvv=models.IntegerField(default=4562)
     rol=models.CharField(max_length=1, choices=Roles)

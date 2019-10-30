@@ -9,8 +9,8 @@ from django_tenants.utils import schema_context
 from django.contrib.auth.models import User
 from apps.usuarios.models import Usuario
 from apps.pizzas.models import Pizza
-
-
+from tenant_schemas.utils import schema_exists
+from django.http import HttpRequest
 
 def home(request):
 
@@ -170,3 +170,17 @@ def modificar_franquicia(request, id_franquicia):
             messages.error(request, "Por favor verificar los campos en rojo")
 
     return render(request, 'franquicias/registrar.html', {'form': form, 'dominios': dominios})
+
+
+def check_schema(request):
+    if HttpRequest.is_ajax and request.method == 'GET':        
+        schema_name = request.GET.get('form1-schema_name')       
+        if schema_exists(schema_name):
+            print('duplicate')  # have this for checking in console
+            return HttpResponse('false')
+        else:
+            print("no duplicate")
+            print(str(schema_name))
+            return HttpResponse('true')
+    else:
+        return HttpResponse("Zero")
