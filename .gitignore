@@ -1,3 +1,12 @@
 bin/
 include/
 lib/
+superpizzas\__pycache__
+apps\franquicias\__pycache__
+apps\franquicias\migrations\__pycache__
+apps\ingredientes\__pycache__
+apps\ingredientes\migrations\__pycache__
+apps\pizzas\__pycache__
+apps\pizzas\migrations\__pycache__
+apps\usuarios\__pycache__
+apps\usuarios\migrations\__pycache__

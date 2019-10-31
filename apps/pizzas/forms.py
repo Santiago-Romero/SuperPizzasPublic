@@ -9,4 +9,4 @@ class PizzaForm(forms.ModelForm):
             required=True)
     class Meta:
         model = Pizza
-        fields = ('nombre','ingrediente','valor')
+        fields = ('nombre','ingrediente','valor','descripcion','especial','enventa')
