@@ -100,9 +100,11 @@ def inicio_sesion_admin(request):
         formulario = UserAuthenticationForm(request.POST)
 
         if formulario.is_valid:
+            
             username = request.POST['username']
             password = request.POST['password']
             acceso_user = authenticate(username = username, password = password)
+            print(acceso_user)
             # Si el log fue existoso?
             if acceso_user is not None:
                 #si el usuario esta activo
@@ -114,7 +116,9 @@ def inicio_sesion_admin(request):
                 else:
                     messages.add_message(request, messages.INFO, 'Error')
             else:
-                messages.add_message(request, messages.INFO, 'Por favor revisa tu usuario o password')
+                messages.warning(request, 'Por favor revisa tu usuario o password')
+                return render(request,  'landingpage/login.html', {'formulario':formulario}) 
+                #messages.add_message(request, messages.INFO, 'Por favor revisa tu usuario o password')
         else:
             messages.add_message(request, messages.INFO, 'Error')
     else:
