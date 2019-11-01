@@ -1,10 +1,10 @@
 ### Para correr se debe tener las siguientes librerias
-django-tenants
-psycopg2
-django-bootstrap4
-django-role-permissions
-django-tenants-schemas
-*(usar `pip install [liberias]` para ello)*
+- django-tenants
+- psycopg2
+- django-bootstrap4
+- django-role-permissions
+- django-tenants-schemas
+- *(usar `pip install -r requirements.txt` para ello)*
 
 ### Dentro del proyecto hacer
 - `python manage.py makemigrations`
