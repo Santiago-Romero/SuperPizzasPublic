@@ -1,0 +1,5 @@
+django-tenants==2.2.3
+psycopg2==2.8.3
+django-bootstrap4==1.0.1
+django-role-permissions==2.2.1
+django-tenants-schemas==1.9.0
