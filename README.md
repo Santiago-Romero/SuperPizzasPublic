@@ -3,7 +3,7 @@
 - psycopg2
 - django-bootstrap4
 - django-role-permissions
-- django-tenants-schemas
+- django-tenant-schemas
 - *(usar `pip install -r requirements.txt` para ello)*
 
 ### Dentro del proyecto hacer
