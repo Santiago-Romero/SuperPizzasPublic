@@ -9,26 +9,30 @@ from django.views.decorators.csrf import csrf_protect
 
 
 def gestionar_usuario(request, id_usuario=None):
-    """
-    Permite la creación y modificación de usuarios
-    :param request:
-    :param id_usuario:
-    :return:
-    """
+    
+    usuarios = Usuario.objects.all()
+    usuario = None
+
     if id_usuario:
         usuario = get_object_or_404(Usuario, id=id_usuario)
+        form = UsuarioForm(instance=usuario)
     else:
-        usuario = None
-    form = UsuarioForm(instance=usuario)
-    usuarios = Usuario.objects.all()
+        form = UsuarioForm()
+
+    
     if request.method == 'POST':
+        usuario = Usuario.objects.get(cc=request.POST['cc'])
         form = UsuarioForm(request.POST, instance=usuario)
+        
         if form.is_valid():
             form.save()
             messages.success(request, 'Usuario creado correctamente')
             return redirect('usuarios:registrar')
         else:
             messages.error(request, 'Por favor verificar los campos en rojo')
+            print(str(form.errors))
+    
+
     return render(request, 'usuarios/gestionar_usuario.html', {'form': form, 'usuario': usuario, 'usuarios': usuarios})
 
 def gestionar_cliente(request, id_cliente=None):
