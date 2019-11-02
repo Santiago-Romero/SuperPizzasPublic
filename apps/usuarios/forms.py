@@ -46,12 +46,29 @@ class UserForm(UserCreationForm):
 
         
         widgets = {
-			'first_name':forms.TextInput(attrs={'class':'form-label required'}),
-			'email':forms.TextInput(attrs={'class':'form-label required', 'type':'email'}),
-			'username':forms.TextInput(attrs={'class':'form-label required'}),
-			'password1':forms.TextInput(attrs={'class':'form-label required','type':'password'}),
-            'password2':forms.TextInput(attrs={'class':'form-label required','type':'password'}),
-		}
+            'first_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
+            'last_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
+            'email':forms.TextInput(attrs={'class':'form-label required form-control', 'type':'email'}),
+            'username':forms.TextInput(attrs={'class':'form-label form-control required',}),
+            'password1':forms.TextInput(attrs={'class':'form-label required form-control','type':'password',}),
+            'password2':forms.TextInput(attrs={'class':'form-label required form-control','type':'password',}),
+        }
+
+class UpdateUser(UserCreationForm):
+    class Meta:
+        model = User
+
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+        ]
+        
+        widgets = {
+            'first_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
+            'last_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
+            'email':forms.TextInput(attrs={'class':'form-label required form-control', 'type':'email'}),
+        }
     
 class UserAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control input-md','name':'username_login'}))

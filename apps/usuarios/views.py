@@ -11,30 +11,74 @@ from django.views.decorators.csrf import csrf_protect
 
 def gestionar_usuario(request, id_usuario=None):
     
-    usuarios = Usuario.objects.all()
+    usuarios = User.objects.all()
     usuario = None
+    
+    if request.method == 'POST':
+        
+        if request.POST['user']=='':
+            form = UsuarioForm(request.POST)
+            formUserDjango = UserForm(request.POST)
+
+            if formUserDjango.is_valid():
+                
+                usuario = formUserDjango.save(commit=False)
+                        
+                usuario = User(username=request.POST['username'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
+                        
+                usuario.set_password(request.POST['password1'])
+                        
+                usuario.save()
+
+                #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
+
+                perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol='b')
+
+                perfil.save()
+
+            else:
+
+                print(str(form.errors))
+                print(str(formUserDjango.errors))
+
+        else:
+            usuario = get_object_or_404(Usuario, cc=request.POST['cc'])
+            user = User.objects.get(pk=usuario.user.id)
+            form = UsuarioForm(request.POST, instance=usuario)
+            form2 = UpdateUser(data=request.POST, instance=user)
+            print(request.POST)
+
+            if form.is_valid():
+                form.save()
+                user.first_name = request.POST['first_name']
+                user.last_name = request.POST['last_name']
+                user.email = request.POST['email']
+                user.save()
+                messages.success(request, 'Usuario actualizado correctamente')
+                form = UsuarioForm()
+                form2 = UserForm()
+                usuario = None
+                
+                return redirect('usuarios:registrar')
+        
+            else:
+                messages.error(request, 'Por favor verificar los campos en rojo')
+                print(str(form.errors))
+                print(str(form2.errors))
 
     if id_usuario:
         usuario = get_object_or_404(Usuario, id=id_usuario)
+        user = User.objects.get(pk=usuario.user.id)
         form = UsuarioForm(instance=usuario)
+        form2 = UpdateUser(instance=user)
+        flag = 0
     else:
-        form = UsuarioForm()
+        form = UsuarioForm()    
+        form2 = UserForm()
+        flag = 1
 
-    
-    if request.method == 'POST':
-        usuario = Usuario.objects.get(cc=request.POST['cc'])
-        form = UsuarioForm(request.POST, instance=usuario)
-        
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Usuario creado correctamente')
-            return redirect('usuarios:registrar')
-        else:
-            messages.error(request, 'Por favor verificar los campos en rojo')
-            print(str(form.errors))
-    
 
-    return render(request, 'usuarios/gestionar_usuario.html', {'form': form, 'usuario': usuario, 'usuarios': usuarios})
+    return render(request, 'usuarios/gestionar_usuario.html', {'form': form, 'usuario': usuario, 'usuarios': usuarios, 'form2':form2,'flag':flag})
 
 def gestionar_cliente(request, id_cliente=None):
     """
@@ -61,17 +105,18 @@ def gestionar_cliente(request, id_cliente=None):
 
 
 def eliminar_usuario(request, id_usuario):
-    """
-    Permite la eliminación de usuarios
-    :param request:
-    :param id_usuario:
-    :return:
-    """
+    
     usuario = get_object_or_404(Usuario, id=id_usuario)
-    usuario.delete()
-    messages.success(request, 'Usuario eliminado correctamente')
 
-    return redirect('usuarios:registrar')
+    if usuario != None:
+        user = User.objects.get(pk=usuario.user.id)
+        usuario.delete()
+        user.delete()
+        messages.success(request, 'Usuario eliminado correctamente')
+        return redirect('usuarios:registrar')
+    else:
+        messages.warning(request, 'Usuario no encontrado')
+        return redirect('usuarios:registrar')
 
 
 @csrf_protect
