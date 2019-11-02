@@ -1,66 +1,226 @@
-{% extends 'base_tablas.html' %}
-{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="colorlib.com">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Registro compra de franquicia</title>
 
-{% block page_title %}
-    Registro de clientes
-{% endblock %}
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{% static 'pago/fonts/themify-icons/themify-icons.css' %}">
 
-{% block content %}
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Registrar cliente</h4>
-                    <hr>
-                    <form method="POST">{% csrf_token %}
-                        {% bootstrap_form form %}
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Listado de clientes </h4>
-                    <hr>
-                    <div class="table-responsive">
-                        <table class="table table-bordered data-combine">
-                            <thead>
-                                <tr>
-                                    <th>Nickname</th>
-                                    <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Rol</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for usuario in usuarios %}
-                                    <tr>
-                                        <td>{{ usuario.nickname }}</td>
-                                        <td>{{ usuario.nombre }}</td>
-                                        <td>{{ usuario.apellido }}</td>
-                                        <td>{{ usuario.rol }}</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-primary dropdown-toggle" type="button"
-                                                        id="dropdownMenuButton" data-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="false">
-                                                    Opciones
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="{% url 'usuarios:modificar' usuario.id %}">Modificar</a>
-                                                    <a class="dropdown-item" href="{% url 'usuarios:eliminar' usuario.id %}">Eliminar</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'pago/css/style.css' %}">
+</head>
+<body>
+    {% include 'landingpage/nav.html' %}
+    <div class="main">
+        <div class="container">
+            <h2>Registro de clientes</h2>
+            {% if form.errors %}
+                <!-- Error messaging -->
+                <div id="errors">
+                    <div class="inner">
+                        <p>There were some errors in the information you entered. Please correct the following:</p>
+                        {{ form3.non_field_errors }}
+                        <ul>
+                            {% for field in form3 %}
+                                {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
-            </div>
+                <!-- /Error messaging -->
+            {% endif %}
+            <form method="POST" id="signup-form" class="signup-form">
+                    {% csrf_token %}               
+
+
+                    <!-- Start first step -->
+
+                    <h3>
+                        <span class="icon"><i class="ti-user"></i></span>
+                        <span class="title_text">Personal</span>
+                    </h3>
+                   
+                    <fieldset>
+                        <legend>
+                            <span class="step-heading">Información personal: </span>
+                            <span class="step-number">Paso 1 / 3</span>
+                        </legend>
+
+                        <div class="form-group">
+                            <label for='{{form3.first_name.label_tag}}' class="form-label required">Nombre</label>
+                            {{UserForm.first_name}}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{form2.last_name.label_tag}}" class="form-label required">Apellido</label>
+                            {{UserForm.last_name}}
+                        </div>                       
+    
+                    
+                        <div class="form-group">
+                            <label for="{{form2.cc.name}}" class="form-label required">Documento de identificación</label>
+                            {{form.cc}}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{form2.telefono.name}}" class="form-label required">Teléfono</label>
+                            {{form.telefono}}
+                        </div>
+
+                        <div class="form-group">
+                            <label for='{{form3.email.label_tag}}' class="form-label required">Correo Electronico</label>
+                            {{UserForm.email}}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{form2.pais.name}}" class="form-label required" class="form-label">País</label>
+                            {{form.pais}}
+                        </div>
+                        
+                    </fieldset>
+                        <!-- end first step -->
+
+                       
+                                        
+                        <!-- Start second step -->
+                    <h3>
+                        <span class="icon"><i class="ti-cloud"></i></span>
+                        <span class="title_text">Login</span>
+                    </h3>
+                    <fieldset>
+                        <legend>
+                            <span class="step-heading">Información Login: </span>
+                            <span class="step-number">Paso 2 / 3</span>
+                        </legend>
+
+                        <div class="form-group">
+                            <label for="" class="form-label required">Nombre de Usuario</label>
+                            {{UserForm.username}}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="form-label required">Contraseña</label>
+                            {{UserForm.password1}}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="form-label required">Confirme Contraseña</label>
+                            {{UserForm.password2}}
+                        </div>                                                                      
+<!--
+                        <div class="form-group">
+                                    <label for="password" class="form-label required"> Repita Password</label>
+                                    <input type="password" name="password" id="password" />
+                                </div> -->
+
+                            <div class="form-group">
+                                <label for="{{form2.rol.name}}" type="hidden" ></label>
+                                {{form2.rol}}
+                            </div>
+                    </fieldset>
+
+                    <!-- End second step -->
+
+                    <!-- Start third step -->
+
+                    <h3>
+                        <span class="icon"><i class="ti-credit-card"></i></span>
+                        <span class="title_text">Pago</span>
+                    </h3>
+                    <fieldset>
+                        <legend>
+                            <span class="step-heading">Información del pago: </span>
+                            <span class="step-number">Paso 3 / 3</span>
+                        </legend>
+                        
+                            <div class="form-group">
+                                            <label>Total a pagar</label>
+                                            <input type="number" name="total" id="department" value="{{tipo.precio}}" readonly />
+                                            
+                                        </div>
+<!---
+                        <div class="form-group">
+                                <label for="bank_name" class="form-label required">Cantidad a pagar</label>
+                                <input type="text" name="bank_name" id="bank_name" />
+                            </div>
+-->
+
+                        <div class="form-group">
+                            <label for="{{form2.nombre_banco.name}}" class="form-label required">Nombre Banco</label>
+                            {{form.nombre_banco}}
+                        </div>
+          <!---    
+                        <div class="form-row">
+                            <div class="form-date">
+                                <label for="expiry_date" class="form-label">Fecha de vencimiento</label>
+                                <div class="form-date-group">
+                                    <div class="form-date-item">
+                                        <select id="expiry_date" name="expiry_date"></select>
+                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
+                                    </div>
+                                    <div class="form-date-item">
+                                        <select id="expiry_month" name="expiry_month"></select>
+                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
+                                    </div>
+                                    <div class="form-date-item">
+                                        <select id="expiry_year" name="expiry_year"></select>
+                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+ -->  
+                         
+                        <div class="form-group">
+                                <label for="{{form2.fecha_vencimiento.name}}" class="form-label required">{{form2.fecha_vencimiento.label}}</label>
+                                {{form.fecha_vencimiento}}
+                        </div>
+                      
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{form2.numero_tarjeta.name}}" class="form-label required">Número de tarjeta</label>
+                                {{form.numero_tarjeta}}
+                            </div>
+
+                            <div class="form-group">
+                                    <label for="{{form2.tipo_tarjeta.name}}" class="form-label required">Tipo Tarjeta</label>
+                                    {{form.tipo_tarjeta}}
+                            </div>
+                        </div>
+
+                            <div class="form-group">
+                                <label for="{{form2.cvv.name}}" class="form-label required">CVC/CVV</label>
+                                {{form.cvv}}
+                            </div>
+
+                            <div class="col-sm-6 col-md-4">
+                                {{ form.captcha }}
+                            </div>
+                                                    
+                    </fieldset>
+
+            <!-- End third step -->  
+
+            </form>
         </div>
+
     </div>
-{% endblock %}
+    <div class="footer">
+        
+    </div>
+    <!-- JS -->
+    <script src="{% static 'pago/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/jquery-validation/dist/additional-methods.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/jquery-steps/jquery.steps.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/minimalist-picker/dobpicker.js' %}"></script>
+    <script src="{% static 'pago/js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'landingpage/js/app.js' %}"></script>
+    {% include 'landingpage/footer.html' %}
+</body>
+</html>

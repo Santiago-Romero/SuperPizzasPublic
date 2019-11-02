@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect 
 
 
+
 def gestionar_usuario(request, id_usuario=None):
     
     usuarios = Usuario.objects.all()
@@ -56,7 +57,7 @@ def gestionar_cliente(request, id_cliente=None):
             return redirect('usuarios:registrarcliente')
         else:
             messages.error(request, 'Por favor verificar los campos en rojo')
-    return render(request, 'usuarios/registro_cliente.html', {'form': form, 'usuario': usuario, 'usuarios': usuarios})
+    return render(request, 'usuarios/registro_cliente.html', {'form': form, 'UserForm': UserForm, 'usuario': usuario, 'usuarios': usuarios})
 
 
 def eliminar_usuario(request, id_usuario):
