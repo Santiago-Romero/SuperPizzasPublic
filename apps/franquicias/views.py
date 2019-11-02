@@ -9,8 +9,9 @@ from django_tenants.utils import schema_context
 from django.contrib.auth.models import User
 from apps.usuarios.models import Usuario
 from apps.pizzas.models import Pizza
-from tenant_schemas.utils import schema_exists
+from tenant_schemas.utils import *
 from django.http import HttpRequest
+from rolepermissions.roles import assign_role
 
 def home(request):
 
@@ -76,6 +77,8 @@ def compra_franquicia(request,tipo):
                         
                         usuario.save()
 
+                        assign_role(usuario,'administrador')
+
                         #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
 
                         perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
@@ -84,7 +87,6 @@ def compra_franquicia(request,tipo):
                         
             except Exception as e: 
                 print(e,"error")
-                messages.error(request, 'Ha ocurrido un error durante la creación de la franquicia, se aborto la operación')
             context={
                 'nombre': form.data.get('form1-nombre'),
                 'schema': form.data.get('form1-schema_name'),
