@@ -17,10 +17,30 @@ class UsuarioForm(forms.ModelForm):
         'tipo_tarjeta',
         'numero_tarjeta',
         'cvv',
+        'rol',
         'user'
         ]
 
         widgets = {'rol': forms.HiddenInput(),'user': forms.HiddenInput(),}
+
+class UsuarioForm2(forms.ModelForm):    
+    class Meta:
+        model = Usuario
+
+        fields = [
+        'cc',
+        'telefono',
+        'pais',
+        'nombre_banco',
+        'fecha_vencimiento',
+        'tipo_tarjeta',
+        'numero_tarjeta',
+        'cvv',
+        'rol',
+        'user'
+        ]
+
+        widgets = {'user': forms.HiddenInput(),}
 
 class UserForm(UserCreationForm):
     class Meta:
