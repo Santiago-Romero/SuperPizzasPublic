@@ -5,6 +5,7 @@
 - django-bootstrap4
 - django-role-permissions
 - django-tenant-schemas
+- django-allauth
 - *(usar **`pip install -r requirements.txt`** para ello)*
 
 ### Dentro del proyecto hacer
