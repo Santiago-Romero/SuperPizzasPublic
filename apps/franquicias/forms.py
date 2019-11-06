@@ -16,7 +16,7 @@ class FranquiciaForm(forms.ModelForm):
     class Meta:
         model = Franquicia
         fields = ('nombre', 'schema_name','tipo')
-        widgets = {'tipo': forms.HiddenInput(),}
+        
   
                 
     def clean_schema_name(self):
