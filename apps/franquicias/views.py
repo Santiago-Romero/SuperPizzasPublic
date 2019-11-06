@@ -40,7 +40,8 @@ def home_admin(request):
         return redirect('/')
 
 def inicio_franquicia(request):
-    return render(request, 'landingpage/index.html', {})
+    dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
+    return render(request, 'landingpage/index.html', {'tenants':dominios})
 
 def compra_franquicia(request,tipo):
     

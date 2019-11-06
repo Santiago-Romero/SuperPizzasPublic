@@ -165,41 +165,15 @@
                 </ul>
             </div>
             <ul class="row client-slider" id="clint-slider">
+
+            {% for tenant in tenants%}
                 <li>
-                    <a href="">
-                        <img src="{% static 'landingpage/images/clients/ClientLogo01.png' %}" alt="client logo 1">
+                    <a href="http://{{tenant.domain}}:8000">
+                        <img src="{% static 'landingpage/images/clients/ClientLogo01.png' %}" alt="{{tenant.tenant.nombre}}">
+                        <p>{{tenant.tenant.nombre}}</p>
                     </a>
                 </li>
-                <li>
-                    <a href="">
-                        <img src="{% static 'landingpage/images/clients/ClientLogo02.png' %}" alt="client logo 2">
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <img src="{% static 'landingpage/images/clients/ClientLogo03.png' %}" alt="client logo 3">
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <img src="{% static 'landingpage/images/clients/ClientLogo04.png' %}" alt="client logo 4">
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <img src="{% static 'landingpage/images/clients/ClientLogo05.png' %}" alt="client logo 5">
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <img src="{% static 'landingpage/images/clients/ClientLogo02.png' %}" alt="client logo 6">
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <img src="{% static 'landingpage/images/clients/ClientLogo04.png' %}" alt="client logo 7">
-                    </a>
-                </li>
+            {% endfor %}
             </ul>
         </div>
     </div>
