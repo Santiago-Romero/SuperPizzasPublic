@@ -16,10 +16,31 @@ class UsuarioForm(forms.ModelForm):
         'fecha_vencimiento',
         'tipo_tarjeta',
         'numero_tarjeta',
-        'cvv'
+        'cvv',
+        'rol',
+        'user'
         ]
 
-        widgets = {'rol': forms.HiddenInput(),}
+        widgets = {'rol': forms.HiddenInput(),'user': forms.HiddenInput(),}
+
+class UsuarioForm2(forms.ModelForm):    
+    class Meta:
+        model = Usuario
+
+        fields = [
+        'cc',
+        'telefono',
+        'pais',
+        'nombre_banco',
+        'fecha_vencimiento',
+        'tipo_tarjeta',
+        'numero_tarjeta',
+        'cvv',
+        'rol',
+        'user'
+        ]
+
+        widgets = {'user': forms.HiddenInput(),}
 
 class UserForm(UserCreationForm):
     class Meta:
@@ -45,12 +66,29 @@ class UserForm(UserCreationForm):
 
         
         widgets = {
-			'first_name':forms.TextInput(attrs={'class':'form-label required'}),
-			'email':forms.TextInput(attrs={'class':'form-label required', 'type':'email'}),
-			'username':forms.TextInput(attrs={'class':'form-label required'}),
-			'password1':forms.TextInput(attrs={'class':'form-label required','type':'password'}),
-            'password2':forms.TextInput(attrs={'class':'form-label required','type':'password'}),
-		}
+            'first_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
+            'last_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
+            'email':forms.TextInput(attrs={'class':'form-label required form-control', 'type':'email'}),
+            'username':forms.TextInput(attrs={'class':'form-label form-control required',}),
+            'password1':forms.TextInput(attrs={'class':'form-label required form-control','type':'password',}),
+            'password2':forms.TextInput(attrs={'class':'form-label required form-control','type':'password',}),
+        }
+
+class UpdateUser(UserCreationForm):
+    class Meta:
+        model = User
+
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+        ]
+        
+        widgets = {
+            'first_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
+            'last_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
+            'email':forms.TextInput(attrs={'class':'form-label required form-control', 'type':'email'}),
+        }
     
 class UserAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control input-md','name':'username_login'}))

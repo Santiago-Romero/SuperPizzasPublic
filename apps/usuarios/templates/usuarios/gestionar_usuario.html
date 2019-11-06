@@ -13,8 +13,37 @@
                     <h4 class="card-title">Registrar usuario</h4>
                     <hr>
                     <form method="POST">{% csrf_token %}
+                        <div class="form-group">
+                            <label for="" class="form-label required">Nombre</label>
+                            {{ form2.first_name }}
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="form-label required">Apellido</label>
+                            {{ form2.last_name }}
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="form-label required">Email</label>
+                            {{ form2.email }}
+                        </div>
+                        {% if flag %}
+                        <div class="form-group">
+                            <label for="" class="form-label required">Username</label>
+                            {{ form2.username }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Contraseña</label>
+                            {{ form2.password1 }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Confirme Contraseña</label>
+                            {{ form2.password2 }}
+                        </div> 
+                        {% endif %}
+                        
                         {% bootstrap_form form %}
+                        
                         <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a class="btn btn-danger" href="{% url 'usuarios:registrar' %}" role="button">Cancelar</a>
                     </form>
                 </div>
             </div>
@@ -22,25 +51,23 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Listado de usuarios </h4>
+                    <h4 class="card-title">Listado de usuarios <a href="{% url 'usuarios:registrar' %}" class="btn btn-primary" role="button">+</a></h4>
                     <hr>
                     <div class="table-responsive">
                         <table class="table table-bordered data-combine">
                             <thead>
                                 <tr>
-                                    <th>Nickname</th>
-                                    <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Rol</th>
+                                    <th>username</th>
+                                    <th>first_name</th>
+                                    <th>last_name</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for usuario in usuarios %}
                                     <tr>
-                                        <td>{{ usuario.nickname }}</td>
-                                        <td>{{ usuario.nombre }}</td>
-                                        <td>{{ usuario.apellido }}</td>
-                                        <td>{{ usuario.rol }}</td>
+                                        <td>{{ usuario.username }}</td>
+                                        <td>{{ usuario.first_name }}</td>
+                                        <td>{{ usuario.last_name }}</td>
                                         <td>
                                             <div class="dropdown">
                                                 <button class="btn btn-primary dropdown-toggle" type="button"

@@ -85,6 +85,8 @@ TENANT_APPS = (
     # your tenant-specific apps
 )
 
+ROLEPERMISSIONS_MODULE = 'superpizzas.roles'
+
 INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 TENANT_MODEL = "franquicias.Franquicia" # app.Model
