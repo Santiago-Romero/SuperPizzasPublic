@@ -12,5 +12,6 @@ urlpatterns = [
     path('cerrar_sesion/',cerrar_sesion, name='cerrar_sesion'),    
     path('validate/', check_schema, name='check_schema'),
     path('admin/franquicias/', include('apps.franquicias.urls', namespace='franquicias')),
+   # path ('admin/', admin.site.urls),   
 
 ]
