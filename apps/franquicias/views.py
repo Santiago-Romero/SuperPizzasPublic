@@ -40,7 +40,8 @@ def home_admin(request):
         return redirect('/')
 
 def inicio_franquicia(request):
-    return render(request, 'landingpage/index.html', {})
+    dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
+    return render(request, 'landingpage/index.html', {'tenants':dominios})
 
 def compra_franquicia(request,tipo):
     
@@ -110,54 +111,30 @@ def compra_franquicia(request,tipo):
     return render(request, 'landingpage/compra.html', context)
 
 def reg_franquicia(request):
-    
     dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
-
-    
     if request.method == 'POST':
-
         form = FranquiciaForm(request.POST,prefix="form1")
         formUsuario = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'a'})
         formUserDjango = UserForm(request.POST,prefix="form3")
-
         print(str(request.POST))
-
         if form.is_valid() and formUserDjango.is_valid():
-            
             try:
-
                 with transaction.atomic():
                     franquicia = form.save()
-                   
                     Dominio.objects.create(domain='%s%s' % (franquicia.schema_name, settings.DOMAIN), is_primary=True, tenant=franquicia)
-
                     with schema_context(franquicia.schema_name):
-
-                        #CREACIÓN DEL USUARIO DJANGO
-                        
                         usuario = formUserDjango.save(commit=False)
-                        
                         usuario = User(username=request.POST['form3-username'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
-                        
                         usuario.set_password(request.POST['form3-password1'])
-                        
                         usuario.save()
-
                         assign_role(usuario,'administrador')
-
-                        #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
-
                         perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
-
                         perfil.save()
                         
             except Exception as e: 
                 print(e,"error")
-            context={
-                'nombre': form.data.get('form1-nombre'),
-                'schema': form.data.get('form1-schema_name'),
-            }
-            return render(request,'franquicias/registrar.html',context)
+            messages.success(request, "Franquicia registrada")
+            return redirect('franquicias:registrar')
         else:
             print(str(formUsuario.errors))
             print(str(formUserDjango.errors))
@@ -172,6 +149,7 @@ def reg_franquicia(request):
         'form2': formUsuario,
         'form3': formUserDjango,
         'dominios': dominios,
+        'regis':True
         }
     return render(request, 'franquicias/registrar.html', context)
 
@@ -183,40 +161,6 @@ def inicio_tenants(request):
         'franquicia':request,
     }
     return render(request, 'tenant/index.html', context)
-
-
-def registrar_franquicia(request):
-    """
-    Permite registrar una franquicia (tenant) en el sistema
-    :param request:
-    :return:
-    """
-    dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
-    form = FranquiciaForm()
-    if request.method == 'POST':
-        form = FranquiciaForm(request.POST)
-        if form.is_valid():
-            try:
-                """
-                La operación se maneja como transaccional dado que involucra la creación de más de un objeto los cuales
-                estan relacionados
-                """
-                with transaction.atomic():
-                    franquicia = form.save()
-                    """
-                    Se crea el dominio y se le asocia información alojada en el tenant. En este punto es que sucede la
-                    creación del esquema del tenant en la base de datos
-                    """
-                    Dominio.objects.create(domain='%s%s' % (franquicia.schema_name, settings.DOMAIN), is_primary=True, tenant=franquicia)
-                    messages.success(request, "Se ha registrado correctamente la franquicia")
-            except Exception:
-                messages.error(request, 'Ha ocurrido un error durante la creación de la franquicia, se aborto la operación')
-            return redirect('franquicias:registrar')
-        else:
-            messages.error(request, "Por favor verificar los campos en rojo")
-
-    return render(request, 'franquicias/registrar.html', {'form': form, 'dominios': dominios})
-
 
 def modificar_franquicia(request, id_franquicia):
     """
@@ -237,7 +181,7 @@ def modificar_franquicia(request, id_franquicia):
         else:
             messages.error(request, "Por favor verificar los campos en rojo")
 
-    return render(request, 'franquicias/registrar.html', {'form': form, 'dominios': dominios})
+    return render(request, 'franquicias/registrar.html', {'form': form, 'dominios': dominios,'regis':False})
 
 
 def check_schema(request):

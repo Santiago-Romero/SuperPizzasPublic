@@ -13,9 +13,13 @@
                     <h4 class="card-title">Registrar franquicia</h4>
                     <hr>
                     <form method="POST">{% csrf_token %}
+                    {% if regis %}
                         {% bootstrap_form form1 %}
                         {% bootstrap_form form2 %}
                         {% bootstrap_form form3 %}
+                    {% else %}
+                        {% bootstrap_form form %}
+                    {% endif %}
                         <button type="submit" class="btn btn-warning">Guardar</button>
                     </form>
                 </div>
