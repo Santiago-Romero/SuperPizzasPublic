@@ -110,6 +110,72 @@ def compra_franquicia(request,tipo):
         'tipo': tipoir}
     return render(request, 'landingpage/compra.html', context)
 
+def reg_franquicia(request):
+    
+    dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
+
+    
+    if request.method == 'POST':
+
+        form = FranquiciaForm(request.POST,prefix="form1")
+        formUsuario = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'a'})
+        formUserDjango = UserForm(request.POST,prefix="form3")
+
+        print(str(request.POST))
+
+        if form.is_valid() and formUserDjango.is_valid():
+            
+            try:
+
+                with transaction.atomic():
+                    franquicia = form.save()
+                   
+                    Dominio.objects.create(domain='%s%s' % (franquicia.schema_name, settings.DOMAIN), is_primary=True, tenant=franquicia)
+
+                    with schema_context(franquicia.schema_name):
+
+                        #CREACIÓN DEL USUARIO DJANGO
+                        
+                        usuario = formUserDjango.save(commit=False)
+                        
+                        usuario = User(username=request.POST['form3-username'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
+                        
+                        usuario.set_password(request.POST['form3-password1'])
+                        
+                        usuario.save()
+
+                        assign_role(usuario,'administrador')
+
+                        #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
+
+                        perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
+
+                        perfil.save()
+                        
+            except Exception as e: 
+                print(e,"error")
+            context={
+                'nombre': form.data.get('form1-nombre'),
+                'schema': form.data.get('form1-schema_name'),
+            }
+            return render(request,'franquicias/registrar.html',context)
+        else:
+            print(str(formUsuario.errors))
+            print(str(formUserDjango.errors))
+            print(str(formUserDjango.errors))
+            messages.error(request, "Por favor verificar los campos en rojo")
+    else:
+        form = FranquiciaForm(prefix="form1")
+        formUsuario = UsuarioForm(prefix="form2",initial={'rol': 'a'})
+        formUserDjango = UserForm(prefix="form3")
+    context = {
+        'form1': form,
+        'form2': formUsuario,
+        'form3': formUserDjango,
+        'dominios': dominios,
+        }
+    return render(request, 'franquicias/registrar.html', context)
+
 def inicio_tenants(request):
     context = {
         'pizzas':Pizza.objects.all(),

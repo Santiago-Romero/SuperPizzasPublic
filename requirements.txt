@@ -4,3 +4,4 @@ psycopg2==2.8.3
 django-bootstrap4==1.0.1
 django-role-permissions==2.2.1
 django-tenant-schemas==1.9.0
+django-allauth==0.40.0
