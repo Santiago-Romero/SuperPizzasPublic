@@ -38,6 +38,7 @@
                                     <th>Dirección</th>
                                     <th>Tipo</th>
                                     <th>Fecha de corte</th>
+                                    <th>Imagen</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -48,6 +49,7 @@
                                         <td>{{ dominio.domain }}</td>
                                         <td>{{ dominio.tenant.tipo }}</td>
                                         <td>{{ dominio.tenant.fecha_corte }}</td>
+                                        <td><img src="{{ dominio.tenant.imagen.url }}" alt="image" height="50" width="50"></td>
                                         <td>
                                             <div class="dropdown">
                                                 <button class="btn btn-primary dropdown-toggle" type="button"
