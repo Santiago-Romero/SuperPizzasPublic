@@ -15,7 +15,7 @@ class FranquiciaForm(forms.ModelForm):
 
     class Meta:
         model = Franquicia
-        fields = ('nombre', 'schema_name','tipo')
+        fields = ('nombre', 'schema_name','tipo','imagen')
         
   
                 
@@ -30,4 +30,4 @@ class FranquiciaForm(forms.ModelForm):
 class ModificarFranquiciaForm(forms.ModelForm):
     class Meta:
         model = Franquicia
-        fields = ('nombre', 'tipo')
+        fields = ('nombre', 'tipo','imagen')
