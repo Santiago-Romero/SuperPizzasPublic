@@ -6,6 +6,7 @@
 - django-role-permissions
 - django-tenant-schemas
 - django-allauth
+- pillow
 - *(usar **`pip install -r requirements.txt`** para ello)*
 
 ### Dentro del proyecto hacer
