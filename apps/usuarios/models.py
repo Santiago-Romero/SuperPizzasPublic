@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class Usuario(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
-    Roles = (('d', 'Digitador'), ('v', 'Vendedor'), ('a', 'Admin'))     
+    Roles = (('d', 'Digitador'), ('v', 'Vendedor'), ('a', 'Admin'), ('c', 'Cliente'))     
     cc=models.BigIntegerField(default=1234567890)
     telefono= models.BigIntegerField(default=1234567890)
     pais=models.CharField(max_length=50,default="Colombia")

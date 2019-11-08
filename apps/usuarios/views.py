@@ -91,21 +91,34 @@ def gestionar_cliente(request, id_cliente=None):
     :param id_usuario:
     :return:
     """
-    if id_cliente:
-        usuario = get_object_or_404(Usuario, id=id_cliente)
-    else:
-        usuario = None
-    form = UsuarioForm(instance=usuario)
-    usuarios = Usuario.objects.all()
     if request.method == 'POST':
-        form = UsuarioForm(request.POST, instance=usuario)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Cliente creado correctamente')
-            return redirect('usuarios:registrarcliente')
+        form = UsuarioForm(request.POST,initial={'rol': 'c'})
+        formUserDjango = UserForm(request.POST)
+        
+        if formUserDjango.is_valid(): 
+
+            usuario = formUserDjango.save(commit=False)
+
+            usuario = User(username=request.POST['username'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
+                        
+            usuario.set_password(request.POST['password1'])
+                        
+            usuario.save()
+
+            #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
+
+            perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol-user'])
+
+            perfil.save()
+
+            messages.success(request, 'Cliente registrado correctamente')
+            return redirect('usuarios:registro')
         else:
             messages.error(request, 'Por favor verificar los campos en rojo')
-    return render(request, 'usuarios/registro_cliente.html', {'form': form, 'UserForm': UserForm, 'usuario': usuario, 'usuarios': usuarios})
+    else:
+        form = UsuarioForm(request.POST,initial={'rol': 'c'})
+        formUserDjango = UserForm(request.POST)        
+    return render(request, 'usuarios/registro_cliente.html', {'form': form, 'UserForm': formUserDjango})
 
 
 def eliminar_usuario(request, id_usuario):
