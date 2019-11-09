@@ -7,6 +7,7 @@
 - django-tenant-schemas
 - django-allauth
 - pillow
+- django-countries
 - *(usar **`pip install -r requirements.txt`** para ello)*
 
 ### Dentro del proyecto hacer
