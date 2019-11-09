@@ -18,6 +18,7 @@ class Franquicia(TenantMixin):
     imagen = models.ImageField(upload_to = 'images', default = 'images/logo.png')
     ##primario = ColorField(default='#FF0000')
     ##secundario = ColorField(default='#FF0000').
+    working=models.BooleanField(default=True)
     auto_create_schema = True
 
     def __str__(self):
