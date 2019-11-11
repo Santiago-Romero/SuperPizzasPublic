@@ -12,6 +12,9 @@ from apps.pizzas.models import Pizza
 from tenant_schemas.utils import *
 from django.http import HttpRequest
 from rolepermissions.roles import assign_role
+from apps.franquicias.models import Franquicia
+import json
+import os
 
 def home(request):
 
@@ -110,11 +113,19 @@ def compra_franquicia(request,tipo):
     return render(request, 'landingpage/compra.html', context)
 
 def inicio_tenants(request):
+    nombreFranquicia= request.tenant.nombre 
+    franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
     context = {
         'pizzas':Pizza.objects.all(),
         'especiales': Pizza.objects.filter(especial=True,enventa=True),
         'enventas': Pizza.objects.filter(enventa=True),
         'franquicia':request,
+        'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
+        'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
+        'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
+        'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
+        'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
+        'logo':  franquicia.media,
     }
     return render(request, 'tenant/index.html', context)
 
@@ -186,3 +197,42 @@ def check_schema(request):
             return HttpResponse('true')
     else:
         return HttpResponse("Zero")
+    
+def configuraciones(request):
+    franquicia= request.tenant.nombre 
+    datosfran = Franquicia.objects.get(schema_name=franquicia)
+    contexto = {'franquicia': datosfran, 
+    'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
+    'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
+    'logo':  datosfran.media,
+    'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
+    }
+
+    if request.method == 'POST':
+        datosfran.configuracion = '{\"colorprimario\":\"#'+ request.POST.get("colorpimario") +'\",\"colorsecundario\":\"#'+ request.POST.get("colorsecundario") +'\", \"tamanioletra\":'+ request.POST.get("tamanioLetra") +'}'
+        
+        if request.FILES.get('inputFileLogoConfig') != None:
+            pathLogoAnterior = datosfran.media
+            if pathLogoAnterior != 'media/logos-franquicias/1_logo_default.png':
+                try:
+                    os.remove(datosfran.media.path)
+                except:
+                    print('***No se pudo Eliminar imagen anterior***')
+            datosfran.media = request.FILES.get('inputFileLogoConfig')
+        try:    
+            datosfran.save()
+            messages.success(request, 'Configuraciones guardadas correctamente')
+        except:
+            messages.error(request, 'Error al intentar guardar configuraciones')
+
+        franquicia= request.tenant.nombre 
+        datosfran = Franquicia.objects.get(schema_name=franquicia)
+        contexto = {'franquicia': datosfran, 
+        'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
+        'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
+        'logo':  datosfran.media,
+        'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
+        }
+    return render(request,'franquicias/configuraciones.html', contexto)
+        
+    

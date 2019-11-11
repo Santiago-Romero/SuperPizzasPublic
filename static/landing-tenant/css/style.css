@@ -3919,7 +3919,7 @@ h5 {
   content: "";
   width: 100%;
   height: 1px;
-  border-bottom: 1px dashed #bf7e06;
+  /* border-bottom: 1px dashed #bf7e06; */
   z-index: -1;
 }
 .pricing-entry .text h3 {
