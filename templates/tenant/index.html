@@ -8,12 +8,12 @@
 
     <section class="home-slider owl-carousel img" style="background-image: url({% static 'landing-tenant/images/bg_1.jpg' %});">
       <div class="slider-item">
-      	<div class="overlay"></div>
+      	<div class="overlay" style="background: {{ colorprimario }} !important"></div>
         <div class="container">
           <div class="row slider-text align-items-center" data-scrollax-parent="true">
 
             <div class="col-md-6 col-sm-12 ftco-animate">
-            	<span class="subheading">Deliciosas</span>
+            	<span class="subheading" >Deliciosas</span>
               <h1 class="mb-4">Pizzas</h1>
               <p class="mb-4 mb-md-5">El mejor lugar para ordenar las más deliciosas pizzas</p>
               <p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Ordenar</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">Ver menú</a></p>
@@ -27,12 +27,12 @@
       </div>
 
       <div class="slider-item">
-      	<div class="overlay"></div>
+      	<div class="overlay" style="background: {{ colorprimario }} !important" ></div>
         <div class="container">
           <div class="row slider-text align-items-center" data-scrollax-parent="true">
 
             <div class="col-md-6 col-sm-12 order-md-last ftco-animate">
-            	<span class="subheading">Crunchy</span>
+            	<span class="subheading" >Crunchy</span>
               <h1 class="mb-4">Pizza Italiana</h1>
               <p class="mb-4 mb-md-5">Degusta tanto la pizza fina y crujiente como la alta y esponjosa, al estilo napolitano</p>
               <p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Ordenar</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">Ver menú</a></p>
@@ -69,7 +69,7 @@
 							<p>{{ingrediente.nombre}}</p>
 							{% endfor %}
               <p>| {{pizza.descripcion}}</p>
-    						<p class="price"><span>${{pizza.valor}}</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
+    						<p class="price" ><span >${{pizza.valor}}</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
     					</div>
     				</div>
     			</div>
@@ -79,9 +79,9 @@
 
     	<div class="container">
     		<div class="row justify-content-center mb-5 pb-3 mt-5 pt-5">
-          <div class="col-md-7 heading-section text-center ftco-animate">
+          <div class="col-md-7 heading-section text-center ftco-animate" >
             <h2 class="mb-4">Nuestro Menú</h2>
-            <p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+            <p class="flip" style="background: {{ colorsecundario }};"><span class="deg1" style="background: {{ colorsecundario }};"></span><span class="deg2" style="background: {{ colorsecundario }};"></span><span class="deg3" style="background: {{ colorsecundario }};"></span></p>
             <p class="mt-5">Sabores tradicionales y únicos con la más cuidadosa selección de ingrendientes.</p>
           </div>
         </div>
@@ -92,7 +92,7 @@
         		<div class="pricing-entry d-flex ftco-animate">
         			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-1.jpg' %});"></div>
         			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
+	        			<div class="d-flex text align-items-center" style="border-bottom: 1px dashed {{ colorsecundario }};z-index: -1;" >
 	        				<h3><span>{{pizza.nombre}}</span></h3>
 	        				<span class="price">${{pizza.valor}}</span>
 	        			</div>
@@ -114,9 +114,9 @@
         <div class="pricing-entry d-flex ftco-animate">
         			<div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-1.jpg' %});"></div>
         			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
+	        			<div class="d-flex text align-items-center" style="border-bottom: 1px dashed {{ colorsecundario }};z-index: -1;">
 	        				<h3><span>{{pizza.nombre}}</span></h3>
-	        				<span class="price">${{pizza.valor}}</span>
+	        				<span class="price" style="color: {{ colorsecundario }};">${{pizza.valor}}</span>
 	        			</div>
 	        			<div class="d-block">
 						{% for ingrediente in pizza.ingrediente.all %}
@@ -131,24 +131,24 @@
     	</div>
     </section>
     
-    <section class="ftco-section ftco-services">
+    <section class="ftco-section ftco-services" style="background: {{ colorprimario }};">
     	<div class="overlay"></div>
     	<div class="container">
-    		<div class="row justify-content-center mb-5 pb-3">
+    		<div class="row justify-content-center mb-5 pb-3" style="color: white !important;">
           <div class="col-md-7 heading-section ftco-animate text-center">
-            <h2 class="mb-4">Nuestros servicios</h2>
-            <p>Se ofrecen domicilios de lunes a domingo desde las 17:00 hasta las 24:00 </p>
+            <h2 class="mb-4" >Nuestros servicios</h2>
+            <p  style="color: white !important;">Se ofrecen domicilios de lunes a domingo desde las 17:00 hasta las 24:00 </p>
           </div>
         </div>
     		<div class="row">
-          <div class="col-md-4 ftco-animate">
-            <div class="media d-block text-center block-6 services">
+          <div class="col-md-4 ftco-animate" >
+            <div class="media d-block text-center block-6 services" >
               <div class="icon d-flex justify-content-center align-items-center mb-5">
               	<span class="flaticon-pizza"></span>
               </div>
               <div class="media-body">
-                <h3 class="heading">Pizzas Italianas</h3>
-                <p>Con dos tipos de masa, la napolitana y la tradicional. La primera es fina en el centro, de bordes gruesos y de consistencia esponjosa; la segunda es fina, crujiente y de bordes finos.</p>
+                <h3 class="heading"  style="color: white !important;">Pizzas Italianas</h3>
+                <p  style="color: white !important;">Con dos tipos de masa, la napolitana y la tradicional. La primera es fina en el centro, de bordes gruesos y de consistencia esponjosa; la segunda es fina, crujiente y de bordes finos.</p>
               </div>
             </div>      
           </div>
@@ -157,9 +157,9 @@
               <div class="icon d-flex justify-content-center align-items-center mb-5">
               	<span class="flaticon-bicycle"></span>
               </div>
-              <div class="media-body">
-                <h3 class="heading">Domicilios rápidos</h3>
-                <p>Con compras 100% online, contamos con una plataforma simple y práctica que te permite realizar tus pedidos y recibir uno de lo servicios de delivery más rápido.</p>
+              <div class="media-body" >
+                <h3 class="heading"  style="color: white !important;">Domicilios rápidos</h3>
+                <p  style="color: white !important;">Con compras 100% online, contamos con una plataforma simple y práctica que te permite realizar tus pedidos y recibir uno de lo servicios de delivery más rápido.</p>
               </div>
             </div>      
           </div>
@@ -167,8 +167,8 @@
             <div class="media d-block text-center block-6 services">
               <div class="icon d-flex justify-content-center align-items-center mb-5"><span class="flaticon-pizza-1"></span></div>
               <div class="media-body">
-                <h3 class="heading">Recetas originales</h3>
-                <p>Con una masa elaborada tal y como manda la tradición, unos ingredientes frescos y originales y cocinada a 400º en un horno de piedra fabricado en Italia. Así es la pizza de Superpizzas </p>
+                <h3 class="heading"  style="color: white !important;">Recetas originales</h3>
+                <p  style="color: white !important;">Con una masa elaborada tal y como manda la tradición, unos ingredientes frescos y originales y cocinada a 400º en un horno de piedra fabricado en Italia. Así es la pizza de Superpizzas </p>
               </div>
             </div>    
           </div>

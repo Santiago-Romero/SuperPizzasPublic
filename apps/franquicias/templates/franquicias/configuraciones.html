@@ -1,0 +1,58 @@
+{% extends 'base_tablas.html' %}
+
+{% load bootstrap4 %}
+
+{% block card_title %}
+Personalización de Sitio Web
+{% endblock %}
+
+
+{% block card_content %}
+<link rel="stylesheet" type="text/css" href="/static/css/franquicia-custom.css">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
+    </script>
+<script src="/static/js/jquery-3.2.1.min.js"></script>
+<script src="/static/js/jscolor.js"></script>
+<script src="/static/js/functions.franquicia.js"></script>
+
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <br>
+    <span> Tamaño Letra: </span> <span id="tamanioLetraNum"> {{ tamanioletra}}% </span><br>
+    <input type="range" name="tamanioLetra" min="1" max="200" step="1" value="{{ tamanioletra}}" class="slider"
+        id="myRange-letra">
+    <br>
+    <br>
+
+    <div class="row">
+        <div class="col" style="padding-bottom: 20px; ">
+            <span> Color Primario: </span> <br> <input id="colorpimario" name="colorpimario" class="jscolor"
+                value="{{ colorprimario }}" style="width: 100px;">
+        </div>
+
+        <div class="col" style="padding-bottom: 20px; ">
+            <span> Color Secundario: </span> <br><input id="colorsecundario" name="colorsecundario" class="jscolor"
+                value="{{ colorsecundario }}" style="width: 100px;">
+        </div>
+
+    </div>
+
+  
+    <br>
+    Logo: <br>
+    <img id="imagenLogoConfig" src="/static/{{ logo }}" alt="Logo" class="img-thumbnail" width="80px"><br>
+    <!-- <input  id="inputFileLogoConfig" name="inputFileLogoConfig" type="file" accept="image/*" /> -->
+    <label class="custom-file-upload">
+            <input  id="inputFileLogoConfig" name="inputFileLogoConfig" type="file" accept="image/*" />
+            Cargar Imagen
+    </label>
+    <br><br>
+    <input type="submit" class="btn btn-primary btn-lg" value="Guardar">
+
+</form>
+<!-- <input type="color"> -->
+<script src="/static/js/functions.franquicia.js"></script>
+{% endblock %}
