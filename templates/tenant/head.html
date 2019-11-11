@@ -26,4 +26,82 @@
     <link rel="stylesheet" href="{% static 'landing-tenant/css/flaticon.css' %}">
     <link rel="stylesheet" href="{% static 'landing-tenant/css/icomoon.css' %}">
     <link rel="stylesheet" href="{% static 'landing-tenant/css/style.css' %}">
+    <style type="text/css">
+        .btn.btn-primary {
+          background: {{ colorsecundario }};
+          border: 1px solid {{ colorsecundario }} 
+        }
+
+        .btn.btn-primary:hover {
+          color: {{ colorsecundario }};
+          border: 1px solid {{ colorsecundario }} 
+        }
+
+        .btn.btn-white.btn-outline-white {
+          color: {{ colorsecundario }};
+          border: 1px solid {{ colorsecundario }} 
+        }
+
+        .btn.btn-white.btn-outline-white:hover {
+          background: {{ colorsecundario }};
+          border: 1px solid {{ colorsecundario }} 
+        }
+        .navbar-brand small{
+          color: {{ colorsecundario }};
+        }
+        .ftco-navbar-light .navbar-nav > .nav-item.active > a{
+          color: {{ colorsecundario }};
+        }
+        .ftco-navbar-light .navbar-nav > .nav-item > .nav-link{
+          font-size: {{ tamanioletra }}%;
+        }
+
+        .ftco-navbar-light .navbar-nav > .nav-item > .nav-link:hover{
+          color: {{ colorsecundario }};
+        }
+
+        .services:hover .icon:after{
+          background: {{ colorsecundario }}
+        }
+
+        .services .icon:after{
+          border: 1px solid {{ colorsecundario }};
+        }
+
+        .services .icon span{
+          color: {{ colorsecundario }};
+        }
+
+    
+        .ftco-navbar-light.scrolled .nav-item.active > a{
+          color: {{ colorsecundario }} !important;
+        }
+        .services-wrap .text .price span {
+          color: {{ colorsecundario }} !important;
+        }
+
+        p{
+          font-size: {{ tamanioletra }}% !important;
+        }
+        h1, h2, h3{
+          color: white !important;
+          font-size: {{ tamanioletraX2 }}% !important;
+        }
+        .owl-carousel.home-slider .slider-item .slider-text .subheading{
+          color: {{ colorsecundario }};
+          font-size: {{ tamanioletraX2 }}% !important;
+        }
+
+        .btn {
+          font-size: {{ tamanioletraXpix }}px ;
+        }
+        .pricing-entry .text .price{
+          color: {{ colorsecundario }};
+          font-size: {{ tamanioletra }}% !important;
+        }
+        .text {
+          font-size: {{ tamanioletra }}% !important;
+        }
+        
+    </style>
   </head>

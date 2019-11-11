@@ -1,0 +1,8 @@
+{% url 'configuraciones' as config %}
+<li class="nav-item  {% if registrar in request.path %}inactive{% endif %}">
+    <!-- <a class="nav-link" href="{{ registrar }}"> -->
+    <a class="nav-link" href="{{ config }}">
+        <i class="menu-icon mdi mdi-settings"></i>
+        <span class="menu-title text-uppercase">Configuraciones</span>
+    </a>
+</li>
