@@ -157,9 +157,7 @@
                 <li>
                     <a href="http://{{tenant.domain}}:8000">
                        <!--  <img src="{% static 'landingpage/images/clients/Pizzas1Logo.png' %}" alt="{{tenant.tenant.nombre}}"> -->
-					   <!-- Se requiere guardar el nombre en la BD de la siguiente forma /static/landingpage/images/clients/NombreFranquiciaLogo.png -->
-					    <img src="{{tenant.tenant.imagen}}" alt="{{tenant.tenant.nombre}}">
-                        <p>{{tenant.tenant.nombre}}</p>
+					   <img src="/static/landingpage/images/clients/{{tenant.tenant.imagen}}" alt="{{tenant.tenant.nombre}}">
                     </a>
                 </li>
             {% endfor %}
