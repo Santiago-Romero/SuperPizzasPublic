@@ -17,10 +17,12 @@ def gestionar_usuario(request, id_usuario=None):
     if request.method == 'POST':
         
         if request.POST['user']=='':
-            form = UsuarioForm(request.POST)
+            form = UsuarioForm2(request.POST)
             formUserDjango = UserForm(request.POST)
 
             if formUserDjango.is_valid():
+
+                print(request.POST)
                 
                 usuario = formUserDjango.save(commit=False)
                         
@@ -32,7 +34,7 @@ def gestionar_usuario(request, id_usuario=None):
 
                 #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
 
-                perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol='b')
+                perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol-user'])
 
                 perfil.save()
 
@@ -44,7 +46,7 @@ def gestionar_usuario(request, id_usuario=None):
         else:
             usuario = get_object_or_404(Usuario, cc=request.POST['cc'])
             user = User.objects.get(pk=usuario.user.id)
-            form = UsuarioForm(request.POST, instance=usuario)
+            form = UsuarioForm2(request.POST, instance=usuario)
             form2 = UpdateUser(data=request.POST, instance=user)
             print(request.POST)
 
@@ -55,7 +57,7 @@ def gestionar_usuario(request, id_usuario=None):
                 user.email = request.POST['email']
                 user.save()
                 messages.success(request, 'Usuario actualizado correctamente')
-                form = UsuarioForm()
+                form = UsuarioForm2()
                 form2 = UserForm()
                 usuario = None
                 
@@ -69,11 +71,13 @@ def gestionar_usuario(request, id_usuario=None):
     if id_usuario:
         usuario = get_object_or_404(Usuario, id=id_usuario)
         user = User.objects.get(pk=usuario.user.id)
-        form = UsuarioForm(instance=usuario)
+        form = UsuarioForm2(instance=usuario)
+        form.fields['rol'].initial = [usuario.rol]
         form2 = UpdateUser(instance=user)
         flag = 0
+        print(request.GET)
     else:
-        form = UsuarioForm()    
+        form = UsuarioForm2()    
         form2 = UserForm()
         flag = 1
 
@@ -87,21 +91,36 @@ def gestionar_cliente(request, id_cliente=None):
     :param id_usuario:
     :return:
     """
-    if id_cliente:
-        usuario = get_object_or_404(Usuario, id=id_cliente)
-    else:
-        usuario = None
-    form = UsuarioForm(instance=usuario)
-    usuarios = Usuario.objects.all()
     if request.method == 'POST':
-        form = UsuarioForm(request.POST, instance=usuario)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Cliente creado correctamente')
-            return redirect('usuarios:registrarcliente')
+        form = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'c'})
+        formUserDjango = UserForm(request.POST,prefix="form3")
+        
+        if formUserDjango.is_valid():
+
+            usuario = formUserDjango.save(commit=False)
+
+            usuario = User(username=request.POST['form3-username'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
+                        
+            usuario.set_password(request.POST['form3-password1'])
+
+            usuario.save()
+
+            #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
+
+            perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
+
+            perfil.save()   
+
+            messages.success(request, 'Cliente registrado correctamente')
+            return redirect('login')
         else:
             messages.error(request, 'Por favor verificar los campos en rojo')
-    return render(request, 'usuarios/registro_cliente.html', {'form': form, 'UserForm': UserForm, 'usuario': usuario, 'usuarios': usuarios})
+            print(str(form.errors))
+            print(str(formUserDjango.errors))
+    else:
+        form = UsuarioForm(prefix="form2",initial={'rol': 'a'})
+        formUserDjango = UserForm(prefix="form3")        
+    return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': formUserDjango})
 
 
 def eliminar_usuario(request, id_usuario):

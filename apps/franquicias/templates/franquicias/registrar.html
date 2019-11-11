@@ -13,7 +13,13 @@
                     <h4 class="card-title">Registrar franquicia</h4>
                     <hr>
                     <form method="POST">{% csrf_token %}
+                    {% if regis %}
+                        {% bootstrap_form form1 %}
+                        {% bootstrap_form form2 %}
+                        {% bootstrap_form form3 %}
+                    {% else %}
                         {% bootstrap_form form %}
+                    {% endif %}
                         <button type="submit" class="btn btn-warning">Guardar</button>
                     </form>
                 </div>
@@ -32,6 +38,7 @@
                                     <th>Dirección</th>
                                     <th>Tipo</th>
                                     <th>Fecha de corte</th>
+                                    <th>Imagen</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -42,6 +49,7 @@
                                         <td>{{ dominio.domain }}</td>
                                         <td>{{ dominio.tenant.tipo }}</td>
                                         <td>{{ dominio.tenant.fecha_corte }}</td>
+                                        <td><img src="{{ dominio.tenant.imagen.url }}" alt="image" height="50" width="50"></td>
                                         <td>
                                             <div class="dropdown">
                                                 <button class="btn btn-primary dropdown-toggle" type="button"

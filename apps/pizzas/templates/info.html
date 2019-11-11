@@ -1,0 +1,72 @@
+{% extends 'base_tablas.html' %}
+{% load bootstrap4 %}
+
+{% block page_title %}
+    Registro de pizzas
+{% endblock %}
+
+{% block content %}
+<div class="card">
+<div class="card-body">
+<h4 class="card-title">Información </h4>
+<hr>
+<style>
+    .badge{
+        font-size:100%;
+    }
+    .badge-spz{
+        background-color: #4F507E;
+        color: #ffffff;
+        }
+    .badge2-spz{
+        background-color: #D3D4E5;
+        }
+</style>
+<table>
+        <tr>
+          <td><h2 class="badge">Nombre: </h2></td>
+          <td><h2 class="badge badge-spz">{{request.tenant.nombre}} </h2></td>
+        </tr>
+        <tr>
+          <td><h2 class="badge">Dominio: </h2></td>
+          <td><h2 class="badge badge-spz">{{request.tenant.schema_name}}.superpizzas.com </h2></td>
+        </tr>
+        <tr>
+            <td><h2 class="badge">Fecha de corte: </h2></td>
+            <td><h2 class="badge badge-spz">{{request.tenant.fecha_corte.day}} de cada mes</h2></td>
+        </tr>
+        <tr>
+            <td><h2 class="badge">Plan Actual: </h2></td>
+            <td><h2 class="badge badge-spz" style="text-transform: capitalize;">{{request.tenant.tipo.nombre}} - {{request.tenant.tipo.precio}} COP</h2></td>
+        </tr>
+        <tr>
+            <td><h2 class="badge">Tiempo de servicio: </h2></td>
+            <td><h2 class="badge badge-spz" style="text-transform: capitalize;">{{dias}} días</h2></td>
+        </tr>
+</table>
+
+<footer><button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">Retirarse</button></footer>
+</div>
+</div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header badge2-spz">
+              <h5 class="modal-title" id="exampleModalLongTitle"><b>¿Seguro desea retirarse?</b></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Si decides retirarte perderás todos los beneficios que te ofrece superpizzas.<b> No hay reembolsos</b>
+              <hr>En caso de que lo desees, se te entregará la información de tu pizzeria de la cual eres propietario.
+              <hr>¡Piensalo dos veces!
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn badge-spz" data-dismiss="modal">¡NOOO! &#128561</button>
+              <button type="button" class="btn btn-secondary" >Si, Seguro &#128557;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}

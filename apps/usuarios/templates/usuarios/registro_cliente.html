@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="author" content="colorlib.com">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Registro compra de franquicia</title>
+    <title>Registro Clientes</title>
 
     <!-- Font Icon -->
     <link rel="stylesheet" href="{% static 'pago/fonts/themify-icons/themify-icons.css' %}">
@@ -53,33 +53,33 @@
 
                         <div class="form-group">
                             <label for='{{form3.first_name.label_tag}}' class="form-label required">Nombre</label>
-                            {{UserForm.first_name}}
+                            {{form3.first_name}}
                         </div>
 
                         <div class="form-group">
-                            <label for="{{form2.last_name.label_tag}}" class="form-label required">Apellido</label>
-                            {{UserForm.last_name}}
+                            <label for='{{form3.last_name.label_tag}}' class="form-label required">Apellido</label>
+                            {{form3.last_name}}
                         </div>                       
     
                     
                         <div class="form-group">
                             <label for="{{form2.cc.name}}" class="form-label required">Documento de identificación</label>
-                            {{form.cc}}
+                            {{form2.cc}}
                         </div>
 
                         <div class="form-group">
                             <label for="{{form2.telefono.name}}" class="form-label required">Teléfono</label>
-                            {{form.telefono}}
+                            {{form2.telefono}}
                         </div>
 
                         <div class="form-group">
                             <label for='{{form3.email.label_tag}}' class="form-label required">Correo Electronico</label>
-                            {{UserForm.email}}
+                            {{form3.email}}
                         </div>
 
                         <div class="form-group">
                             <label for="{{form2.pais.name}}" class="form-label required" class="form-label">País</label>
-                            {{form.pais}}
+                            {{form2.pais}}
                         </div>
                         
                     </fieldset>
@@ -100,17 +100,17 @@
 
                         <div class="form-group">
                             <label for="" class="form-label required">Nombre de Usuario</label>
-                            {{UserForm.username}}
+                            {{form3.username}}
                         </div>
 
                         <div class="form-group">
                             <label for="" class="form-label required">Contraseña</label>
-                            {{UserForm.password1}}
+                            {{form3.password1}}
                         </div>
 
                         <div class="form-group">
                             <label for="" class="form-label required">Confirme Contraseña</label>
-                            {{UserForm.password2}}
+                            {{form3.password2}}
                         </div>                                                                      
 <!--
                         <div class="form-group">
@@ -138,11 +138,6 @@
                             <span class="step-number">Paso 3 / 3</span>
                         </legend>
                         
-                            <div class="form-group">
-                                            <label>Total a pagar</label>
-                                            <input type="number" name="total" id="department" value="{{tipo.precio}}" readonly />
-                                            
-                                        </div>
 <!---
                         <div class="form-group">
                                 <label for="bank_name" class="form-label required">Cantidad a pagar</label>
@@ -152,7 +147,7 @@
 
                         <div class="form-group">
                             <label for="{{form2.nombre_banco.name}}" class="form-label required">Nombre Banco</label>
-                            {{form.nombre_banco}}
+                            {{form2.nombre_banco}}
                         </div>
           <!---    
                         <div class="form-row">
@@ -177,30 +172,27 @@
                          
                         <div class="form-group">
                                 <label for="{{form2.fecha_vencimiento.name}}" class="form-label required">{{form2.fecha_vencimiento.label}}</label>
-                                {{form.fecha_vencimiento}}
+                                {{form2.fecha_vencimiento}}
                         </div>
                       
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="{{form2.numero_tarjeta.name}}" class="form-label required">Número de tarjeta</label>
-                                {{form.numero_tarjeta}}
+                                {{form2.numero_tarjeta}}
                             </div>
 
                             <div class="form-group">
                                     <label for="{{form2.tipo_tarjeta.name}}" class="form-label required">Tipo Tarjeta</label>
-                                    {{form.tipo_tarjeta}}
+                                    {{form2.tipo_tarjeta}}
                             </div>
                         </div>
 
                             <div class="form-group">
                                 <label for="{{form2.cvv.name}}" class="form-label required">CVC/CVV</label>
-                                {{form.cvv}}
+                                {{form2.cvv}}
                             </div>
-
-                            <div class="col-sm-6 col-md-4">
-                                {{ form.captcha }}
-                            </div>
+                            
                                                     
                     </fieldset>
 

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
-
+from datetime import date
 
 def gestionar_pizza(request, id_pizza=None):
     """
@@ -39,3 +39,9 @@ def eliminar_pizza(request, id_pizza):
     messages.success(request, 'Pizza eliminado correctamente')
 
     return redirect('pizzas:registrar')
+
+def informacion(request):
+    inicio=request.tenant.fecha_corte
+    dias=inicio-date.today()
+    context={'dias':dias.days}
+    return render(request,'info.html',context)

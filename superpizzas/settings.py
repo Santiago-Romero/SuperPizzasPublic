@@ -43,6 +43,18 @@ SHARED_APPS = (
     'django.contrib.staticfiles',
     'bootstrap4',
     'rolepermissions',
+
+    #allauth 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    #provider google
+
+    'allauth.socialaccount.providers.google',
+
+    #countries
+    'django_countries',
     
 )
 
@@ -51,6 +63,7 @@ TENANT_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
+    'django.contrib.contenttypes',
     # este sites se tiraba el superadmin no se porque
     'django.contrib.sites',
     'django.contrib.messages',
@@ -62,6 +75,18 @@ TENANT_APPS = (
     'apps.usuarios',
     'apps.ingredientes',
     'captcha',
+
+    #allauth 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    #provider google
+
+    'allauth.socialaccount.providers.google',
+    
+    #countries 
+    'django_countries',
     # your tenant-specific apps
 )
 
@@ -177,3 +202,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "static")
 NORECAPTCHA_SITE_KEY = "6LduqL8UAAAAAFLmpECMTGr1qkCueUDg5NYDDFcr"
 NORECAPTCHA_SECRET_KEY = "6LduqL8UAAAAAM0P2SZslr4SJ9koM0ZWv9BOsU7"
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+
+# Django all auth settings
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID=1
+LOGIN_REDIRECT_URL= '/admin'
