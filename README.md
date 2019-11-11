@@ -19,6 +19,6 @@
 ```SQL
 INSERT INTO "franquicias_tipofranquicia" ("nombre","precio") VALUES ('basico',79);
 INSERT INTO "franquicias_tipofranquicia" ("nombre","precio") VALUES ('premium',135);
-INSERT INTO "franquicias_franquicia" ("schema_name", "nombre","fecha_corte","configuracion","media","tipo_id") VALUES ('public', 'public',CURRENT_DATE,'{"colorprimario":"#1D1D1D","colorsecundario":"#E9951F", "tamanioletra":100}','media/logos-franquicias/1_logo_default.png',1);
+INSERT INTO "franquicias_franquicia" ("schema_name", "nombre","fecha_corte","configuracion","media","working","tipo_id") VALUES ('public', 'public',CURRENT_DATE,'{"colorprimario":"#1D1D1D","colorsecundario":"#E9951F", "tamanioletra":100}','media/logos-franquicias/1_logo_default.png',true,1);
 INSERT INTO "franquicias_dominio" ("domain", "is_primary", "tenant_id") VALUES ('localhost', true, 1);
 ```
