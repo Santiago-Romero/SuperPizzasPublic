@@ -44,7 +44,8 @@ def home_admin(request):
 
 def inicio_franquicia(request):
     dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
-    return render(request, 'landingpage/index.html', {'tenants':dominios})
+    tipos = TipoFranquicia.objects.all()
+    return render(request, 'landingpage/index.html', {'tenants':dominios,'tipos':tipos})
 
 def compra_franquicia(request,tipo):
     

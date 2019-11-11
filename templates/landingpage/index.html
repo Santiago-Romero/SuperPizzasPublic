@@ -2,6 +2,10 @@
 {% load static %}
 
 {% block inicio %}
+<style>.logos {
+    transform: scale(0.5);
+    }
+    </style>
  <!-- Start home section -->
  <div id="home">
     <!-- Start cSlider -->
@@ -106,32 +110,29 @@
             <p>Superpizzas ofrece dos opciones de planes que se pueden elegir según tus necesidades.</p>
         </div>
         <div class="price-table row-fluid">
+            {% for tipo in tipos %}
             <div class="span4 price-column">
-                <h3>Basico</h3>
+                <h3>{{tipo.nombre}}</h3>
                 <ul class="list">
-                    <li class="price">$19,99</li>
+                    <li class="price">{{tipo.precio}} COP</li>
+                    {% if tipo.id == 1 %}
                     <li><strong>Ilimitado</strong> ingredientes</li>
                     <li><strong>24/7</strong> Soporte</li>
                     <li><strong>Ilimitada</strong> Creación de pizzas</li>
                     <li><strong>Ilimitada</strong> Registro de clientes</li>
                     <li><strong>Ilimitadas</strong> Compras online </li>
-                </ul>
-                <a href="{% url 'compra' 'basico' %}" class="button button-ps">COMPRAR</a>
-            </div>                   
-            <div class="span4 price-column">
-                <h3>Premium</h3>
-                <ul class="list">
-                    <li class="price">$79,99</li>
+                    {% else %}
                     <li><strong>Ilimitado</strong> ingredientes</li>
                     <li><strong>24/7</strong> Soporte</li>
                     <li><strong>Ilimitada</strong> Creación de pizzas</li>
                     <li><strong>Ilimitada</strong> Registro de clientes</li>
                     <li><strong>Ilimitadas</strong> Compras online </li>
                     <li><strong>Ilimitados</strong> Gráficos estadísticos </li>
-
+                    {% endif %} 
                 </ul>
-                <a  href="{% url 'compra' 'premium' %}" class="button button-ps">COMPRAR</a>
+                <a href="{% url 'compra' tipo.nombre %}" class="button button-ps">COMPRAR</a>
             </div>
+            {% endfor %}
         </div>                
     </div>
 </div>
@@ -152,14 +153,12 @@
                 </ul>
             </div>
             <ul class="row client-slider" id="clint-slider">
-
             {% for tenant in tenants%}
                 <li>
                     <a href="http://{{tenant.domain}}:8000">
-                       <!--  <img src="{% static 'landingpage/images/clients/Pizzas1Logo.png' %}" alt="{{tenant.tenant.nombre}}"> -->
-					   <img src="/static/landingpage/images/clients/{{tenant.tenant.imagen}}" alt="{{tenant.tenant.nombre}}">
-					   <h3>{{tenant.tenant.nombre}}</h3>
-					</a>
+                    <img class="logos" src="/static/{{tenant.tenant.media}}" alt="{{tenant.tenant.nombre}}">
+                    <h3>{{tenant.tenant.nombre}}</h3>
+                    </a>
                 </li>
             {% endfor %}
             </ul>
