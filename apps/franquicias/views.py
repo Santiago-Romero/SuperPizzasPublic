@@ -15,6 +15,7 @@ from rolepermissions.roles import assign_role
 from apps.franquicias.models import Franquicia
 import json
 import os
+from datetime import date
 
 def home(request):
 
@@ -246,4 +247,8 @@ def configuraciones(request):
         }
     return render(request,'franquicias/configuraciones.html', contexto)
         
-    
+def informacion(request):
+    inicio=request.tenant.fecha_corte
+    dias=date.today()-inicio
+    context={'dias':dias.days}
+    return render(request,'franquicias/info.html',context)
