@@ -11,7 +11,7 @@ urlpatterns = [
     path('admin/', home_admin, name='home'),
     path('login/', inicio_sesion_admin,name='login'), 
     path('cerrar_sesion/',cerrar_sesion, name='cerrar_sesion'),    
-    path('validate/', check_schema, name='check_schema'),
+    path('validate/', check_schema, name='check_schema'),    
     path('admin/franquicias/', include('apps.franquicias.urls', namespace='franquicias')),
    # path ('admin/', admin.site.urls),   
 

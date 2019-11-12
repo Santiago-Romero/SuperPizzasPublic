@@ -1,7 +1,7 @@
 
 from django.urls import path, include
 from apps.franquicias.views import home, inicio_tenants
-from apps.usuarios.views import inicio_sesion, cerrar_sesion,gestionar_cliente
+from apps.usuarios.views import inicio_sesion, cerrar_sesion,gestionar_cliente, check_email
 
 urlpatterns = [
     path('', inicio_tenants, name='inicio_t'),
@@ -11,6 +11,7 @@ urlpatterns = [
     path('cerrar_sesion/',cerrar_sesion, name='cerrar_sesion'),
     path('admin/pizzas/', include('apps.pizzas.urls', namespace='pizzas')),
     path('admin/usuarios/', include('apps.usuarios.urls', namespace='usuarios')),
-    path('registroclientes/',gestionar_cliente,name="registro"),
+    path('registroclientes/',gestionar_cliente,name="registro"),  
+    path('validate_email/', check_email, name='check_email'),  
     path('admin/ingredientes/', include('apps.ingredientes.urls', namespace='ingredientes')),
 ]

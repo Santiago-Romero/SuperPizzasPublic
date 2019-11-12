@@ -88,6 +88,18 @@ $.ajaxSetup({
            'form3-email' : {
                 required: true,
                 validate_email: true,
+                remote:
+                {
+                      url: "/validate_email/",
+                      type: "get",                 
+                      data:                  
+                      {                                  
+                        'form3-email': function()
+                          {
+                              return $('#signup-form :input[name="form3-email"]').val();
+                          }
+                      }
+                    },
             },
 
             'form2-pais' : {
@@ -180,6 +192,7 @@ $.ajaxSetup({
             },
             'form3-email' : {
                 required : "Por favor digite un email válido",
+                remote: jQuery.validator.format("El email {0} ya está siendo usado"),
                 email: "Por favor digite un email válido!"
             },
 

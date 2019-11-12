@@ -6,8 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect 
-
-
+from rolepermissions.roles import assign_role
+from django.http import HttpResponse
+from django.http import HttpRequest
 
 def gestionar_usuario(request, id_usuario=None):
     
@@ -84,7 +85,9 @@ def gestionar_usuario(request, id_usuario=None):
 
     return render(request, 'usuarios/gestionar_usuario.html', {'form': form, 'usuario': usuario, 'usuarios': usuarios, 'form2':form2,'flag':flag})
 
-def gestionar_cliente(request, id_cliente=None):
+
+
+def gestionar_cliente(request):
     """
     Permite la creación y modificación de usuarios
     :param request:
@@ -98,18 +101,18 @@ def gestionar_cliente(request, id_cliente=None):
         if formUserDjango.is_valid():
 
             usuario = formUserDjango.save(commit=False)
-
+                                 
             usuario = User(username=request.POST['form3-username'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
                         
             usuario.set_password(request.POST['form3-password1'])
-
-            usuario.save()
+                        
+            usuario.save()            
 
             #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
 
-            perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
+            perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='c')
 
-            perfil.save()   
+            perfil.save()  
 
             messages.success(request, 'Cliente registrado correctamente')
             return redirect('login')
@@ -118,7 +121,7 @@ def gestionar_cliente(request, id_cliente=None):
             print(str(form.errors))
             print(str(formUserDjango.errors))
     else:
-        form = UsuarioForm(prefix="form2",initial={'rol': 'a'})
+        form = UsuarioForm(prefix="form2",initial={'rol': 'c'})
         formUserDjango = UserForm(prefix="form3")        
     return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': formUserDjango})
 
@@ -230,4 +233,17 @@ def cerrar_sesion(request):
         return redirect('/login')
     else:
         return redirect('/admin')
+
+def check_email(request):    
+    if HttpRequest.is_ajax and request.method == 'GET':        
+        email = request.GET.get('form3-email','') 
+        if User.objects.filter(email=email).exists():
+            print('duplicate')  # have this for checking in console
+            return HttpResponse('false')
+        else:
+            print("no duplicate")
+            print(str(email))
+            return HttpResponse('true')
+    else:
+        return HttpResponse("Zero")
 
