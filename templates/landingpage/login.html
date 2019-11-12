@@ -35,7 +35,8 @@
         {% endif %}
         <div class="form-row">
             {{ formulario.username.errors }}
-            {{ formulario.username.label_tag }} {{ formulario.username }}
+            <label for="id_username">Correo Electronico:</label>
+            {{ formulario.username }}
         </div>
         <div class="form-row">
             {{ formulario.password.errors }}
