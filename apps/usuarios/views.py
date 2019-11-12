@@ -27,7 +27,7 @@ def gestionar_usuario(request, id_usuario=None):
                 
                 usuario = formUserDjango.save(commit=False)
                         
-                usuario = User(username=request.POST['username'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
+                usuario = User(username=request.POST['email'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
                         
                 usuario.set_password(request.POST['password1'])
                         
@@ -56,6 +56,7 @@ def gestionar_usuario(request, id_usuario=None):
                 user.first_name = request.POST['first_name']
                 user.last_name = request.POST['last_name']
                 user.email = request.POST['email']
+                user.username = request.POST['email']
                 user.save()
                 messages.success(request, 'Usuario actualizado correctamente')
                 form = UsuarioForm2()
@@ -247,3 +248,23 @@ def check_email(request):
     else:
         return HttpResponse("Zero")
 
+
+#Retorna 1 si es anonimo / 2 si es admin / 3 si es digitador / 4 si es vendedor / 5 si es cliente / 6 error
+def get_role_user(request):
+    if request.user.is_anonymous:
+        return 1;
+    else:
+        usuario = request.user
+        user = User.objects.get(pk=usuario.id)
+        perfil = Usuario.objects.get(user=user)
+
+        if perfil.rol == 'a':
+            return 2
+        elif perfil.rol == 'd':
+            return 3
+        elif perfil.rol == 'v':
+            return 4
+        elif perfil.rol == 'c':
+            return 5
+        else:
+            return 6

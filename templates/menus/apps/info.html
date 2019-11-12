@@ -1,0 +1,7 @@
+{% url 'pizzas:info' as informacion %}
+<li class="nav-item {% if informacion in request.path %}active{% endif %}">
+    <a class="nav-link" href="{{ informacion }}">
+        <i class="menu-icon mdi mdi-information"></i>
+        <span class="menu-title text-uppercase">Más</span>
+    </a>
+</li>

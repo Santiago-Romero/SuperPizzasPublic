@@ -52,6 +52,9 @@ SHARED_APPS = (
     #provider google
 
     'allauth.socialaccount.providers.google',
+
+    #countries
+    'django_countries',
     
 )
 
@@ -81,7 +84,9 @@ TENANT_APPS = (
     #provider google
 
     'allauth.socialaccount.providers.google',
-
+    
+    #countries 
+    'django_countries',
     # your tenant-specific apps
 )
 
@@ -192,8 +197,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_collected')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join (BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, "static")
 
 NORECAPTCHA_SITE_KEY = "6LduqL8UAAAAAFLmpECMTGr1qkCueUDg5NYDDFcr"
 NORECAPTCHA_SECRET_KEY = "6LduqL8UAAAAAM0P2SZslr4SJ9koM0ZWv9BOsU7"
