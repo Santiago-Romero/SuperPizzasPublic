@@ -21,7 +21,7 @@
     {% block css %}
     {% endblock css %}
     <!-- endinject -->
-    <link rel="shortcut icon" href="{% static 'landingpage\images\logo.png' %}"/>
+    <link rel="shortcut icon" href="/static/{{ request.tenant.media }}"/>
 </head>
 
 <body>
