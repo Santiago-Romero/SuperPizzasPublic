@@ -76,7 +76,7 @@ def compra_franquicia(request,tipo):
                         
                         usuario = formUserDjango.save(commit=False)
                         
-                        usuario = User(username=request.POST['form3-username'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
+                        usuario = User(username=request.POST['form3-email'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
                         
                         usuario.set_password(request.POST['form3-password1'])
                         

@@ -50,7 +50,6 @@ class UserForm(UserCreationForm):
             'first_name',
             'last_name',
             'email',
-            'username',
             'password1',
             'password2',
         ]
@@ -59,7 +58,6 @@ class UserForm(UserCreationForm):
             'first_name':'Nombres',
             'last_name':'Apellidos',
             'email':'Email',
-            'username':'Nombre de Usuario',
             'password1':'Contrasena',
             'password2':'Confirmacion de Contrasena',
         }
@@ -69,7 +67,6 @@ class UserForm(UserCreationForm):
             'first_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
             'last_name':forms.TextInput(attrs={'class':'form-label required form-control'}),
             'email':forms.TextInput(attrs={'class':'form-label required form-control', 'type':'email'}),
-            'username':forms.TextInput(attrs={'class':'form-label form-control required',}),
             'password1':forms.TextInput(attrs={'class':'form-label required form-control','type':'password',}),
             'password2':forms.TextInput(attrs={'class':'form-label required form-control','type':'password',}),
         }
