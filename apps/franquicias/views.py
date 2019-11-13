@@ -198,7 +198,7 @@ def modificar_franquicia(request, id_franquicia):
 
 def check_schema(request):
     if HttpRequest.is_ajax and request.method == 'GET':        
-        schema_name = request.GET.get('form1-schema_name')       
+        schema_name = request.GET.get('form1-schema_name','')       
         if schema_exists(schema_name):
             print('duplicate')  # have this for checking in console
             return HttpResponse('false')
@@ -208,6 +208,7 @@ def check_schema(request):
             return HttpResponse('true')
     else:
         return HttpResponse("Zero")
+
     
 def configuraciones(request):
     franquicia= request.tenant.nombre 

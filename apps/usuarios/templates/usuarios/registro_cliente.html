@@ -74,11 +74,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label for='{{form3.email.label_tag}}' class="form-label required">Correo Electronico</label>
-                            {{form3.email}}
-                        </div>
-
-                        <div class="form-group">
                             <label for="{{form2.pais.name}}" class="form-label required" class="form-label">País</label>
                             {{form2.pais}}
                         </div>
@@ -100,8 +95,8 @@
                         </legend>
 
                         <div class="form-group">
-                            <label for="" class="form-label required">Nombre de Usuario</label>
-                            {{form3.username}}
+                            <label for='{{form3.email.label_tag}}' class="form-label required">Correo Electronico</label>
+                            {{form3.email}}
                         </div>
 
                         <div class="form-group">
@@ -119,8 +114,7 @@
                                     <input type="password" name="password" id="password" />
                                 </div> -->
 
-                            <div class="form-group">
-                                <label for="{{form2.rol.name}}" type="hidden" ></label>
+                            <div class="form-group">                                
                                 {{form2.rol}}
                             </div>
                     </fieldset>
