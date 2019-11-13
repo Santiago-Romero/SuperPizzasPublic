@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Renuncia</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <style>.card{
+        background-color: #4F507E;
+        color: #ffffff;
+    }
+    body{
+        background-color: #D3D4E5;
+    }
+    </style>
+    <hr>
+    <div class="card">
+    <div class="card-body">
+    <h3 class="card-title">Haz renunciado al servicio de superpizzas</h3>
+    <h5>Aqui está tu información:</h5>
+    <form onsubmit="download(this['name'].value, this['text'].value)">
+    <input class="form-control" readonly type="text" name="name" value="data_{{request.tenant.nombre}}.json">
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" name="text">{{data}}</textarea>
+    <input class="form-control btn btn-dark" type="submit" value="Descargar">
+</form>
+<hr>
+    <a class="btn btn-dark" href="http://localhost:8000">Regresar</a>
+    </div>
+</div>
+<hr>
+<script>
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}</script>
+</body>
+</html>

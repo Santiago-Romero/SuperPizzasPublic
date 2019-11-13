@@ -9,12 +9,15 @@ from django_tenants.utils import schema_context
 from django.contrib.auth.models import User
 from apps.usuarios.models import Usuario
 from apps.pizzas.models import Pizza
+from apps.ingredientes.models import Ingrediente
 from tenant_schemas.utils import *
 from django.http import HttpRequest
 from rolepermissions.roles import assign_role
 from apps.franquicias.models import Franquicia
 import json
 import os
+from datetime import date
+from django.core import serializers
 
 def home(request):
 
@@ -247,4 +250,20 @@ def configuraciones(request):
         }
     return render(request,'franquicias/configuraciones.html', contexto)
         
-    
+def informacion(request):
+    inicio=request.tenant.fecha_corte
+    dias=date.today()-inicio
+    context={'dias':dias.days}
+    return render(request,'franquicias/info.html',context)
+
+def renuncia(request):
+    franquicias = serializers.serialize("json", Franquicia.objects.all())
+    f = {"Franquicias": franquicias}
+    usuarios = serializers.serialize("json", Usuario.objects.all())
+    u = {"Usuarios": usuarios}
+    pizzas = serializers.serialize("json", Pizza.objects.all())
+    i = {"Pizzas": pizzas}
+    ingredientes = serializers.serialize("json", Ingrediente.objects.all())
+    p = {"Ingredientes": ingredientes}
+    data={**f,**u,**i,**p}
+    return render(request,'franquicias/renuncia.html',{'data':data})
