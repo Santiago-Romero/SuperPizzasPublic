@@ -34,7 +34,7 @@ def gestionar_usuario(request, id_usuario=None):
 
                 #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
 
-                perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol-user'])
+                perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol'])
 
                 perfil.save()
 
