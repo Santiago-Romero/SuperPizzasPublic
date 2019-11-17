@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	{% include 'tenant/head.html' %}
+  <body>
+      {% include 'tenant/nav.html' %}
+      <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-3 mt-5 pt-5">
+      <div class="col-md-7 heading-section text-center ftco-animate" >
+        <h2 class="mb-4">Ordenar</h2>
+        <p class="flip" style="background: {{ colorsecundario }};"><span class="deg1" style="background: {{ colorsecundario }};"></span><span class="deg2" style="background: {{ colorsecundario }};"></span><span class="deg3" style="background: {{ colorsecundario }};"></span></p>
+        <p class="mt-5">Sabores tradicionales y únicos con la más cuidadosa selección de ingrendientes.</p>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {% for pizza in enventas %}
+    {% if forloop.counter|divisibleby:2 %}
+            <div class="pricing-entry d-flex ftco-animate">
+                <div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-1.jpg' %});"></div>
+                <div class="desc pl-3">
+                    <div class="d-flex text align-items-center" style="border-bottom: 1px dashed {{ colorsecundario }};z-index: -1;" >
+                        <h3><span>{{pizza.nombre}}</span></h3>
+                        <span class="price">${{pizza.valor}}</span>
+                    </div>
+                    <div class="d-block">
+                    {% for ingrediente in pizza.ingrediente.all %}
+                        <p>{{ingrediente.nombre}}</p>
+                        {% endfor %}
+          <p>| {{pizza.descripcion}}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+            {% endfor  %}
+        </div>
+      <div class="col-md-6">
+            {% for pizza in enventas %}
+    {% if forloop.counter|divisibleby:2 %}
+    {% else %}
+    <div class="pricing-entry d-flex ftco-animate">
+                <div class="img" style="background-image: url({% static 'landing-tenant/images/pizza-1.jpg' %});"></div>
+                <div class="desc pl-3">
+                    <div class="d-flex text align-items-center" style="border-bottom: 1px dashed {{ colorsecundario }};z-index: -1;">
+                        <h3><span>{{pizza.nombre}}</span></h3>
+                        <span class="price" style="color: {{ colorsecundario }};">${{pizza.valor}}</span>
+                    </div>
+                    <div class="d-block">
+                    {% for ingrediente in pizza.ingrediente.all %}
+                        <p>{{ingrediente.nombre}}</p>
+                        {% endfor %}                                                                     
+                    </div>                                           
+                </div>                                     
+            </div>                             
+    {% endif%}    
+    <button class="btn btn-primary btn-md my-0 p" onclick="add_to_cart(event,{{pizza.id}})">Add to cart <i class="fa fa-shopping-cart"></i>
+  </button>       
+    {% endfor  %} 
+
+        </div>       
+    </div>
+</section>
+{% include 'tenant/footer.html' %}
+		 
+
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{% static 'landing-tenant/js/jquery.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/popper.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/aos.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/scrollax.min.js' %}"></script>  
+  <script src="{% static 'landing-tenant/js/main.js' %}"></script>
+    
+  </body>
+</html>
+<script type="text/javascript">
+    function add_to_cart(event,producto){
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cart_agregar' %}",
+            dataType: "json",
+            async: true,
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                id_producto: JSON.stringify(producto)
+            },
+            success: function(data){
+                //window.location = url_listar;
+                console.log(data)
+                if(data.estado){
+                    console.log(data.mensaje)
+                	document.getElementById("cantidad_pedido").innerHTML=""+data.cantidad;
+                	notificacion(data.mensaje, "success");
+                }else{
+                    notificacion(data.mensaje, "warning");
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	{% include 'tenant/head.html' %}
+  <body>
+      {% include 'tenant/nav.html' %}
+      <section id="contact" class="padd-section wow fadeInUp">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-12 col-md-12">
+                    <h1>Compra exitosa</h1>
+                    <h2>Tu pedido llegará en breve</h2>
+                    <img src="{% static 'landing-tenant/images/pizza-1.jpg' %}" width="200px" height="200px" alt="Pizza enviada">
+                </div>
+            </div>
+        </div>
+    </section>    
+{% include 'tenant/footer.html' %}
+		 
+
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{% static 'landing-tenant/js/jquery.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/popper.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/aos.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/scrollax.min.js' %}"></script>  
+  <script src="{% static 'landing-tenant/js/main.js' %}"></script>
+    
+  </body>
+</html>

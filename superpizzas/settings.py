@@ -70,9 +70,9 @@ TENANT_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'bootstrap4',
-    'rolepermissions',
-    'apps.pizzas',
+    'rolepermissions',    
     'apps.usuarios',
+    'apps.pizzas',
     'apps.ingredientes',
     'captcha',
 
