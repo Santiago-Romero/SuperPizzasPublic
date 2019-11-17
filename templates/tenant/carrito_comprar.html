@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	{% include 'tenant/head.html' %}
+  <body>
+      {% include 'tenant/nav.html' %}
+    <section class="ftco-section">
+            <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-12 col-md-12">
+                            <h2>Realizar el pedido</h2>
+                            {% if user.is_authenticated%}
+                            {% else %}
+                            <h5>Estas realizando el pedido como invitado. ¿Tienes una cuenta en {{ datos_franquicia.nombre }}? <a href="{% url 'login' %}">Inicia Sesión</a> o <a href="{% url 'registro' %}">Regístrate</a></h5>
+                            {% endif %}
+            
+                            <br>
+                            <a style="color: white; text-decoration: none" class="btn btn-info float-right mb-3 mr-2" href="{% url 'cliente:cliente_index' %}">
+                                Seguir comprando
+                            </a>
+                            <div class="table-responsive">
+                                {% if productos %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <script type="text/javascript">
+                                            var ids = []
+                                     </script>
+                                    {% for key, un_producto in productos.items %}
+                                    <tr>
+                                        <script type="text/javascript">
+                                            ids.push({{un_producto.id}});
+                                        </script>
+                                        <td>{{ un_producto.nombre }}</td>
+                                        {% for key, cantidad in cantidades.items %}
+                                            {% if cantidad.id == un_producto.id %}
+                                                <td id="cantidad_{{un_producto.id}}">
+                                                    {{cantidad.cantidad}}
+                                                </td>
+                                            {% endif %}
+                                        {% endfor %}
+            
+                                        <td id="precio_{{un_producto.id}}">{{ un_producto.valor}}</td>
+                                        <td id="total_{{un_producto.id}}">{{ un_producto.valor}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="font-weight-bold">Total:</td>
+                                        <td id="total" class="font-weight-bold"></td>
+                                    </tr>
+                                </table>
+            
+                            </div>
+                            {% else %}
+                            <h1>Carrito vacio</h1>
+                            {% endif %}
+                            </tbody>
+                            <h4>Dirección de envio:</h4>
+                            <form class="form-inline form-direccion" method="POST" enctype="multipart/form-data" onsubmit="direccioncita()">
+                                {% csrf_token %}
+                              <div class="form-group mx-sm-3 mb-2">
+                                <label for="departamento" class="sr-only">Departamento</label>
+                                 <select class="form-control" id="departamento" onchange="cargarCiudades(this)" name="departamento" required>
+                                     <option value="">Departamento</option>
+                                     {% for key, cantidad in colombia.items %}
+                                        <option value="{{key}}">{{key}}</option>
+                                    {% endfor %}
+                                 </select>
+                              </div>
+                              <div class="form-group mx-sm-3 mb-2">
+                                <label for="ciudad" class="sr-only">Ciudad</label>
+                                 <select class="form-control" id="ciudad" name="ciudad" required>
+                                     <option value="">Ciudad</option>
+                                 </select>
+                              </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                <label for="barrio" class="sr-only">Barrio</label>
+                                 <input class="form-control" id="barrio" placeholder="Barrio" name="barrio" required>
+                              </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                <label for="direccion" class="sr-only">Dirección</label>
+                                 <input class="form-control" id="direccion" placeholder="Dirección" name="direccion" required>
+                              </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                <label for="efectivo" class="sr-only">¿Con cuanto efectivo pagará?</label>
+                                 <input class="form-control" id="efectivo" type="number" placeholder="¿Con cuanto efectivo pagará?" name="efectivo" required>
+                              </div>
+                              <div class="form-group">
+                                        <input type="hidden" name="datos-direccion" id="mi_direccion" value=""/>
+                              </div>
+                                <div class="text-center"><button type="submit" class="btn btn-danger float-right mb-3 mr-2">Pedir</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+    </section>
+{% include 'tenant/footer.html' %}
+		 
+
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{% static 'landing-tenant/js/jquery.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/popper.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/aos.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/scrollax.min.js' %}"></script>  
+  <script src="{% static 'landing-tenant/js/main.js' %}"></script>
+    
+  </body>
+</html>

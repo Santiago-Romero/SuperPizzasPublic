@@ -1,6 +1,7 @@
 
 from django.urls import path, include
-from apps.franquicias.views import home, inicio_tenants, configuraciones,informacion,renuncia
+from apps.franquicias.views import home, inicio_tenants, configuraciones,informacion,renuncia, ordenar,\
+ CartAgregar,CartListar, CartDelete,AgregarCantidadCarrito,CartComprar
 from apps.usuarios.views import inicio_sesion, cerrar_sesion,gestionar_cliente, check_email
 
 urlpatterns = [
@@ -17,4 +18,12 @@ urlpatterns = [
     path('admin/configuraciones/',configuraciones, name='configuraciones'),
     path('admin/info/',informacion,name='info'),
     path('renuncia/',renuncia,name='renuncia'),
+    path('ordenar/',ordenar,name="ordenar"),
+    #carrito de compras
+    path('add/', CartAgregar.as_view(), name='cart_agregar'),
+    path('lista_compra', CartListar.as_view(), name='cart_listar'),
+    path('borrar_carrito', CartDelete.as_view(), name='cart_eliminar'),
+    path('agregar_cantidades', AgregarCantidadCarrito.as_view(), name='cart_cantidades'),
+    path('comprar', CartComprar.as_view(), name='cart_comprar'),
+
 ]

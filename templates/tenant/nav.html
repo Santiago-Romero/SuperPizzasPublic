@@ -11,9 +11,10 @@
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="{% url 'cart_listar' %}" class="nav-link"> <span id="cantidad_pedido">{{ request.session.cart |length }}</span> <i class="fa fa-shopping-cart"></i> Cart </a></li>
             <li class="nav-item active"><a href="index.html" class="nav-link">Inicio</a></li>
             <li class="nav-item"><a href="#" class="nav-link">Menú</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Pide en Línea</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Pide en Línea</a></li>            
             <li class="nav-item"><a href="registroclientes/" class="nav-link">Registrarse</a></li>
             <li class="nav-item"><a href="login/" class="nav-link">Iniciar sesión</a></li>
           </ul>

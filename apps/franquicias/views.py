@@ -8,7 +8,7 @@ from apps.usuarios.forms import UsuarioForm, UserForm
 from django_tenants.utils import schema_context
 from django.contrib.auth.models import User
 from apps.usuarios.models import Usuario
-from apps.pizzas.models import Pizza
+from apps.pizzas.models import Pizza,Factura,Detalle
 from apps.ingredientes.models import Ingrediente
 from tenant_schemas.utils import *
 from django.http import HttpRequest
@@ -18,6 +18,12 @@ import json
 import os
 from datetime import date
 from django.core import serializers
+from django.views.generic import TemplateView
+from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse_lazy
+
+
+
 
 def home(request):
 
@@ -212,6 +218,22 @@ def check_schema(request):
     else:
         return HttpResponse("Zero")
 
+
+def ordenar(request):
+    nombreFranquicia= request.tenant.nombre 
+    franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+    context = {
+        'pizzas':Pizza.objects.all(),        
+        'enventas': Pizza.objects.filter(enventa=True),
+        'franquicia':request,
+        'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
+        'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
+        'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
+        'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
+        'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
+        'logo':  franquicia.media,
+    }
+    return render(request, 'tenant/ordenar.html', context)
     
 def configuraciones(request):
     franquicia= request.tenant.nombre 
@@ -267,3 +289,134 @@ def renuncia(request):
     p = {"Ingredientes": ingredientes}
     data={**f,**u,**i,**p}
     return render(request,'franquicias/renuncia.html',{'data':data})
+
+class CartAgregar(TemplateView):
+
+    def post(self, request):
+        id_producto = request.POST.get("id_producto", "")
+        productico = Pizza.objects.filter(id=id_producto).values()[0]
+        # detalles = Detalle(cantidad=1, precio=productico['precio'], descuento=0, producto_id=int(id_producto))
+        # detalle_cart = model_to_dict(detalles)
+        respuesta = {}
+        if productico is not None:
+            respuesta['estado'] = True
+            cart = request.session.get('cart', {})
+            if id_producto in cart:
+                respuesta['estado'] = False
+                respuesta['mensaje'] = "Producto ya añadido"
+                return JsonResponse(respuesta)
+            else:
+                cart[''+id_producto] = productico
+                request.session['cart'] = cart
+                respuesta['cantidad'] = len(cart)
+                respuesta['mensaje'] = "Producto añadido"
+                return JsonResponse(respuesta)
+        else:
+            respuesta['estado'] = False
+            respuesta['mensaje'] = "El producto no existe"
+            return JsonResponse(respuesta)
+
+class CartListar(TemplateView):
+    template_name = "tenant/carrito_lista.html"    
+    
+    def get_context_data(self, **kwargs):
+        context = super(CartListar, self).get_context_data(**kwargs)
+        nombreFranquicia= self.request.tenant.nombre 
+        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        context['franquicia']=self.request
+        context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
+        context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
+        context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
+        context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
+        context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
+        context['logo'] = franquicia.media
+        cart = self.request.session.get('cart', {})
+        context['productos'] = cart
+        return context
+
+class CartDelete(TemplateView):
+
+    def post(self, request):
+        id_producto = request.POST.get("id_producto", "")
+        cart = request.session.get('cart', {})
+        del cart[id_producto]
+        request.session['cart'] = cart
+        respuesta = {'estado': True, 'mensaje': len(cart)}
+        return JsonResponse(respuesta)
+
+    def get_success_url(self):
+        return reverse_lazy('cart_listar')
+
+class AgregarCantidadCarrito(TemplateView):
+
+    def post(self, request):
+        cantidades = request.POST.get("cantidades", "")
+        detalles = []
+        self.request.session['cantidades'] = cantidades
+        respuesta = {'estado': True, }
+        return JsonResponse(respuesta)
+
+class CartComprar(TemplateView):
+    template_name = "tenant/carrito_comprar.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CartComprar, self).get_context_data(**kwargs)
+        nombreFranquicia= self.request.tenant.nombre 
+        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        context['franquicia']=self.request
+        context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
+        context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
+        context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
+        context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
+        context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
+        context['logo'] = franquicia.media
+        cart = self.request.session.get('cart', {})
+        cantidades = self.request.session.get('cantidades', {})       
+        context['productos'] = cart
+        context['cantidades'] = json.loads(cantidades)        
+
+        return context
+
+    def post(self, request):
+        direccion = request.POST['datos-direccion']
+        direccion_completa = ''
+        if len(direccion) > 0:
+            datos = json.loads(direccion)
+            tamano_datos = len(datos)
+            efectivo = datos[int(tamano_datos) - 2]['value']
+            for x in range(1, int(tamano_datos)-2):
+                direccion_completa += datos[x]['value']+' '
+        usuario = request.user
+        if usuario.is_authenticated():
+            cliente = Usuario.objects.get(user_id=usuario.id)
+            factura = Factura(direccion=direccion_completa, estado_Factura=0, efectivo=efectivo, cliente=cliente)
+            factura.save()
+        else:
+            usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
+            cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
+            factura = Factura(direccion=direccion_completa, estado_Factura=0, efectivo=efectivo, cliente=cliente_anonimo)
+            factura.save()
+        cantidades = self.request.session.get('cantidades', {})
+        cantidades_dict = json.loads(cantidades)
+        for k, v in cantidades_dict.items():
+            productico = Pizza.objects.filter(id=v['id']).values()[0]
+            detallito = Detalle(cantidad=v['cantidad'], precio=productico['precio'], factura=factura,
+                                producto_id=v['id'])
+            detallito.save()
+        self.request.session['cart'] = {}
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('cart_success')
+
+class CartSuccess(TemplateView):
+    template_name = "tenant/carrito_success.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CartSuccess, self).get_context_data(**kwargs)
+        context['configuracion'] = obtener_configuracion()
+        context['datos_franquicia'] = obtener_datos_franquicia()
+        namespace = self.request.resolver_match.namespace
+        context['namespace'] = namespace
+        context['extend_name'] = extend_name(namespace)
+        return context

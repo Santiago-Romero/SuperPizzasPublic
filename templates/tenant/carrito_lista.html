@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	{% include 'tenant/head.html' %}
+  <body>
+      {% include 'tenant/nav.html' %}
+    <section class="ftco-section">
+            <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-12 col-md-12">
+                            <h2>Carrito de compras</h2>
+                            <br>
+                            <div class="table-responsive">
+                                {% if productos %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Imagen</th>
+                                        <th>Detalles del pedido</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio</th>
+                                        <th>Subtotal</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <script type="text/javascript">
+                                            var ids = []
+                                     </script>
+                                    {% for key, un_producto in productos.items %}
+                                    <tr>
+                                        <script type="text/javascript">
+                                            ids.push({{un_producto.id}});
+                                        </script>                                      
+                                        <td><img src="{% static 'landing-tenant/images/pizza-1.jpg' %}" alt="Foto Producto" height="150" width="150"></td>
+                                        <td>{{ un_producto.nombre }}: {{ un_producto.descripcion}}</td>
+                                        <td>
+                                            <div class="input-group mb-3">
+                                                  <div class="input-group-prepend">
+                                                        <span style="cursor:pointer" class="input-group-text" onclick="clic_cantidad(event,this,{{un_producto.valor}})" data-type="minus" data-field="{{un_producto.id}}">
+                                                            <i class="fa fa-minus text-danger"></i>
+                                                        </span>
+                                                  </div>
+                                                  <input type="number" name="{{un_producto.id}}" class="form-control input-number" value="1"
+                                                                                         min="1" max="100" disabled>
+                                                    <div class="input-group-append">
+                                                        <span style="cursor:pointer" class="input-group-text " onclick="clic_cantidad(event,this,{{un_producto.valor}})" data-type="plus" data-field="{{un_producto.id}}">
+                                                            <i class="fa fa-plus text-success"></i>
+                                                        </span>
+                                                  </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ un_producto.valor}}</td>
+                                        <td id="total_{{un_producto.id}}">{{ un_producto.valor}}</td>
+                                        <td>
+                                            <a class="text-danger" href="#" onclick="del_to_cart(event,{{un_producto.id}})">
+                                                <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="font-weight-bold">Total:</td>
+                                        <td id="total" class="font-weight-bold"></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+            
+                            </div>
+                            <a style="color: white; text-decoration: none" class="btn btn-info float-left mb-3 mr-2" href="{% url 'ordenar' %}">
+                                Seguir comprando
+                            </a>
+                            <button class="btn btn-danger float-right mb-3 mr-2" onclick="cant_to_cart(event);">
+                                <a style="color: white; text-decoration: none" >
+                                    Comprar
+                                </a>
+                            </button>
+                            <div class="clearfix"></div>
+                            {% else %}
+                            <h1>Carrito vacio</h1>
+                            <br>
+                            <a style="color: white; text-decoration: none" class="btn btn-info float-left mb-3 mr-2" href="{% url 'ordenar' %}">
+                                Seguir comprando
+                            </a>
+                            </br>
+                            {% endif %}
+                            </tbody>
+            
+                        </div>
+                    </div>
+                </div>
+            </section>
+      
+    </section>
+{% include 'tenant/footer.html' %}
+		 
+
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{% static 'landing-tenant/js/jquery.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/popper.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/aos.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/scrollax.min.js' %}"></script>  
+  <script src="{% static 'landing-tenant/js/main.js' %}"></script>
+    
+  </body>
+</html>
+<script type="text/javascript">
+    function clic_cantidad(e, algo, precio){
+    e.preventDefault();
+    fieldName = $(algo).attr('data-field');
+    type      = $(algo).attr('data-type');
+    var input = $("input[name='"+fieldName+"']");
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+
+            if(currentVal > input.attr('min')) {
+                input.val(currentVal - 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(algo).attr('disabled', true);
+            }
+
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                input.val(currentVal + 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(algo).attr('disabled', true);
+            }
+        }
+        cambio_cantidad(fieldName, input, precio);
+    } else {
+        input.val(0);
+    }
+}
+$('.input-number').focusin(function(){
+   $(this).data('oldValue', $(this).val());
+});
+function cambio_cantidad(id, algo, precio) {
+    minValue =  parseInt($(algo).attr('min'));
+    maxValue =  parseInt($(algo).attr('max'));
+    valueCurrent = parseInt($(algo).val());
+    if(valueCurrent > minValue) {
+        $(".btn-number[data-type='minus'][data-field='"+id+"']").removeAttr('disabled')
+    } else {
+        $(this).val($(this).data('oldValue'));
+    }
+    if(valueCurrent <= maxValue) {
+        $(".btn-number[data-type='plus'][data-field='"+id+"']").removeAttr('disabled')
+    } else {
+        $(this).val($(this).data('oldValue'));
+    }
+    calcular_subtotal(id, algo, precio)
+}
+
+function calcular_subtotal(id, algo, precio){
+    var input = $("input[name='"+id+"']");
+    var currentVal = Number(input.val());
+    resultado = currentVal*precio;
+    elemento = document.getElementById('total_'+id);
+    elemento.innerText = "";
+    elemento.innerText = resultado;
+    calcular_total();
+}
+
+$(document).ready(function() {
+    calcular_total();
+});
+
+function calcular_total(){
+    var cantidad = parseInt(document.getElementById("cantidad_pedido").innerHTML);
+    var suma = 0;
+    for(i=0; i<cantidad; i++){
+        suma += parseInt(document.getElementById("total_"+ids[i]).innerHTML);
+    }
+    elemento = document.getElementById('total');
+    elemento.innerText = "";
+    elemento.innerText = suma;
+}
+
+function del_to_cart(event,producto){
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cart_eliminar' %}",
+            dataType: "json",
+            async: true,
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                id_producto: JSON.stringify(producto)
+            },
+            success: function(data){
+                window.location = "{% url 'cart_listar' %}";
+                if(data.estado){
+                    console.log(data.mensaje)
+                	document.getElementById("cantidad_pedido").innerHTML=""+data.mensaje;
+                }else{
+                    console.log(data.mensaje);
+                }
+            }
+        });
+    }
+
+    function cant_to_cart(event){
+        console.log("entro cantidad")
+        event.preventDefault();
+        inputs = {}
+        var cantidad = parseInt(document.getElementById("cantidad_pedido").innerHTML);
+        var suma = 0;
+        for(i=0; i<cantidad; i++){
+            var item = {}
+            var input = $("input[name='"+ids[i]+"']");
+            var currentVal = parseInt(input.val());
+            item = {'id': ids[i], 'cantidad':currentVal}
+            inputs[ids[i]]= item;
+        }
+        console.log(inputs);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cart_cantidades' %}",
+            dataType: "json",
+            async: true,
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                cantidades: JSON.stringify(inputs)
+            },
+            success: function(data){
+                window.location = "{% url 'cart_comprar' %}";
+            }
+        });
+    }
+</script>
