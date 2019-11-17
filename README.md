@@ -8,6 +8,7 @@
 - django-allauth
 - pillow
 - django-countries
+- django-recaptcha
 - *(usar **`pip install -r requirements.txt`** para ello)*
 
 ### Dentro del proyecto hacer
