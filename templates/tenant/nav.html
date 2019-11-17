@@ -2,8 +2,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
         <div class="row">
-          <div class="col" style="padding-right: 0px;"><a class="navbar-brand" href="#"><img src="/static/{{ logo }}" alt="" height="50" > </a></div>
-          <div class="col" style="padding-top: 12px; padding-left: 0px;">  <a  class="navbar-brand" href="#"> SuperPizzas<br><small>{{request.tenant.nombre}}</small></a></div>
+          <div class="col" style="padding-right: 0px;"><a class="navbar-brand" href="{% url 'inicio_t' %}"><img src="/static/{{ logo }}" alt="" height="50" > </a></div>
+          <div class="col" style="padding-top: 12px; padding-left: 0px;">  <a  class="navbar-brand" href="{% url 'inicio_t' %}"> SuperPizzas<br><small>{{request.tenant.nombre}}</small></a></div>
         </div>
         <!-- <a class="navbar-brand" href="#"><img src="/static/{{ logo }}" alt="" height="50" > </span> SuperPizzas<br><small>{{request.tenant.nombre}}</small></a> -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,11 +12,11 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a href="{% url 'cart_listar' %}" class="nav-link"> <span id="cantidad_pedido">{{ request.session.cart |length }}</span> <i class="fa fa-shopping-cart"></i> Cart </a></li>
-            <li class="nav-item active"><a href="index.html" class="nav-link">Inicio</a></li>
+            <li class="nav-item active"><a href="{% url 'inicio_t' %}" class="nav-link">Inicio</a></li>
             <li class="nav-item"><a href="#" class="nav-link">Menú</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Pide en Línea</a></li>            
-            <li class="nav-item"><a href="registroclientes/" class="nav-link">Registrarse</a></li>
-            <li class="nav-item"><a href="login/" class="nav-link">Iniciar sesión</a></li>
+            <li class="nav-item"><a href="{% url 'ordenar' %}" class="nav-link">Pide en Línea</a></li>            
+            <li class="nav-item"><a href="{% url 'registro' %}" class="nav-link">Registrarse</a></li>
+            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></li>
           </ul>
         </div>
     </div>

@@ -386,9 +386,9 @@ class CartComprar(TemplateView):
             efectivo = datos[int(tamano_datos) - 2]['value']
             for x in range(1, int(tamano_datos)-2):
                 direccion_completa += datos[x]['value']+' '
-        usuario = request.user
-        if usuario.is_authenticated():
-            cliente = Usuario.objects.get(user_id=usuario.id)
+        customer = request.user        
+        if customer.is_authenticated:
+            cliente = Usuario.objects.get(user_id=customer.id)
             factura = Factura(direccion=direccion_completa, estado_Factura=0, efectivo=efectivo, cliente=cliente)
             factura.save()
         else:
@@ -400,7 +400,7 @@ class CartComprar(TemplateView):
         cantidades_dict = json.loads(cantidades)
         for k, v in cantidades_dict.items():
             productico = Pizza.objects.filter(id=v['id']).values()[0]
-            detallito = Detalle(cantidad=v['cantidad'], precio=productico['precio'], factura=factura,
+            detallito = Detalle(cantidad=v['cantidad'], precio=productico['valor'], factura=factura,
                                 producto_id=v['id'])
             detallito.save()
         self.request.session['cart'] = {}
@@ -414,9 +414,13 @@ class CartSuccess(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(CartSuccess, self).get_context_data(**kwargs)
-        context['configuracion'] = obtener_configuracion()
-        context['datos_franquicia'] = obtener_datos_franquicia()
-        namespace = self.request.resolver_match.namespace
-        context['namespace'] = namespace
-        context['extend_name'] = extend_name(namespace)
+        nombreFranquicia= self.request.tenant.nombre 
+        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        context['franquicia']=self.request
+        context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
+        context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
+        context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
+        context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
+        context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
+        context['logo'] = franquicia.media
         return context
