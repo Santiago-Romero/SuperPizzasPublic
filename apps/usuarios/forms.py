@@ -2,9 +2,11 @@ from django import forms
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
+from captcha.fields import ReCaptchaField
 
 
-class UsuarioForm(forms.ModelForm):    
+class UsuarioForm(forms.ModelForm):
+    captcha = ReCaptchaField(label="Debe realizar la verificación captcha.")    
     class Meta:
         model = Usuario
 
@@ -24,7 +26,8 @@ class UsuarioForm(forms.ModelForm):
 
         widgets = {'rol': forms.HiddenInput(),'user': forms.HiddenInput(),}
 
-class UsuarioForm2(forms.ModelForm):    
+class UsuarioForm2(forms.ModelForm):
+    captcha = ReCaptchaField(label="Debe realizar la verificación captcha.")    
     class Meta:
         model = Usuario
 
