@@ -236,32 +236,7 @@ def ordenar(request):
     return render(request, 'tenant/ordenar.html', context)
     
 def configuraciones(request):
-    franquicia= request.tenant.nombre 
-    datosfran = Franquicia.objects.get(schema_name=franquicia)
-    contexto = {'franquicia': datosfran, 
-    'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
-    'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
-    'logo':  datosfran.media,
-    'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
-    }
-
-    if request.method == 'POST':
-        datosfran.configuracion = '{\"colorprimario\":\"#'+ request.POST.get("colorpimario") +'\",\"colorsecundario\":\"#'+ request.POST.get("colorsecundario") +'\", \"tamanioletra\":'+ request.POST.get("tamanioLetra") +'}'
-        
-        if request.FILES.get('inputFileLogoConfig') != None:
-            pathLogoAnterior = datosfran.media
-            if pathLogoAnterior != 'media/logos-franquicias/1_logo_default.png':
-                try:
-                    os.remove(datosfran.media.path)
-                except:
-                    print('***No se pudo Eliminar imagen anterior***')
-            datosfran.media = request.FILES.get('inputFileLogoConfig')
-        try:    
-            datosfran.save()
-            messages.success(request, 'Configuraciones guardadas correctamente')
-        except:
-            messages.error(request, 'Error al intentar guardar configuraciones')
-
+    if(request.tenant.tipo.nombre=="premium"):
         franquicia= request.tenant.nombre 
         datosfran = Franquicia.objects.get(schema_name=franquicia)
         contexto = {'franquicia': datosfran, 
@@ -270,7 +245,35 @@ def configuraciones(request):
         'logo':  datosfran.media,
         'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
         }
-    return render(request,'franquicias/configuraciones.html', contexto)
+
+        if request.method == 'POST':
+            datosfran.configuracion = '{\"colorprimario\":\"#'+ request.POST.get("colorpimario") +'\",\"colorsecundario\":\"#'+ request.POST.get("colorsecundario") +'\", \"tamanioletra\":'+ request.POST.get("tamanioLetra") +'}'
+            
+            if request.FILES.get('inputFileLogoConfig') != None:
+                pathLogoAnterior = datosfran.media
+                if pathLogoAnterior != 'media/logos-franquicias/1_logo_default.png':
+                    try:
+                        os.remove(datosfran.media.path)
+                    except:
+                        print('***No se pudo Eliminar imagen anterior***')
+                datosfran.media = request.FILES.get('inputFileLogoConfig')
+            try:    
+                datosfran.save()
+                messages.success(request, 'Configuraciones guardadas correctamente')
+            except:
+                messages.error(request, 'Error al intentar guardar configuraciones')
+
+            franquicia= request.tenant.nombre 
+            datosfran = Franquicia.objects.get(schema_name=franquicia)
+            contexto = {'franquicia': datosfran, 
+            'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
+            'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
+            'logo':  datosfran.media,
+            'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
+            }
+        return render(request,'franquicias/configuraciones.html', contexto)
+    else:
+        return redirect('/admin')
         
 def informacion(request):
     inicio=request.tenant.fecha_corte

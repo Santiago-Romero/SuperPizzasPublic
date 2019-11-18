@@ -5,7 +5,9 @@
         {% include 'menus/apps/ingredientes.html' %}
         {% include 'menus/apps/pizzas.html' %}
         {% include 'menus/apps/usuarios.html' %}
-        {% include 'menus/apps/configuraciones.html' %}
+        {% if request.tenant.tipo.nombre == 'premium'%}
+            {% include 'menus/apps/configuraciones.html' %}
+        {% endif %}
         {% include 'menus/apps/info.html' %}
     {% endif %}
 </li>
