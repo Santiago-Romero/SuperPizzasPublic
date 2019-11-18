@@ -30,3 +30,18 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     </div>
   </div>
 </footer>
+<script src="{% static 'vendors/toast/toastr-js/toastr.min.js' %}"></script>
+<script>
+    {% for msg in messages %}
+        $(document).ready(function(){
+            setTimeout(function() {
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true,
+                    "showEasing": "swing"
+                }
+                toastr["{{ msg.tags }}"]("{{msg}}")
+            },500);
+        });
+    {% endfor %}
+</script>
