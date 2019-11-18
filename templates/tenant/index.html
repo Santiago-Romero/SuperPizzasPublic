@@ -16,7 +16,7 @@
             	<span class="subheading" >Deliciosas</span>
               <h1 class="mb-4">Pizzas</h1>
               <p class="mb-4 mb-md-5">El mejor lugar para ordenar las más deliciosas pizzas</p>
-              <p><a href="{% url 'ordenar' %}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Ordenar</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">Ver menú</a></p>
+              <p><a href="{% url 'ordenar' %}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Ordenar</a> <a href="#menu" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">Ver menú</a></p>
             </div>
             <div class="col-md-6 ftco-animate">
             	<img src="{% static 'landing-tenant/images/bg_1.png' %}" class="img-fluid" alt="">
@@ -35,7 +35,7 @@
             	<span class="subheading" >Crunchy</span>
               <h1 class="mb-4">Pizza Italiana</h1>
               <p class="mb-4 mb-md-5">Degusta tanto la pizza fina y crujiente como la alta y esponjosa, al estilo napolitano</p>
-              <p><a href="{% url 'ordenar' %}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Ordenar</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">Ver menú</a></p>
+              <p><a href="{% url 'ordenar' %}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Ordenar</a> <a href="#menu" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">Ver menú</a></p>
             </div>
             <div class="col-md-6 ftco-animate">
             	<img src="{% static 'landing-tenant/images/bg_2.png' %}" class="img-fluid" alt="">
@@ -69,7 +69,7 @@
 							<p>{{ingrediente.nombre}}</p>
 							{% endfor %}
               <p>| {{pizza.descripcion}}</p>
-    						<p class="price" ><span >${{pizza.valor}}</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
+    						<p class="price" ><span >${{pizza.valor}}</span> <a href="{% url 'ordenar' %}" class="ml-2 btn btn-white btn-outline-white">Ordenar</a></p>
     					</div>
     				</div>
     			</div>
@@ -77,7 +77,7 @@
     		</div>
     	</div>
 
-    	<div class="container">
+    	<div class="container" id="menu">
     		<div class="row justify-content-center mb-5 pb-3 mt-5 pt-5">
           <div class="col-md-7 heading-section text-center ftco-animate" >
             <h2 class="mb-4">Nuestro Menú</h2>

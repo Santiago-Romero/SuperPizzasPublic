@@ -4,8 +4,8 @@
 	{% include 'tenant/head.html' %}
   <body>
       {% include 'tenant/nav.html' %}
-      <section class="ftco-section">
-      <div class="container">
+      <section >       
+      <div class="container">        
         <div class="row justify-content-center mb-5 pb-3 mt-5 pt-5">
       <div class="col-md-7 heading-section text-center ftco-animate" >
         <h2 class="mb-4">Ordenar</h2>
@@ -53,12 +53,12 @@
                     </div>                                           
                 </div>                                     
             </div>                             
-    {% endif%}    
-    <button class="btn btn-primary btn-md my-0 p" onclick="add_to_cart(event,{{pizza.id}})">Add to cart <i class="fa fa-shopping-cart"></i>
-  </button>       
+    {% endif%}      
+    <button class="btn btn-primary btn-md my-0 p" id="boton_add" onclick="add_to_cart(event,{{pizza.id}})"> add to cart <i class="fa fa-shopping-cart"></i></button> 
+    
     {% endfor  %} 
-
-        </div>       
+    </div>       
+    </div>
     </div>
 </section>
 {% include 'tenant/footer.html' %}
@@ -85,11 +85,17 @@
   <script src="{% static 'landing-tenant/js/bootstrap-datepicker.js' %}"></script>
   <script src="{% static 'landing-tenant/js/jquery.timepicker.min.js' %}"></script>
   <script src="{% static 'landing-tenant/js/scrollax.min.js' %}"></script>  
-  <script src="{% static 'landing-tenant/js/main.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/main.js' %}"></script>    
+  <script src="{% static 'vendors/toast/toastr-js/toastr.min.js' %}"></script>
+  
+  
+
     
   </body>
 </html>
 <script type="text/javascript">
+
+
     function add_to_cart(event,producto){
         event.preventDefault();
         $.ajax({
@@ -101,15 +107,14 @@
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 id_producto: JSON.stringify(producto)
             },
-            success: function(data){
-                //window.location = url_listar;
+            success: function(data){                
                 console.log(data)
                 if(data.estado){
                     console.log(data.mensaje)
-                	document.getElementById("cantidad_pedido").innerHTML=""+data.cantidad;
-                	notificacion(data.mensaje, "success");
-                }else{
-                    notificacion(data.mensaje, "warning");
+                    document.getElementById("cantidad_pedido").innerHTML=""+data.cantidad;
+                    toastr["success"](data.mensaje)                                                           
+                }else{                    
+                    toastr["warning"](data.mensaje)                   
                 }
             }
         });

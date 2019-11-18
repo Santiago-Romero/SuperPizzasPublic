@@ -294,22 +294,20 @@ class CartAgregar(TemplateView):
 
     def post(self, request):
         id_producto = request.POST.get("id_producto", "")
-        productico = Pizza.objects.filter(id=id_producto).values()[0]
-        # detalles = Detalle(cantidad=1, precio=productico['precio'], descuento=0, producto_id=int(id_producto))
-        # detalle_cart = model_to_dict(detalles)
-        respuesta = {}
-        if productico is not None:
+        producto_item = Pizza.objects.filter(id=id_producto).values()[0]       
+        respuesta = {}        
+        if producto_item is not None:
             respuesta['estado'] = True
             cart = request.session.get('cart', {})
             if id_producto in cart:
                 respuesta['estado'] = False
-                respuesta['mensaje'] = "Producto ya añadido"
+                respuesta['mensaje'] = "La pizza ya está añadida en el carrito de compras "                            
                 return JsonResponse(respuesta)
             else:
-                cart[''+id_producto] = productico
+                cart[''+id_producto] = producto_item
                 request.session['cart'] = cart
                 respuesta['cantidad'] = len(cart)
-                respuesta['mensaje'] = "Producto añadido"
+                respuesta['mensaje'] = "Has añadido la pizza al carrito de compras"                              
                 return JsonResponse(respuesta)
         else:
             respuesta['estado'] = False
@@ -399,10 +397,10 @@ class CartComprar(TemplateView):
         cantidades = self.request.session.get('cantidades', {})
         cantidades_dict = json.loads(cantidades)
         for k, v in cantidades_dict.items():
-            productico = Pizza.objects.filter(id=v['id']).values()[0]
-            detallito = Detalle(cantidad=v['cantidad'], precio=productico['valor'], factura=factura,
+            producto_item = Pizza.objects.filter(id=v['id']).values()[0]
+            detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
                                 producto_id=v['id'])
-            detallito.save()
+            detalle_item.save()
         self.request.session['cart'] = {}
         return HttpResponseRedirect(self.get_success_url())
 
