@@ -26,20 +26,23 @@ from django.urls import reverse_lazy
 
 
 def home(request):
-
-    #Si usario es anonimo? 
-    if request.user.is_anonymous:
-        return redirect('/')
-    #Validacion del Formulario a traves del metodo POST
-    else:
-        id_usuario = request.user.id
-
-        perfil = Usuario.objects.get(user=id_usuario)
-
-        if perfil.rol == 'a':
-            return render(request, 'base.html', {})
+    if(request.tenant.working==True):
+        #Si usario es anonimo? 
+        if request.user.is_anonymous:
+            return redirect('/')
+        #Validacion del Formulario a traves del metodo POST
         else:
-            return redirect('/login')
+            id_usuario = request.user.id
+
+            perfil = Usuario.objects.get(user=id_usuario)
+
+            if perfil.rol == 'a':
+                return render(request, 'base.html', {})
+            else:
+                return redirect('/login')
+    else:
+        return render(request,"404.html",{})
+    
 
 def home_admin(request):
     #Si usario es anonimo? 
@@ -50,6 +53,7 @@ def home_admin(request):
         return render(request, 'base.html', {})
     else:
         return redirect('/')
+
 
 def inicio_franquicia(request):
     dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
@@ -167,29 +171,26 @@ def reg_franquicia(request):
     return render(request, 'franquicias/registrar.html', context)
 
 def inicio_tenants(request):
-    nombreFranquicia= request.tenant.nombre 
-    franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
-    context = {
-        'pizzas':Pizza.objects.all(),
-        'especiales': Pizza.objects.filter(especial=True,enventa=True),
-        'enventas': Pizza.objects.filter(enventa=True),
-        'franquicia':request,
-        'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
-        'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
-        'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
-        'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
-        'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
-        'logo':  franquicia.media,
-    }
-    return render(request, 'tenant/index.html', context)
+    if(request.tenant.working==True):
+        nombreFranquicia= request.tenant.nombre 
+        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        context = {
+            'pizzas':Pizza.objects.all(),
+            'especiales': Pizza.objects.filter(especial=True,enventa=True),
+            'enventas': Pizza.objects.filter(enventa=True),
+            'franquicia':request,
+            'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
+            'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
+            'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
+            'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
+            'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
+            'logo':  franquicia.media,
+        }
+        return render(request, 'tenant/index.html', context)
+    else:
+        return render(request,"404.html",{})
 
 def modificar_franquicia(request, id_franquicia):
-    """
-    Permite modificar parte de la información del tenant
-    :param request:
-    :param id_franquicia:
-    :return:
-    """
     franquicia = get_object_or_404(Franquicia, id=id_franquicia)
     dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
     form = ModificarFranquiciaForm(instance=franquicia)
@@ -201,7 +202,6 @@ def modificar_franquicia(request, id_franquicia):
             return redirect('franquicias:registrar')
         else:
             messages.error(request, "Por favor verificar los campos en rojo")
-
     return render(request, 'franquicias/registrar.html', {'form': form, 'dominios': dominios,'regis':False})
 
 
@@ -220,49 +220,27 @@ def check_schema(request):
 
 
 def ordenar(request):
-    nombreFranquicia= request.tenant.nombre 
-    franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
-    context = {
-        'pizzas':Pizza.objects.all(),        
-        'enventas': Pizza.objects.filter(enventa=True),
-        'franquicia':request,
-        'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
-        'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
-        'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
-        'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
-        'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
-        'logo':  franquicia.media,
-    }
-    return render(request, 'tenant/ordenar.html', context)
+    if(request.tenant.working==True):
+        nombreFranquicia= request.tenant.nombre 
+        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        context = {
+            'pizzas':Pizza.objects.all(),        
+            'enventas': Pizza.objects.filter(enventa=True),
+            'franquicia':request,
+            'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
+            'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
+            'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
+            'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
+            'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
+            'logo':  franquicia.media,
+        }
+        return render(request, 'tenant/ordenar.html', context)
+    else:
+        return render(request,"404.html",{})
     
 def configuraciones(request):
-    if(request.tenant.tipo.nombre=="premium"):
-        franquicia= request.tenant.nombre 
-        datosfran = Franquicia.objects.get(schema_name=franquicia)
-        contexto = {'franquicia': datosfran, 
-        'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
-        'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
-        'logo':  datosfran.media,
-        'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
-        }
-
-        if request.method == 'POST':
-            datosfran.configuracion = '{\"colorprimario\":\"#'+ request.POST.get("colorpimario") +'\",\"colorsecundario\":\"#'+ request.POST.get("colorsecundario") +'\", \"tamanioletra\":'+ request.POST.get("tamanioLetra") +'}'
-            
-            if request.FILES.get('inputFileLogoConfig') != None:
-                pathLogoAnterior = datosfran.media
-                if pathLogoAnterior != 'media/logos-franquicias/1_logo_default.png':
-                    try:
-                        os.remove(datosfran.media.path)
-                    except:
-                        print('***No se pudo Eliminar imagen anterior***')
-                datosfran.media = request.FILES.get('inputFileLogoConfig')
-            try:    
-                datosfran.save()
-                messages.success(request, 'Configuraciones guardadas correctamente')
-            except:
-                messages.error(request, 'Error al intentar guardar configuraciones')
-
+    if(request.tenant.working==True):
+        if(request.tenant.tipo.nombre=="premium"):
             franquicia= request.tenant.nombre 
             datosfran = Franquicia.objects.get(schema_name=franquicia)
             contexto = {'franquicia': datosfran, 
@@ -271,78 +249,122 @@ def configuraciones(request):
             'logo':  datosfran.media,
             'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
             }
-        return render(request,'franquicias/configuraciones.html', contexto)
+
+            if request.method == 'POST':
+                datosfran.configuracion = '{\"colorprimario\":\"#'+ request.POST.get("colorpimario") +'\",\"colorsecundario\":\"#'+ request.POST.get("colorsecundario") +'\", \"tamanioletra\":'+ request.POST.get("tamanioLetra") +'}'
+                
+                if request.FILES.get('inputFileLogoConfig') != None:
+                    pathLogoAnterior = datosfran.media
+                    if pathLogoAnterior != 'media/logos-franquicias/1_logo_default.png':
+                        try:
+                            os.remove(datosfran.media.path)
+                        except:
+                            print('***No se pudo Eliminar imagen anterior***')
+                    datosfran.media = request.FILES.get('inputFileLogoConfig')
+                try:    
+                    datosfran.save()
+                    messages.success(request, 'Configuraciones guardadas correctamente')
+                except:
+                    messages.error(request, 'Error al intentar guardar configuraciones')
+
+                franquicia= request.tenant.nombre 
+                datosfran = Franquicia.objects.get(schema_name=franquicia)
+                contexto = {'franquicia': datosfran, 
+                'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
+                'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
+                'logo':  datosfran.media,
+                'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
+                }
+            return render(request,'franquicias/configuraciones.html', contexto)
+        else:
+            return redirect('/admin')
     else:
-        return redirect('/admin')
-        
+        return render(request,"404.html",{})
+
 def informacion(request):
-    inicio=request.tenant.fecha_corte
-    dias=date.today()-inicio
-    context={'dias':dias.days}
-    return render(request,'franquicias/info.html',context)
+    if(request.tenant.working==True):
+        inicio=request.tenant.fecha_corte
+        dias=date.today()-inicio
+        context={'dias':dias.days}
+        return render(request,'franquicias/info.html',context)
+    else:
+        return render(request,"404.html",{})
 
 def renuncia(request):
-    franquiciafields={"nombre":request.tenant.nombre,"dominio":request.tenant.schema_name,"tipo":request.tenant.tipo.nombre}
-    franquicia={"model":"franquicias.franquicia","pk":request.tenant.id,"fields":franquiciafields}
-    usuarios = serializers.serialize("json", Usuario.objects.all())
-    ingredientes = serializers.serialize("json", Ingrediente.objects.all())
-    pizzas = serializers.serialize("json", Pizza.objects.all())
-    facturas = serializers.serialize("json", Factura.objects.all())
-    detalles = serializers.serialize("json", Detalle.objects.all())
-    context={'f':json.dumps(franquicia),'u':usuarios,'i':ingredientes,'p':pizzas,'fc':facturas,'dt':detalles}
-    return render(request,'franquicias/renuncia.html',context)
+    if(request.tenant.working==True):
+        franquiciafields={"nombre":request.tenant.nombre,"dominio":request.tenant.schema_name,"tipo":request.tenant.tipo.nombre}
+        franquicia={"model":"franquicias.franquicia","pk":request.tenant.id,"fields":franquiciafields}
+        usuarios = serializers.serialize("json", Usuario.objects.all())
+        ingredientes = serializers.serialize("json", Ingrediente.objects.all())
+        pizzas = serializers.serialize("json", Pizza.objects.all())
+        facturas = serializers.serialize("json", Factura.objects.all())
+        detalles = serializers.serialize("json", Detalle.objects.all())
+        context={'f':json.dumps(franquicia),'u':usuarios,'i':ingredientes,'p':pizzas,'fc':facturas,'dt':detalles}
+        Franquicia.objects.filter(pk=request.tenant.id).update(working=False)
+        return render(request,'franquicias/renuncia.html',context)
+    else:
+        return render(request,"404.html",{})
 
 class CartAgregar(TemplateView):
 
     def post(self, request):
-        id_producto = request.POST.get("id_producto", "")
-        producto_item = Pizza.objects.filter(id=id_producto).values()[0]       
-        respuesta = {}        
-        if producto_item is not None:
-            respuesta['estado'] = True
-            cart = request.session.get('cart', {})
-            if id_producto in cart:
-                respuesta['estado'] = False
-                respuesta['mensaje'] = "La pizza ya está añadida en el carrito de compras "                            
-                return JsonResponse(respuesta)
+        if(request.tenant.working==True):
+            id_producto = request.POST.get("id_producto", "")
+            producto_item = Pizza.objects.filter(id=id_producto).values()[0]       
+            respuesta = {}        
+            if producto_item is not None:
+                respuesta['estado'] = True
+                cart = request.session.get('cart', {})
+                if id_producto in cart:
+                    respuesta['estado'] = False
+                    respuesta['mensaje'] = "La pizza ya está añadida en el carrito de compras "                            
+                    return JsonResponse(respuesta)
+                else:
+                    cart[''+id_producto] = producto_item
+                    request.session['cart'] = cart
+                    respuesta['cantidad'] = len(cart)
+                    respuesta['mensaje'] = "Has añadido la pizza al carrito de compras"                              
+                    return JsonResponse(respuesta)
             else:
-                cart[''+id_producto] = producto_item
-                request.session['cart'] = cart
-                respuesta['cantidad'] = len(cart)
-                respuesta['mensaje'] = "Has añadido la pizza al carrito de compras"                              
+                respuesta['estado'] = False
+                respuesta['mensaje'] = "El producto no existe"
                 return JsonResponse(respuesta)
         else:
-            respuesta['estado'] = False
-            respuesta['mensaje'] = "El producto no existe"
-            return JsonResponse(respuesta)
+            return render(request,"404.html",{})
 
 class CartListar(TemplateView):
     template_name = "tenant/carrito_lista.html"    
     
     def get_context_data(self, **kwargs):
-        context = super(CartListar, self).get_context_data(**kwargs)
-        nombreFranquicia= self.request.tenant.nombre 
-        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
-        context['franquicia']=self.request
-        context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
-        context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
-        context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
-        context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
-        context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
-        context['logo'] = franquicia.media
-        cart = self.request.session.get('cart', {})
-        context['productos'] = cart
-        return context
+        if(self.request.tenant.working==True):
+            context = super(CartListar, self).get_context_data(**kwargs)
+            nombreFranquicia= self.request.tenant.nombre 
+            franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+            context['franquicia']=self.request
+            context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
+            context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
+            context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
+            context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
+            context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
+            context['logo'] = franquicia.media
+            cart = self.request.session.get('cart', {})
+            context['productos'] = cart
+            return context
+        else:
+            return render(self.request,"404.html",{})
 
 class CartDelete(TemplateView):
 
     def post(self, request):
-        id_producto = request.POST.get("id_producto", "")
-        cart = request.session.get('cart', {})
-        del cart[id_producto]
-        request.session['cart'] = cart
-        respuesta = {'estado': True, 'mensaje': len(cart)}
-        return JsonResponse(respuesta)
+        if(request.tenant.working==True):
+            id_producto = request.POST.get("id_producto", "")
+            cart = request.session.get('cart', {})
+            del cart[id_producto]
+            request.session['cart'] = cart
+            respuesta = {'estado': True, 'mensaje': len(cart)}
+            return JsonResponse(respuesta)
+        else:
+            return render(request,"404.html",{})
 
     def get_success_url(self):
         return reverse_lazy('cart_listar')
@@ -350,61 +372,70 @@ class CartDelete(TemplateView):
 class AgregarCantidadCarrito(TemplateView):
 
     def post(self, request):
-        cantidades = request.POST.get("cantidades", "")
-        detalles = []
-        self.request.session['cantidades'] = cantidades
-        respuesta = {'estado': True, }
-        return JsonResponse(respuesta)
+        if(request.tenant.working==True):
+            cantidades = request.POST.get("cantidades", "")
+            detalles = []
+            self.request.session['cantidades'] = cantidades
+            respuesta = {'estado': True, }
+            return JsonResponse(respuesta)
+        else:
+            return render(request,"404.html",{})
 
 class CartComprar(TemplateView):
     template_name = "tenant/carrito_comprar.html"
 
     def get_context_data(self, **kwargs):
-        context = super(CartComprar, self).get_context_data(**kwargs)
-        nombreFranquicia= self.request.tenant.nombre 
-        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
-        context['franquicia']=self.request
-        context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
-        context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
-        context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
-        context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
-        context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
-        context['logo'] = franquicia.media
-        cart = self.request.session.get('cart', {})
-        cantidades = self.request.session.get('cantidades', {})       
-        context['productos'] = cart
-        context['cantidades'] = json.loads(cantidades)        
+        if(self.request.tenant.working==True):
+            context = super(CartComprar, self).get_context_data(**kwargs)
+            nombreFranquicia= self.request.tenant.nombre 
+            franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+            context['franquicia']=self.request
+            context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
+            context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
+            context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
+            context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
+            context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
+            context['logo'] = franquicia.media
+            cart = self.request.session.get('cart', {})
+            cantidades = self.request.session.get('cantidades', {})       
+            context['productos'] = cart
+            context['cantidades'] = json.loads(cantidades)        
 
-        return context
+            return context
+        else:
+            return render(self.request,"404.html",{})
 
     def post(self, request):
-        direccion = request.POST['datos-direccion']
-        direccion_completa = ''
-        if len(direccion) > 0:
-            datos = json.loads(direccion)
-            tamano_datos = len(datos)
-            efectivo = datos[int(tamano_datos) - 2]['value']
-            for x in range(1, int(tamano_datos)-2):
-                direccion_completa += datos[x]['value']+' '
-        customer = request.user        
-        if customer.is_authenticated:
-            cliente = Usuario.objects.get(user_id=customer.id)
-            factura = Factura(direccion=direccion_completa, estado_Factura=0, efectivo=efectivo, cliente=cliente)
-            factura.save()
+        if(request.tenant.working==True):
+            direccion = request.POST['datos-direccion']
+            direccion_completa = ''
+            if len(direccion) > 0:
+                datos = json.loads(direccion)
+                tamano_datos = len(datos)
+                efectivo = datos[int(tamano_datos) - 2]['value']
+                for x in range(1, int(tamano_datos)-2):
+                    direccion_completa += datos[x]['value']+' '
+            customer = request.user        
+            if customer.is_authenticated:
+                cliente = Usuario.objects.get(user_id=customer.id)
+                factura = Factura(direccion=direccion_completa, estado_Factura=0, efectivo=efectivo, cliente=cliente)
+                factura.save()
+            else:
+                usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
+                cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
+                factura = Factura(direccion=direccion_completa, estado_Factura=0, efectivo=efectivo, cliente=cliente_anonimo)
+                factura.save()
+            cantidades = self.request.session.get('cantidades', {})
+            cantidades_dict = json.loads(cantidades)
+            for k, v in cantidades_dict.items():
+                producto_item = Pizza.objects.filter(id=v['id']).values()[0]
+                detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
+                                    producto_id=v['id'])
+                detalle_item.save()
+            self.request.session['cart'] = {}
+            return HttpResponseRedirect(self.get_success_url())
         else:
-            usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
-            cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
-            factura = Factura(direccion=direccion_completa, estado_Factura=0, efectivo=efectivo, cliente=cliente_anonimo)
-            factura.save()
-        cantidades = self.request.session.get('cantidades', {})
-        cantidades_dict = json.loads(cantidades)
-        for k, v in cantidades_dict.items():
-            producto_item = Pizza.objects.filter(id=v['id']).values()[0]
-            detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
-                                producto_id=v['id'])
-            detalle_item.save()
-        self.request.session['cart'] = {}
-        return HttpResponseRedirect(self.get_success_url())
+            return render(request,"404.html",{})
 
     def get_success_url(self):
         return reverse_lazy('cart_success')
@@ -413,14 +444,17 @@ class CartSuccess(TemplateView):
     template_name = "tenant/carrito_success.html"
 
     def get_context_data(self, **kwargs):
-        context = super(CartSuccess, self).get_context_data(**kwargs)
-        nombreFranquicia= self.request.tenant.nombre 
-        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
-        context['franquicia']=self.request
-        context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
-        context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
-        context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
-        context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
-        context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
-        context['logo'] = franquicia.media
-        return context
+        if(self.request.tenant.working==True):
+            context = super(CartSuccess, self).get_context_data(**kwargs)
+            nombreFranquicia= self.request.tenant.nombre 
+            franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+            context['franquicia']=self.request
+            context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
+            context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
+            context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
+            context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
+            context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
+            context['logo'] = franquicia.media
+            return context
+        else:
+            return render(self.request,"404.html",{})
