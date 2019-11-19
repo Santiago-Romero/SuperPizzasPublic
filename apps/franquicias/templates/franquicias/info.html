@@ -80,14 +80,21 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+            <form method="post"> {% csrf_token %}
             <div class="modal-body">
-            <input class="form-control" placeholder="Digita la contraseña de administrador">
+            <label>Digita el correo de administrador"</label>
+            {{formulario.username}}
+            <label>Digita la contraseña de administrador"</label>
+            {{formulario.password}}
+            <input type="hidden" name="next" value="{{ next }}" />
             </div>
             <div class="modal-footer">
               <button type="button" class="btn badge-spz" data-dismiss="modal">¡NOOO! &#128561;</button>
               {% url 'renuncia' as renuncia %}
-              <a href="{{ renuncia }}" class="btn btn-secondary" >Si, Seguro &#128557;</a>
+              <!--href="{{ renuncia }}"-->
+              <input type="submit"  class="btn btn-secondary" value="Si, Seguro &#128557;">
             </div>
+          </form>
           </div>
         </div>
       </div>

@@ -21,6 +21,8 @@ from django.core import serializers
 from django.views.generic import TemplateView
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+from apps.usuarios.forms import UserAuthenticationForm
+from django.contrib.auth import authenticate
 
 
 
@@ -285,7 +287,26 @@ def informacion(request):
     if(request.tenant.working==True):
         inicio=request.tenant.fecha_corte
         dias=date.today()-inicio
-        context={'dias':dias.days}
+        
+        if request.method == 'POST':
+            formulario = UserAuthenticationForm(request.POST)
+            if formulario.is_valid:
+                username = request.POST['username']
+                password = request.POST['password']
+                acceso_user = authenticate(username = username, password = password)
+                if acceso_user is not None:
+                    if acceso_user.is_active:
+                        return renuncia(request)
+                    else:
+                        messages.add_message(request, messages.INFO, 'Error')
+                else:
+                    messages.add_message(request, messages.INFO, 'Por favor revisa tu password')
+            else:
+                messages.add_message(request, messages.INFO, 'Error')
+        else:
+            formulario = UserAuthenticationForm()
+
+        context={'dias':dias.days,'formulario':formulario}
         return render(request,'franquicias/info.html',context)
     else:
         return render(request,"404.html",{})
@@ -301,7 +322,7 @@ def renuncia(request):
         detalles = serializers.serialize("json", Detalle.objects.all())
         context={'f':json.dumps(franquicia),'u':usuarios,'i':ingredientes,'p':pizzas,'fc':facturas,'dt':detalles}
         Franquicia.objects.filter(pk=request.tenant.id).update(working=False)
-        return render(request,'franquicias/renuncia.html',context)
+        return render(request,'tenant/renuncia.html',context)
     else:
         return render(request,"404.html",{})
 
