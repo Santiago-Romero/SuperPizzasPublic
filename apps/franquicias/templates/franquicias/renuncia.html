@@ -23,7 +23,7 @@
     <h5>Aqui está tu información:</h5>
     <form onsubmit="download(this['name'].value, this['text'].value)">
     <input class="form-control" readonly type="text" name="name" value="data_{{request.tenant.nombre}}.json">
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" name="text">{{data}}</textarea>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" name="text">{"Franquicia":[{{f}}],&#10;"Usuarios":{{u}},&#10;"Ingredientes":{{i}},&#10;"Pizzas":{{p}},&#10;"Facturas":{{fc}},&#10;"Detalles":{{dt}}}</textarea>
     <input class="form-control btn btn-dark" type="submit" value="Descargar">
 </form>
 <hr>
