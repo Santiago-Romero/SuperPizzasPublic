@@ -282,16 +282,15 @@ def informacion(request):
     return render(request,'franquicias/info.html',context)
 
 def renuncia(request):
-    franquicias = serializers.serialize("json", Franquicia.objects.all())
-    f = {"Franquicias": franquicias}
+    franquiciafields={"nombre":request.tenant.nombre,"dominio":request.tenant.schema_name,"tipo":request.tenant.tipo.nombre}
+    franquicia={"model":"franquicias.franquicia","pk":request.tenant.id,"fields":franquiciafields}
     usuarios = serializers.serialize("json", Usuario.objects.all())
-    u = {"Usuarios": usuarios}
-    pizzas = serializers.serialize("json", Pizza.objects.all())
-    i = {"Pizzas": pizzas}
     ingredientes = serializers.serialize("json", Ingrediente.objects.all())
-    p = {"Ingredientes": ingredientes}
-    data={**f,**u,**i,**p}
-    return render(request,'franquicias/renuncia.html',{'data':data})
+    pizzas = serializers.serialize("json", Pizza.objects.all())
+    facturas = serializers.serialize("json", Factura.objects.all())
+    detalles = serializers.serialize("json", Detalle.objects.all())
+    context={'f':json.dumps(franquicia),'u':usuarios,'i':ingredientes,'p':pizzas,'fc':facturas,'dt':detalles}
+    return render(request,'franquicias/renuncia.html',context)
 
 class CartAgregar(TemplateView):
 
