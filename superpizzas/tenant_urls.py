@@ -17,7 +17,6 @@ urlpatterns = [
     path('admin/ingredientes/', include('apps.ingredientes.urls', namespace='ingredientes')),
     path('admin/configuraciones/',configuraciones, name='configuraciones'),
     path('admin/info/',informacion,name='info'),
-    path('renuncia/',renuncia,name='renuncia'),
     path('ordenar/',ordenar,name='ordenar'),
     #carrito de compras
     path('add/', CartAgregar.as_view(), name='cart_agregar'),
