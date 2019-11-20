@@ -1,7 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-	{% include 'tenant/head.html' %}
+    {% include 'tenant/head.html' %}    
   <body>
       {% include 'tenant/nav.html' %}
     <section class="ftco-section">
@@ -15,12 +15,15 @@
                             {% endif %}
             
                             <br>
-                            <a style="color: white; text-decoration: none" class="btn btn-info float-right mb-3 mr-2" href="{% url 'ordenar' %}">
+                            
+                            <a style="color: white; text-decoration: none" class="btn btn-primary btn-md my-0 p" href="{% url 'ordenar' %}">
                                 Seguir comprando
                             </a>
+                            <br>
+                            <br>
                             <div class="table-responsive">
                                 {% if productos %}
-                                <table class="table table-bordered">
+                                <table class="table table-dark">
                                     <thead>
                                     <tr>
                                         <th>Nombre</th>
@@ -66,7 +69,7 @@
                             </tbody>
                             <h4>Dirección de envio:</h4>
                             <form class="form-inline form-direccion" method="POST" enctype="multipart/form-data" onsubmit="direccioncita()">
-                                {% csrf_token %}                                 
+                                {% csrf_token %}                                                              
                                 <div class="form-group mx-sm-3 mb-2">
                                 <label for="direccion" class="sr-only">Dirección</label>
                                  <input class="form-control" id="direccion" placeholder="Dirección" name="direccion" required>
@@ -108,7 +111,8 @@
   <script src="{% static 'landing-tenant/js/bootstrap-datepicker.js' %}"></script>
   <script src="{% static 'landing-tenant/js/jquery.timepicker.min.js' %}"></script>
   <script src="{% static 'landing-tenant/js/scrollax.min.js' %}"></script>  
-  <script src="{% static 'landing-tenant/js/main.js' %}"></script>
+  <script src="{% static 'landing-tenant/js/main.js' %}"></script> 
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     
   </body>
 </html>

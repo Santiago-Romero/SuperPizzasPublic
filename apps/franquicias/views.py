@@ -410,6 +410,10 @@ class CartComprar(TemplateView):
             context = super(CartComprar, self).get_context_data(**kwargs)
             nombreFranquicia= self.request.tenant.nombre 
             franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+            cliente=None
+            customer = self.request.user        
+            if customer.is_authenticated:
+                cliente = Usuario.objects.get(user_id=customer.id)
             context['franquicia']=self.request
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
             context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
@@ -420,7 +424,8 @@ class CartComprar(TemplateView):
             cart = self.request.session.get('cart', {})
             cantidades = self.request.session.get('cantidades', {})       
             context['productos'] = cart
-            context['cantidades'] = json.loads(cantidades)        
+            context['cantidades'] = json.loads(cantidades) 
+            context['cliente']=cliente       
 
             return context
         else:
