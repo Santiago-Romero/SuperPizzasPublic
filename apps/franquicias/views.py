@@ -417,13 +417,14 @@ class AgregarCantidadCarrito(TemplateView):
 
 class CartComprar(TemplateView):
     template_name = "tenant/carrito_comprar.html"
-
+    
     def get_context_data(self, **kwargs):
         if(self.request.tenant.working==True):
             context = super(CartComprar, self).get_context_data(**kwargs)
             nombreFranquicia= self.request.tenant.nombre 
             franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
             form = UsuarioForm(self.request.POST or None,prefix="form2") 
+            admin_franquicia = Usuario.objects.get(user_id=1)
             cliente=None
             customer = self.request.user        
             if customer.is_authenticated:                
@@ -442,6 +443,7 @@ class CartComprar(TemplateView):
             context['cantidades'] = json.loads(cantidades) 
             context['cliente']=cliente 
             context["form2"] = form
+            context['admin_franquicia']=admin_franquicia
 
 
             return context

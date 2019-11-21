@@ -72,7 +72,7 @@
                                 {% csrf_token %}                                  
                                 <div class="form-group mx-sm-3 mb-2">
                                 <label for="barrio" class="sr-only">País</label>
-                                <input class="form-control" id="pais" placeholder="País" name="país" required>
+                                <input class="form-control" name="form2-pais" id="id_form2-pais" placeholder="País" value="{{ admin_franquicia.pais|default_if_none:"" }}"  required>
                                 </div>
 
                                 <div class="form-group mx-sm-3 mb-2">
