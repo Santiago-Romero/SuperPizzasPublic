@@ -88,8 +88,6 @@ def gestionar_usuario(request, id_usuario=None):
     else:
         return render(request,"404.html",{})
 
-
-
 def gestionar_cliente(request):
     if(request.tenant.working==True):
         if request.method == 'POST':
@@ -146,8 +144,17 @@ def inicio_sesion(request):
     if(request.tenant.working==True):
         #Si usario no es anonimo? (ya esta log)
         if not request.user.is_anonymous:
-            #Redireccion a Raiz
-            return HttpResponseRedirect('/admin')
+            
+            role = get_role_user(request)
+
+            if role == 5:
+
+                return HttpResponseRedirect('/')
+
+            else:
+
+                return HttpResponseRedirect('/admin')
+
         #Validacion del Formulario a traves del metodo POST
         if request.method == 'POST':
 
@@ -172,6 +179,7 @@ def inicio_sesion(request):
             else:
                 messages.add_message(request, messages.INFO, 'Error')
         else:
+            print(request.user,"hola")
             formulario = UserAuthenticationForm()
             
         contexto = {
@@ -185,7 +193,7 @@ def inicio_sesion(request):
 
 
 @csrf_protect
-def inicio_sesion_admin(request):
+def inicio_sesion_admin(request,id=None):
 
     #Si usario no es anonimo? (ya esta log)
     if request.user.is_superuser:
@@ -219,6 +227,7 @@ def inicio_sesion_admin(request):
         else:
             messages.add_message(request, messages.INFO, 'Error')
     else:
+
         formulario = UserAuthenticationForm()
         
         contexto = {
@@ -256,7 +265,7 @@ def check_email(request):
 #Retorna 1 si es anonimo / 2 si es admin / 3 si es digitador / 4 si es vendedor / 5 si es cliente / 6 error
 def get_role_user(request):
     if request.user.is_anonymous:
-        return 1;
+        return 1
     else:
         usuario = request.user
         user = User.objects.get(pk=usuario.id)

@@ -5,10 +5,10 @@ from django.db import migrations
 
 def insertarDatos(apps, schema_editor):
 	 tipofranquicia = apps.get_model('franquicias', 'tipofranquicia')
-	 plan1 = tipofranquicia(nombre = "basico", precio = 79)
+	 plan1 = tipofranquicia(nombre = "basico", precio = 79000)
 	 plan1.save()
 	 tipofranquicia = apps.get_model('franquicias', 'tipofranquicia')
-	 plan2 = tipofranquicia(nombre = "premium", precio = 135)
+	 plan2 = tipofranquicia(nombre = "premium", precio = 135000)
 	 plan2.save()
 	 franquicia = apps.get_model('franquicias', 'franquicia')
 	 FrPublic = franquicia(schema_name = "public", nombre = "public", tipo_id = 1)
