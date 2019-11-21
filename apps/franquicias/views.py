@@ -27,7 +27,6 @@ from django.contrib.auth import authenticate
 from reportlab.pdfgen import canvas
 from django.views.generic import View
 from io import BytesIO
-from apps.usuarios.views import get_role_user
 
 
 
@@ -259,7 +258,7 @@ def ordenar(request):
         return render(request,"404.html",{})
     
 def configuraciones(request):
-    if(request.tenant.working==True):
+    if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
         if(request.tenant.tipo.nombre=="premium"):
             franquicia= request.tenant.nombre 
             datosfran = Franquicia.objects.get(schema_name=franquicia)
@@ -302,10 +301,9 @@ def configuraciones(request):
         return render(request,"404.html",{})
 
 def informacion(request):
-    if(request.tenant.working==True):
+    if(request.user.usuario.rol=='a' and request.tenant.working==True):
         inicio=request.tenant.fecha_corte
         dias=date.today()-inicio
-        
         if request.method == 'POST':
             formulario = UserAuthenticationForm(request.POST)
             if formulario.is_valid:
@@ -586,7 +584,13 @@ def factura_PDF(request, id_factura=None):
     return response
 
 def vender(request):
-    return render(request,"404.html",{})
+    if(request.user.usuario.rol=='v' and request.tenant.working==True):
+        return HttpResponse("Aqui va lo de la venta")
+    else:
+        return render(request,"404.html",{})
 
 def reportes(request):
-    return render(request,"404.html",{})
+    if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
+        return HttpResponse("Aqui van los reportes")
+    else:
+        return render(request,"404.html",{})
