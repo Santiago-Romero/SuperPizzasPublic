@@ -1,12 +1,7 @@
 
 from django.urls import path, include
-<<<<<<< HEAD
 from apps.franquicias.views import home, inicio_tenants, configuraciones,informacion, factura_PDF,renuncia, ordenar,\
- CartAgregar,CartListar, CartDelete,AgregarCantidadCarrito,CartComprar,CartSuccess
-=======
-from apps.franquicias.views import home, inicio_tenants, configuraciones,informacion,renuncia, ordenar,\
- CartAgregar,CartListar, CartDelete,AgregarCantidadCarrito,CartComprar,CartSuccess, vender, reportes
->>>>>>> ebbf10540fa4a70adec7e81b9e5663cd6ad9d248
+ CartAgregar,CartListar, CartDelete,AgregarCantidadCarrito,CartComprar,CartSuccess,vender, reportes
 from apps.usuarios.views import inicio_sesion, cerrar_sesion,gestionar_cliente, check_email
 from django.conf.urls import url
 
@@ -31,13 +26,9 @@ urlpatterns = [
     path('agregar_cantidades', AgregarCantidadCarrito.as_view(), name='cart_cantidades'),
     path('comprar', CartComprar.as_view(), name='cart_comprar'),
     path('compra_exitosa', CartSuccess.as_view(), name='cart_success'),
-<<<<<<< HEAD
     url('reporte/(?P<id_factura>[0-9]+)$',factura_PDF, name="reporte_personas_pdf"),
-
-=======
     # new
     path('admin/vender/',vender,name='vender'),
     path('admin/reportes/',reportes,name='reportes'),
->>>>>>> ebbf10540fa4a70adec7e81b9e5663cd6ad9d248
 
 ]
