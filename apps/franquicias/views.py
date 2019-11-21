@@ -495,3 +495,9 @@ class CartSuccess(TemplateView):
             return context
         else:
             return render(self.request,"404.html",{})
+
+def vender(request):
+    return render(request,"404.html",{})
+
+def reportes(request):
+    return render(request,"404.html",{})

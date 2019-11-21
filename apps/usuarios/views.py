@@ -88,8 +88,6 @@ def gestionar_usuario(request, id_usuario=None):
     else:
         return render(request,"404.html",{})
 
-
-
 def gestionar_cliente(request):
     if(request.tenant.working==True):
         if request.method == 'POST':
@@ -267,7 +265,7 @@ def check_email(request):
 #Retorna 1 si es anonimo / 2 si es admin / 3 si es digitador / 4 si es vendedor / 5 si es cliente / 6 error
 def get_role_user(request):
     if request.user.is_anonymous:
-        return 1;
+        return 1
     else:
         usuario = request.user
         user = User.objects.get(pk=usuario.id)
