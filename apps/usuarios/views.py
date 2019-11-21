@@ -129,7 +129,7 @@ def eliminar_usuario(request, id_usuario):
         usuario = get_object_or_404(Usuario, id=id_usuario)
 
         if (usuario != None):
-            if(id_usuario != 5 and id_usuario != 2):
+            if(id_usuario != 1 and id_usuario != 2):
                 print("Es diferente")
                 user = User.objects.get(pk=usuario.user.id)
                 usuario.delete()
