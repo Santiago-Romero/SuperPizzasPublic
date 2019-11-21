@@ -17,5 +17,5 @@ class Usuario(models.Model):
     tipo_tarjeta=models.CharField(max_length=50,choices=tiposTarjetas,default='visa')
     numero_tarjeta=models.BigIntegerField(default=123456789012345)
     cvv=models.IntegerField(default=123)
-    direccion=models.CharField(max_length=200,default='calle 13a 5e-01 Buga', blank=True,null=True)
+    direccion=models.CharField(max_length=200,default='calle 100 100 av 100', blank=True,null=True)
     rol=models.CharField(max_length=1, choices=Roles)
