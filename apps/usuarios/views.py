@@ -157,7 +157,6 @@ def inicio_sesion(request):
 
         #Validacion del Formulario a traves del metodo POST
         if request.method == 'POST':
-
             formulario = UserAuthenticationForm(request.POST)
 
             if formulario.is_valid:
@@ -170,8 +169,17 @@ def inicio_sesion(request):
                     if acceso_user.is_active:
                         #Login
                         login(request,acceso_user)
-                        #Redireccion al origen
-                        return redirect('/admin')
+
+                        user = User.objects.get(username=acceso_user)
+                        perfil = Usuario.objects.get(user=user)
+
+
+                        if perfil.rol == 'c':
+                            #Redireccion al origen
+                            return redirect('/')
+                        else:
+                            #Redireccion al origen
+                            return redirect('/admin')
                     else:
                         messages.add_message(request, messages.INFO, 'Error')
                 else:
