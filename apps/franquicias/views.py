@@ -26,6 +26,7 @@ from django.contrib.auth import authenticate
 from reportlab.pdfgen import canvas
 from django.views.generic import View
 from io import BytesIO
+from apps.usuarios.views import get_role_user
 
 
 
