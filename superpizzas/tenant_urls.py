@@ -1,8 +1,9 @@
 
 from django.urls import path, include
-from apps.franquicias.views import home, inicio_tenants, configuraciones,informacion,renuncia, ordenar,\
+from apps.franquicias.views import home, inicio_tenants, configuraciones,informacion, factura_PDF,renuncia, ordenar,\
  CartAgregar,CartListar, CartDelete,AgregarCantidadCarrito,CartComprar,CartSuccess
 from apps.usuarios.views import inicio_sesion, cerrar_sesion,gestionar_cliente, check_email
+from django.conf.urls import url
 
 urlpatterns = [
     path('', inicio_tenants, name='inicio_t'),
@@ -25,5 +26,7 @@ urlpatterns = [
     path('agregar_cantidades', AgregarCantidadCarrito.as_view(), name='cart_cantidades'),
     path('comprar', CartComprar.as_view(), name='cart_comprar'),
     path('compra_exitosa', CartSuccess.as_view(), name='cart_success'),
+    url('reporte/(?P<id_factura>[0-9]+)$',factura_PDF, name="reporte_personas_pdf"),
+
 
 ]

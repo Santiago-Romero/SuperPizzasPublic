@@ -23,6 +23,9 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from apps.usuarios.forms import UserAuthenticationForm
 from django.contrib.auth import authenticate
+from reportlab.pdfgen import canvas
+from django.views.generic import View
+from io import BytesIO
 
 
 
@@ -458,6 +461,13 @@ class CartComprar(TemplateView):
                 factura = Factura(direccion=direccion, estado_Factura=0, efectivo=efectivo, cliente=cliente)
                 factura.save()
             else:
+                if not User.objects.filter(email="anonimo@superpizzas.com").exists():
+                    user_anonimo = User(username='anonimo@superpizzas.com',password="V7IyWywC9JZyno", email='anonimo@superpizzas.com', first_name='anonimo', last_name='anonimo')
+                    user_anonimo.save()
+                    assign_role(user_anonimo,'cliente')
+                    cliente_anonimo = Usuario(user=user_anonimo,cc=0000000000,telefono=0000000000,pais='CO',nombre_banco='bancolombia',fecha_vencimiento='2019-11-21',tipo_tarjeta='visa',numero_tarjeta=000000000000000,cvv=000,rol='c')
+                    cliente_anonimo.save()
+
                 usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
                 cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
                 factura = Factura(direccion=direccion, estado_Factura=0, efectivo=efectivo, cliente=cliente_anonimo)
@@ -470,12 +480,10 @@ class CartComprar(TemplateView):
                                     producto_id=v['id'])
                 detalle_item.save()
             self.request.session['cart'] = {}
-            return HttpResponseRedirect(self.get_success_url())
+            #return HttpResponseRedirect(self.get_success_url())
+            return HttpResponseRedirect('/compra_exitosa?id='+str(factura.id))
         else:
             return render(request,"404.html",{})
-
-    def get_success_url(self):
-        return reverse_lazy('cart_success')
 
 class CartSuccess(TemplateView):
     template_name = "tenant/carrito_success.html"
@@ -492,6 +500,41 @@ class CartSuccess(TemplateView):
             context['tamanioletraX2'] = int(json.loads(franquicia.configuracion)['tamanioletra'])*2
             context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
             context['logo'] = franquicia.media
+            context['id_factura'] = self.request.GET['id']
+
             return context
         else:
             return render(self.request,"404.html",{})
+
+def factura_PDF(request, id_factura=None):
+    
+    #Indicamos el tipo de contenido a devolver, en este caso un pdf
+    response = HttpResponse(content_type='application/pdf')
+    #La clase io.BytesIO permite tratar un array de bytes como un fichero binario, se utiliza como almacenamiento temporal
+    buffer = BytesIO()
+    #Canvas nos permite hacer el reporte con coordenadas X y Y
+    pdf = canvas.Canvas(buffer)
+    pdf.setPageSize((200, 300))
+    #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
+
+    archivo_imagen = settings.MEDIA_ROOT+'/images/favicon.png'
+    pdf.drawImage(archivo_imagen, 10, 240, 50, 50,preserveAspectRatio=True)
+    
+    pdf.setFont("Helvetica", 8)
+    pdf.drawString(80, 270, u"FACTURA DE VENTA")
+    pdf.setFont("Helvetica", 7)
+    pdf.drawString(80, 260, id_factura)
+
+    factura = Factura.objects.get(id=id_factura)
+
+    pdf.setFont("Helvetica", 10)
+    pdf.drawString(80, 230, factura.direccion)
+
+
+    pdf.showPage()
+    pdf.save()
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+
+    return response
