@@ -98,13 +98,26 @@ def compra_franquicia(request,tipo):
                         usuario.save()
 
                         assign_role(usuario,'administrador')
-
+                       
                         #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
 
                         perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
 
                         perfil.save()
                         
+                          # Cliente anonimo 
+
+                        user_anonimo = User(username='anonimo@superpizzas.com',password="V7IyWywC9JZyno", email='anonimo@superpizzas.com', first_name='anonimo', last_name='anonimo')
+                                                                        
+                        user_anonimo.save()
+
+                        assign_role(user_anonimo,'cliente')
+
+                        cliente_anonimo = Usuario(user=user_anonimo,cc=0000000000,telefono=0000000000,pais='CO',nombre_banco='bancolombia',fecha_vencimiento='2019-11-21',tipo_tarjeta='visa',numero_tarjeta=000000000000000,cvv=000,rol='c')
+
+                        cliente_anonimo.save()
+                      
+
             except Exception as e: 
                 print(e,"error")
             context={
@@ -410,10 +423,12 @@ class CartComprar(TemplateView):
             context = super(CartComprar, self).get_context_data(**kwargs)
             nombreFranquicia= self.request.tenant.nombre 
             franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+            form = UsuarioForm(self.request.POST or None,prefix="form2") 
             cliente=None
             customer = self.request.user        
-            if customer.is_authenticated:
-                cliente = Usuario.objects.get(user_id=customer.id)
+            if customer.is_authenticated:                
+                cliente = Usuario.objects.get(user_id=customer.id)            
+            context["form"] = form
             context['franquicia']=self.request
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
             context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
@@ -425,7 +440,9 @@ class CartComprar(TemplateView):
             cantidades = self.request.session.get('cantidades', {})       
             context['productos'] = cart
             context['cantidades'] = json.loads(cantidades) 
-            context['cliente']=cliente       
+            context['cliente']=cliente 
+            context["form2"] = form
+
 
             return context
         else:
@@ -433,23 +450,17 @@ class CartComprar(TemplateView):
 
     def post(self, request):
         if(request.tenant.working==True):
-            direccion = request.POST['datos-direccion']
-            direccion_completa = ''
-            if len(direccion) > 0:
-                datos = json.loads(direccion)
-                tamano_datos = len(datos)
-                efectivo = datos[int(tamano_datos) - 2]['value']
-                for x in range(1, int(tamano_datos)-2):
-                    direccion_completa += datos[x]['value']+' '
+            direccion = request.POST['direccion']
+            efectivo=50000
             customer = request.user        
             if customer.is_authenticated:
                 cliente = Usuario.objects.get(user_id=customer.id)
-                factura = Factura(direccion=direccion_completa, estado_Factura=0, efectivo=efectivo, cliente=cliente)
+                factura = Factura(direccion=direccion, estado_Factura=0, efectivo=efectivo, cliente=cliente)
                 factura.save()
             else:
                 usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
                 cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
-                factura = Factura(direccion=direccion_completa, estado_Factura=0, efectivo=efectivo, cliente=cliente_anonimo)
+                factura = Factura(direccion=direccion, estado_Factura=0, efectivo=efectivo, cliente=cliente_anonimo)
                 factura.save()
             cantidades = self.request.session.get('cantidades', {})
             cantidades_dict = json.loads(cantidades)

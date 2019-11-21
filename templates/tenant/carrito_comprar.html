@@ -11,7 +11,7 @@
                             <h2>Realizar el pedido</h2>
                             {% if user.is_authenticated%}
                             {% else %}
-                            <h5>Estas realizando el pedido como invitado. ¿Tienes una cuenta en {{ datos_franquicia.nombre }}? <a href="{% url 'login' %}">Inicia Sesión</a> o <a href="{% url 'registro' %}">Regístrate</a></h5>
+                            <h5>Estas realizando el pedido como invitado. ¿Tienes una cuenta en Superpizzas {{request.tenant.nombre}}? <a href="{% url 'login' %}">Inicia Sesión</a> o <a href="{% url 'registro' %}">Regístrate</a></h5>
                             {% endif %}
             
                             <br>
@@ -67,21 +67,58 @@
                             <h1>Carrito vacio</h1>
                             {% endif %}
                             </tbody>
-                            <h4>Dirección de envio:</h4>
-                            <form class="form-inline form-direccion" method="POST" enctype="multipart/form-data" onsubmit="direccioncita()">
-                                {% csrf_token %}                                                              
+                            <h4>Dirección de envío:</h4>
+                            <form class="form-horizontal form-direccion" method="POST" enctype="multipart/form-data" onsubmit="direccioncita()">
+                                {% csrf_token %}                                  
+                                <div class="form-group mx-sm-3 mb-2">
+                                <label for="barrio" class="sr-only">País</label>
+                                <input class="form-control" id="pais" placeholder="País" name="país" required>
+                                </div>
+
+                                <div class="form-group mx-sm-3 mb-2">
+                                <label for="barrio" class="sr-only">Ciudad</label>
+                                <input class="form-control" id="ciudad" placeholder="Ciudad" name="ciudad" required>
+                                </div>
                                 <div class="form-group mx-sm-3 mb-2">
                                 <label for="direccion" class="sr-only">Dirección</label>
-                                 <input class="form-control" id="direccion" placeholder="Dirección" name="direccion" required>
-                              </div>
-                                <div class="form-group mx-sm-3 mb-2">
-                                <label for="efectivo" class="sr-only">¿Con cuanto efectivo pagará?</label>
-                                 <input class="form-control" id="efectivo" type="number" placeholder="¿Con cuanto efectivo pagará?" name="efectivo" required>
-                              </div>
+                                 <input class="form-control" id="direccion" placeholder="Dirección" name="direccion" value="{{ cliente.direccion|default_if_none:"" }}" required>
+                              </div>  
+                              {% if user.is_authenticated%}
+                              {% else %}
+                              <h4>Información del pago:</h4>
+
+                              <div class="form-group mx-sm-3 mb-2">                                  
+                              <label for="nombrebanco" class="sr-only">nombre banco</label>
+                              {{form.nombre_banco}}
+                              </div> 
+
+                              <div class="form-group mx-sm-3 mb-2">                                  
+                                <label for="fechavencimiento" class="sr-only">fecha vencimiento</label>
+                                {{form2.fecha_vencimiento}}
+                            </div> 
+
+                            <div class="form-group mx-sm-3 mb-2">                                  
+                                    <label for="numerotarjeta" class="sr-only">numero tarjeta</label>
+                                    {{form2.numero_tarjeta}}
+                                </div> 
+
+                                <div class="form-group mx-sm-3 mb-2">                                  
+                                        <label for="tipotarjeta" class="sr-only">tipo tarjeta</label>
+                                        {{form2.tipo_tarjeta}}
+                                    </div> 
+
+                                    <div class="form-group mx-sm-3 mb-2">                                  
+                                            <label for="cvv" class="sr-only">cvv</label>
+                                            {{form2.cvv}}
+                                        </div> 
+
+
+                              {%endif%}
                               <div class="form-group">
                                <input type="hidden" name="datos-direccion" id="mi_direccion" value=""/>
                               </div>
                                 <div class="text-center"><button type="submit" class="btn btn-danger float-right mb-3 mr-2">Pedir</button></div>
+                              
                             </form>
                         </div>
                     </div>
