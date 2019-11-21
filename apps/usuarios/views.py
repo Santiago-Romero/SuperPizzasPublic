@@ -193,7 +193,7 @@ def inicio_sesion(request):
 
 
 @csrf_protect
-def inicio_sesion_admin(request):
+def inicio_sesion_admin(request,id=None):
 
     #Si usario no es anonimo? (ya esta log)
     if request.user.is_superuser:
