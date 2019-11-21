@@ -1,0 +1,7 @@
+{% url 'vender' as venta %}
+<li class="nav-item  {% if venta in request.path %}active{% endif %}">
+    <a class="nav-link" href="{{ venta }}">
+        <i class="menu-icon mdi mdi-shopping"></i>
+        <span class="menu-title text-uppercase">Vender</span>
+    </a>
+</li>
