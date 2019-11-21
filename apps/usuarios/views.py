@@ -143,11 +143,22 @@ def eliminar_usuario(request, id_usuario):
 
 @csrf_protect
 def inicio_sesion(request):
+
+    print(request.user,"hola")
     if(request.tenant.working==True):
         #Si usario no es anonimo? (ya esta log)
         if not request.user.is_anonymous:
-            #Redireccion a Raiz
-            return HttpResponseRedirect('/admin')
+            
+            role = get_role_user(request)
+
+            if role == 5:
+
+                return HttpResponseRedirect('/')
+
+            else:
+
+                return HttpResponseRedirect('tenant/admin')
+
         #Validacion del Formulario a traves del metodo POST
         if request.method == 'POST':
 
@@ -172,6 +183,7 @@ def inicio_sesion(request):
             else:
                 messages.add_message(request, messages.INFO, 'Error')
         else:
+            print(request.user,"hola")
             formulario = UserAuthenticationForm()
             
         contexto = {
@@ -219,6 +231,7 @@ def inicio_sesion_admin(request):
         else:
             messages.add_message(request, messages.INFO, 'Error')
     else:
+
         formulario = UserAuthenticationForm()
         
         contexto = {
