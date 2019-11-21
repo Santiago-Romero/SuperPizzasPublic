@@ -538,3 +538,9 @@ def factura_PDF(request, id_factura=None):
     response.write(pdf)
 
     return response
+
+def vender(request):
+    return render(request,"404.html",{})
+
+def reportes(request):
+    return render(request,"404.html",{})

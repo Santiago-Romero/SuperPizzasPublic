@@ -8,6 +8,8 @@
         {% if request.tenant.tipo.nombre == 'premium'%}
             {% include 'menus/apps/configuraciones.html' %}
         {% endif %}
+        {% include 'menus/apps/vender.html'%}
+        {% include 'menus/apps/reportes.html'%}
         {% include 'menus/apps/info.html' %}
     {% endif %}
 </li>

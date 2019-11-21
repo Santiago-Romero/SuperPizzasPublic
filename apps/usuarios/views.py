@@ -88,8 +88,6 @@ def gestionar_usuario(request, id_usuario=None):
     else:
         return render(request,"404.html",{})
 
-
-
 def gestionar_cliente(request):
     if(request.tenant.working==True):
         if request.method == 'POST':
