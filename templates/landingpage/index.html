@@ -19,7 +19,7 @@
             <div class="da-slide">
                 <h2>Sé dueño de tu Franquicia</h2>
                 <h4>Fácil y Rentable</h4>
-                <p>Cuenta con un sistema de pedidos de pizza en línea que permitirá que obtengas una mayor cantidad de pedidos y por ende mayor ganancias. Además de que te permite administrar y gestionar tu negocio y los clientes.</p>
+                <p>Cuenta con un sistema de pedidos de pizza en línea que permitirá que obtengas una mayor cantidad de pedidos y por ende mayor ganancias. Además de que te permite administrar y gestionar tu negocio y tus propios clientes.</p>
                 <div class="da-img">
                     <img src="{% static 'landingpage/images/Slider01.png' %}" width="320" alt="image01">
                 </div>
@@ -30,7 +30,7 @@
             <div class="da-slide">
                 <h2 class="fittext2">Crea tus propias pizzas personalizadas</h2>
                 <h4>Pizzas únicas</h4>
-                <p> Somos reconocidos por el exquisito sabor de nuestras pizzas, salsas y la elaboración de una gran variedad de pizzas de diferentes sabores, como son: la de pepperoni, doble queso y hawaiana; además de que tenemos la opción de agregar pizzas totalmente personalizadas. </p>
+                <p> Como solo tú las sabes hacer </p>
                 <div class="da-img">
                     <img src="{% static 'landingpage/images/Slider02.png' %}" alt="image02" width="320">
                 </div>
@@ -40,7 +40,7 @@
             <!-- Start Third slide -->                  
             <div class="da-slide">
                 <h2>Pedidos online</h2>
-                <h4>Customizable</h4>
+                <h4>Personalizable</h4>
                 <p>Tus clientes podrán realizar las compras de manera rápida y sencilla de manera online.</p>
                 <div class="da-img">
                     <img src="{% static 'landingpage/images/Slider03.png' %}" width="320" alt="image03">
@@ -72,17 +72,17 @@
         <div class="row-fluid">
             <div class="span4">
                 <div class="centered service">
-                    <div class="circle-border zoom-in">
-                        <img class="img-circle" src="{% static 'landingpage/images/Service1.png' %}" alt="service 1">
+                    <div class="zoom-in">
+                        <img src="{% static 'landingpage/images/Service1.png' %}" alt="service 1">
                     </div>
                     <h3>Administración de pizzas y precios.</h3>
-                    <p>De una manera fácil y sencilla podrás administrar tu negocio.</p>
+                    <p>De una manera fácil y desde cualquier lugar podrás administrar tu negocio.</p>
                 </div>
             </div>
             <div class="span4">
                 <div class="centered service">
-                    <div class="circle-border zoom-in">
-                        <img class="img-circle" src="{% static 'landingpage/images/Service2.png' %}" alt="service 2" />
+                    <div class="zoom-in">
+                        <img src="{% static 'landingpage/images/Service2.png' %}" alt="service 2" />
                     </div>
                     <h3>Gráficos estadísticos.</h3>
                     <p>Gráficos que permiten conocer y tomar decisiones respecto al manejo de su negocio.</p>
@@ -90,8 +90,8 @@
             </div>
             <div class="span4">
                 <div class="centered service">
-                    <div class="circle-border zoom-in">
-                        <img class="img-circle" src="{% static 'landingpage/images/Service3.png' %}" alt="service 3">
+                    <div class="zoom-in">
+                        <img src="{% static 'landingpage/images/Service3.png' %}" alt="service 3">
                     </div>
                     <h3>Administración de clientes.</h3>
                     <p>Administrar el manejo y control de clientes. </p>
@@ -116,18 +116,19 @@
                 <ul class="list">
                     <li class="price">{{tipo.precio}} COP</li>
                     {% if tipo.id == 1 %}
-                    <li><strong>Ilimitado</strong> ingredientes</li>
-                    <li><strong>24/7</strong> Soporte</li>
                     <li><strong>Ilimitada</strong> Creación de pizzas</li>
-                    <li><strong>Ilimitada</strong> Registro de clientes</li>
+                    <li><strong>Ilimitado</strong> Registro de clientes</li>
+                    <li><strong>Ilimitada</strong> Creación de ingredientes</li>
                     <li><strong>Ilimitadas</strong> Compras online </li>
+                    <li><strong>24/7</strong> Soporte</li>
                     {% else %}
-                    <li><strong>Ilimitado</strong> ingredientes</li>
-                    <li><strong>24/7</strong> Soporte</li>
                     <li><strong>Ilimitada</strong> Creación de pizzas</li>
-                    <li><strong>Ilimitada</strong> Registro de clientes</li>
+                    <li><strong>Ilimitado</strong> Registro de clientes</li>
+                    <li><strong>Ilimitada</strong> Creación de ingredientes</li>
                     <li><strong>Ilimitadas</strong> Compras online </li>
-                    <li><strong>Ilimitados</strong> Gráficos estadísticos </li>
+                    <li><strong>24/7</strong> Soporte</li>
+                    <li><strong>Plus +</strong> Reportes gráficos </li>
+                    <li><strong>Plus +</strong> Personalización de la página </li>
                     {% endif %} 
                 </ul>
                 <a href="{% url 'compra' tipo.nombre %}" class="button button-ps">COMPRAR</a>
@@ -154,12 +155,16 @@
             </div>
             <ul class="row client-slider" id="clint-slider">
             {% for tenant in tenants%}
-                <li>
-                    <a href="http://{{tenant.domain}}:8000">
+            <div class="span4">
+                <div class="centered service">
+                    <div class="zoom-in">
+                        <a href="http://{{tenant.domain}}:8000">
                     <img class="logos" src="/static/{{tenant.tenant.media}}" alt="{{tenant.tenant.nombre}}">
                     <h3>{{tenant.tenant.nombre}}</h3>
                     </a>
-                </li>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
             </ul>
         </div>

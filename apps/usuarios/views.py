@@ -11,7 +11,8 @@ from django.http import HttpResponse
 from django.http import HttpRequest
 
 def gestionar_usuario(request, id_usuario=None):
-    if(request.tenant.working==True):
+    ## DE ESTE NO ESTOY SEGURO
+    if(request.user.usuario.rol=='a' and request.tenant.working==True):
         usuarios = User.objects.all()
         usuario = None
         
@@ -124,14 +125,19 @@ def gestionar_cliente(request):
         return render(request,"404.html",{})
 
 def eliminar_usuario(request, id_usuario):
-    if(request.tenant.working==True):
+    if(request.user.usuario.rol=='a' and request.tenant.working==True):
         usuario = get_object_or_404(Usuario, id=id_usuario)
 
-        if usuario != None:
-            user = User.objects.get(pk=usuario.user.id)
-            usuario.delete()
-            user.delete()
-            messages.success(request, 'Usuario eliminado correctamente')
+        if (usuario != None):
+            if(id_usuario != 1 and id_usuario != 2):
+                print("Es diferente")
+                user = User.objects.get(pk=usuario.user.id)
+                usuario.delete()
+                user.delete()
+                messages.success(request, 'Usuario eliminado correctamente')
+                return redirect('usuarios:registrar')
+            else:
+                messages.error(request, 'No puedes elimiar este usuario')
             return redirect('usuarios:registrar')
         else:
             messages.warning(request, 'Usuario no encontrado')

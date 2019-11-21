@@ -33,13 +33,20 @@
                     <li class="nav-item dropdown d-xl-inline-block">
                         <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown"
                            aria-expanded="false">
-                            <span class="profile-text">{{request.tenant}}</span>
+                           {% if request.user.usuario.rol == 'a' %}
+                           {% firstof "Administrador" as rol %}
+                           {% elif request.user.usuario.rol == 'd' %}
+                           {% firstof "Digitador" as rol %}  
+                           {% else %}
+                           {% firstof "Vendedor" as rol %}
+                           {% endif %}
+                            <html>
+                            <span class="profile-text">{{request.user}} - {{rol}} </span>
+                            </html>
+                            
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-                            <a href="{% url 'cerrar_sesion'  %}">Cerrar Sesion</a>
-                            <a class="dropdown-item">
-                                
-                            </a>
+                            <a class="dropdown-item" href="{% url 'cerrar_sesion'  %}">Cerrar Sesion</a>
                         </div>
                     </li>
                 </ul>

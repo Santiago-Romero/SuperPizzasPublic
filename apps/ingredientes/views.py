@@ -4,7 +4,7 @@ from .forms import *
 
 
 def gestionar_ingrediente(request, id_ingrediente=None):
-    if(request.tenant.working==True):
+    if((request.user.usuario.rol=='a' or request.user.usuario.rol=='d') and request.tenant.working==True):
         if id_ingrediente:
             ingrediente = get_object_or_404(Ingrediente, id=id_ingrediente)
         else:
@@ -25,7 +25,7 @@ def gestionar_ingrediente(request, id_ingrediente=None):
 
 
 def eliminar_ingrediente(request, id_ingrediente):
-    if(request.tenant.working==True):
+    if((request.user.usuario.rol=='a' or request.user.usuario.rol=='d') and request.tenant.working==True):
         ingrediente = get_object_or_404(Ingrediente, id=id_ingrediente)
         ingrediente.delete()
         messages.success(request, 'Ingrediente eliminado correctamente')
