@@ -4,7 +4,7 @@ from .forms import *
 
 
 def gestionar_pizza(request, id_pizza=None):
-    if(request.tenant.working==True):
+    if((request.user.usuario.rol=='a' or request.user.usuario.rol=='d') and request.tenant.working==True):
         if id_pizza:
             pizza = get_object_or_404(Pizza, id=id_pizza)
         else:
@@ -25,7 +25,7 @@ def gestionar_pizza(request, id_pizza=None):
 
 
 def eliminar_pizza(request, id_pizza):
-    if(request.tenant.working==True):
+    if((request.user.usuario.rol=='a' or request.user.usuario.rol=='d') and request.tenant.working==True):
         pizza = get_object_or_404(Pizza, id=id_pizza)
         pizza.delete()
         messages.success(request, 'Pizza eliminado correctamente')
