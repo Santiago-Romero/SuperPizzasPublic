@@ -9,6 +9,7 @@
 - pillow
 - django-countries
 - django-recaptcha
+- reportlab
 - *(usar **`pip install -r requirements.txt`** para ello)*
 
 ### Dentro del proyecto hacer
