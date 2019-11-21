@@ -41,7 +41,7 @@ def home(request):
 
             perfil = Usuario.objects.get(user=id_usuario)
 
-            if perfil.rol == 'a':
+            if perfil.rol != 'c':
                 return render(request, 'base.html', {})
             else:
                 return redirect('/login')
