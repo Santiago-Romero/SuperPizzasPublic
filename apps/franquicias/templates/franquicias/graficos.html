@@ -15,9 +15,9 @@ Reportes Gráficos
             <div class="row mt">
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Doughnut</h4>
+                        <h4><i class="fa fa-angle-right"></i>N° Ventas Mensuales</h4>
                         <div class="panel-body text-center">
-                            <canvas id="doughnut" height="300" width="400"></canvas>
+                            <canvas id="bar" height="300" width="400"></canvas>
                         </div>
                     </div>
                 </div>
@@ -51,9 +51,9 @@ Reportes Gráficos
             <div class="row mt">
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Bar</h4>
+                        <h4><i class="fa fa-angle-right"></i> Doughnut</h4>
                         <div class="panel-body text-center">
-                            <canvas id="bar" height="300" width="400"></canvas>
+                            <canvas id="doughnut" height="300" width="400"></canvas>
                         </div>
                     </div>
                 </div>
@@ -129,17 +129,12 @@ Reportes Gráficos
 
         ];
         var barChartData = {
-            labels : ["Ene","Feb","Mar","Abr","May","Jun","Jul"],
+            labels : ["E","F","M","A","M","J","J","A","S","O","N","D"],
             datasets : [
                 {
                     fillColor : "rgba(220,220,220,0.5)",
                     strokeColor : "rgba(220,220,220,1)",
-                    data : [65,59,90,81,56,55,40]
-                },
-                {
-                    fillColor : "rgba(151,187,205,0.5)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    data : [28,48,40,19,96,27,100]
+                    data : ["{{vene}}","{{vfeb}}","{{vmarzo}}","{{vabr}}","{{vmay}}","{{vjun}}","{{vjul}}","{{vago}}","{{vsep}}","{{voct}}","{{vnov}}","{{vdic}}"]
                 }
             ]
 
