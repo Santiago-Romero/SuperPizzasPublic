@@ -578,7 +578,13 @@ def vender(request):
 
 def reportes(request):
     if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
-        contexto={'dato':request.tenant}
+        vmeses=[0,0,0,0,0,0,0,0,0,0,0,0]
+        pizza1="Hawa"
+        pizza2="Poll"
+        pizza3="Otr"
+        for factura in Factura.objects.all():
+            vmeses[factura.fecha_creacion.month-1]+=1
+        contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'pizza1':pizza1,'pizza2':pizza2,'pizza3':pizza3,}
         return render(request,'franquicias/graficos.html', contexto)
     else:
         return render(request,"404.html",{})
