@@ -591,6 +591,7 @@ def vender(request):
 
 def reportes(request):
     if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
-        return HttpResponse("Aqui van los reportes")
+        contexto={}
+        return render(request,'franquicias/graficos.html', contexto)
     else:
         return render(request,"404.html",{})
