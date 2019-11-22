@@ -23,9 +23,6 @@ def gestionar_usuario(request, id_usuario=None):
                 formUserDjango = UserForm(request.POST)
 
                 if formUserDjango.is_valid():
-
-                    print(request.POST)
-                    
                     usuario = formUserDjango.save(commit=False)
                             
                     usuario = User(username=request.POST['email'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
@@ -50,7 +47,6 @@ def gestionar_usuario(request, id_usuario=None):
                 user = User.objects.get(pk=usuario.user.id)
                 form = UsuarioForm2(request.POST, instance=usuario)
                 form2 = UpdateUser(data=request.POST, instance=user)
-                print(request.POST)
 
                 if form.is_valid():
                     form.save()
@@ -68,8 +64,6 @@ def gestionar_usuario(request, id_usuario=None):
             
                 else:
                     messages.error(request, 'Por favor verificar los campos en rojo')
-                    print(str(form.errors))
-                    print(str(form2.errors))
 
         if id_usuario:
             usuario = get_object_or_404(Usuario, id=id_usuario)
@@ -78,7 +72,6 @@ def gestionar_usuario(request, id_usuario=None):
             form.fields['rol'].initial = [usuario.rol]
             form2 = UpdateUser(instance=user)
             flag = 0
-            print(request.GET)
         else:
             form = UsuarioForm2()    
             form2 = UserForm()
@@ -115,8 +108,6 @@ def gestionar_cliente(request):
                 return redirect('login')
             else:
                 messages.error(request, 'Por favor verificar los campos en rojo')
-                print(str(form.errors))
-                print(str(formUserDjango.errors))
         else:
             form = UsuarioForm(prefix="form2",initial={'rol': 'c'})
             formUserDjango = UserForm(prefix="form3")        
@@ -130,7 +121,6 @@ def eliminar_usuario(request, id_usuario):
 
         if (usuario != None):
             if(id_usuario != 1 and id_usuario != 2):
-                print("Es diferente")
                 user = User.objects.get(pk=usuario.user.id)
                 usuario.delete()
                 user.delete()
@@ -193,7 +183,6 @@ def inicio_sesion(request):
             else:
                 messages.add_message(request, messages.INFO, 'Error')
         else:
-            print(request.user,"hola")
             formulario = UserAuthenticationForm()
             
         contexto = {
@@ -223,7 +212,6 @@ def inicio_sesion_admin(request,id=None):
             username = request.POST['username']
             password = request.POST['password']
             acceso_user = authenticate(username = username, password = password)
-            print(acceso_user)
             # Si el log fue existoso?
             if acceso_user is not None:
                 #si el usuario esta activo
@@ -264,11 +252,8 @@ def check_email(request):
         if HttpRequest.is_ajax and request.method == 'GET':        
             email = request.GET.get('form3-email','') 
             if User.objects.filter(email=email).exists():
-                print('duplicate')  # have this for checking in console
                 return HttpResponse('false')
             else:
-                print("no duplicate")
-                print(str(email))
                 return HttpResponse('true')
         else:
             return HttpResponse("Zero")
