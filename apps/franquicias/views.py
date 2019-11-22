@@ -77,9 +77,6 @@ def compra_franquicia(request,tipo):
         form = FranquiciaForm(request.POST,prefix="form1",initial={'tipo': tipoir})
         formUsuario = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'a'})
         formUserDjango = UserForm(request.POST,prefix="form3")
-
-        print(str(request.POST))
-
         if form.is_valid() and formUserDjango.is_valid():
             
             try:
@@ -130,9 +127,6 @@ def compra_franquicia(request,tipo):
             }
             return render(request,'landingpage/comprado.html',context)
         else:
-            print(str(formUsuario.errors))
-            print(str(formUserDjango.errors))
-            print(str(formUserDjango.errors))
             messages.error(request, "Por favor verificar los campos en rojo")
     else:
         form = FranquiciaForm(prefix="form1",initial={'tipo': tipoir})
@@ -152,7 +146,6 @@ def reg_franquicia(request):
         form = FranquiciaForm(request.POST,prefix="form1")
         formUsuario = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'a'})
         formUserDjango = UserForm(request.POST,prefix="form3")
-        print(str(request.POST))
         if form.is_valid() and formUserDjango.is_valid():
             try:
                 with transaction.atomic():
@@ -172,9 +165,6 @@ def reg_franquicia(request):
             messages.success(request, "Franquicia registrada")
             return redirect('franquicias:registrar')
         else:
-            print(str(formUsuario.errors))
-            print(str(formUserDjango.errors))
-            print(str(formUserDjango.errors))
             messages.error(request, "Por favor verificar los campos en rojo")
     else:
         form = FranquiciaForm(prefix="form1")
@@ -228,11 +218,8 @@ def check_schema(request):
     if HttpRequest.is_ajax and request.method == 'GET':        
         schema_name = request.GET.get('form1-schema_name','')       
         if schema_exists(schema_name):
-            print('duplicate')  # have this for checking in console
             return HttpResponse('false')
         else:
-            print("no duplicate")
-            print(str(schema_name))
             return HttpResponse('true')
     else:
         return HttpResponse("Zero")
@@ -591,7 +578,7 @@ def vender(request):
 
 def reportes(request):
     if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
-        contexto={}
+        contexto={'dato':request.tenant}
         return render(request,'franquicias/graficos.html', contexto)
     else:
         return render(request,"404.html",{})
