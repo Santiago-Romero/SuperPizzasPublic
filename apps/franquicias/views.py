@@ -181,8 +181,7 @@ def reg_franquicia(request):
 
 def inicio_tenants(request):
     if(request.tenant.working==True):
-        nombreFranquicia= request.tenant.nombre 
-        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
         context = {
             'pizzas':Pizza.objects.all(),
             'especiales': Pizza.objects.filter(especial=True,enventa=True),
@@ -227,8 +226,7 @@ def check_schema(request):
 
 def ordenar(request):
     if(request.tenant.working==True):
-        nombreFranquicia= request.tenant.nombre 
-        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
         context = {
             'pizzas':Pizza.objects.all(),        
             'enventas': Pizza.objects.filter(enventa=True),
@@ -247,8 +245,7 @@ def ordenar(request):
 def configuraciones(request):
     if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
         if(request.tenant.tipo.nombre=="premium"):
-            franquicia= request.tenant.nombre 
-            datosfran = Franquicia.objects.get(schema_name=franquicia)
+            datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
             contexto = {'franquicia': datosfran, 
             'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
             'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
@@ -273,8 +270,7 @@ def configuraciones(request):
                 except:
                     messages.error(request, 'Error al intentar guardar configuraciones')
 
-                franquicia= request.tenant.nombre 
-                datosfran = Franquicia.objects.get(schema_name=franquicia)
+                datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
                 contexto = {'franquicia': datosfran, 
                 'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
                 'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
@@ -362,8 +358,7 @@ class CartListar(TemplateView):
     def get_context_data(self, **kwargs):
         if(self.request.tenant.working==True):
             context = super(CartListar, self).get_context_data(**kwargs)
-            nombreFranquicia= self.request.tenant.nombre 
-            franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+            franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
             context['franquicia']=self.request
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
             context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
@@ -411,8 +406,7 @@ class CartComprar(TemplateView):
     def get_context_data(self, **kwargs):
         if(self.request.tenant.working==True):
             context = super(CartComprar, self).get_context_data(**kwargs)
-            nombreFranquicia= self.request.tenant.nombre 
-            franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+            franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
             form = UsuarioForm(self.request.POST or None,prefix="form2") 
             admin_franquicia = Usuario.objects.get(user_id=1)
             cliente=None
@@ -481,8 +475,7 @@ class CartSuccess(TemplateView):
     def get_context_data(self, **kwargs):
         if(self.request.tenant.working==True):
             context = super(CartSuccess, self).get_context_data(**kwargs)
-            nombreFranquicia= self.request.tenant.nombre 
-            franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+            franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
             context['franquicia']=self.request
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
             context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
@@ -575,8 +568,7 @@ def factura_PDF(request, id_factura=None):
 
 def vender(request):
     if(request.user.usuario.rol=='v' and request.tenant.working==True):
-        nombreFranquicia= request.tenant.nombre 
-        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
         context = {
             'pizzas':Pizza.objects.all(),        
             'enventas': Pizza.objects.filter(enventa=True),
@@ -606,8 +598,7 @@ class VentaCantidades(TemplateView):
 
 def VenderPago(request):
     if(request.user.usuario.rol=='v' and request.tenant.working==True):
-        nombreFranquicia= request.tenant.nombre 
-        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
         cantidades = request.session.get('cantidades_venta', {})
         cantidades_dict = json.loads(cantidades) 
         form = UsuarioForm(request.POST or None,prefix="form2") 
