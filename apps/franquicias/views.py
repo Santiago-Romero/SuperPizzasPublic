@@ -407,13 +407,14 @@ class AgregarCantidadCarrito(TemplateView):
 
 class CartComprar(TemplateView):
     template_name = "tenant/carrito_comprar.html"
-
+    
     def get_context_data(self, **kwargs):
         if(self.request.tenant.working==True):
             context = super(CartComprar, self).get_context_data(**kwargs)
             nombreFranquicia= self.request.tenant.nombre 
             franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
             form = UsuarioForm(self.request.POST or None,prefix="form2") 
+            admin_franquicia = Usuario.objects.get(user_id=1)
             cliente=None
             customer = self.request.user        
             if customer.is_authenticated:                
@@ -432,7 +433,7 @@ class CartComprar(TemplateView):
             context['cantidades'] = json.loads(cantidades) 
             context['cliente']=cliente 
             context["form2"] = form
-
+            context['admin_franquicia']=admin_franquicia
 
             return context
         else:
@@ -441,11 +442,11 @@ class CartComprar(TemplateView):
     def post(self, request):
         if(request.tenant.working==True):
             direccion = request.POST['direccion']
-            efectivo=50000
+            ciudad= request.POST['ciudad']            
             customer = request.user        
             if customer.is_authenticated:
                 cliente = Usuario.objects.get(user_id=customer.id)
-                factura = Factura(direccion=direccion, estado_Factura=0, efectivo=efectivo, cliente=cliente)
+                factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente)
                 factura.save()
             else:
                 if not User.objects.filter(email="anonimo@superpizzas.com").exists():
@@ -457,7 +458,7 @@ class CartComprar(TemplateView):
 
                 usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
                 cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
-                factura = Factura(direccion=direccion, estado_Factura=0, efectivo=efectivo, cliente=cliente_anonimo)
+                factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente_anonimo)
                 factura.save()
             cantidades = self.request.session.get('cantidades', {})
             cantidades_dict = json.loads(cantidades)
@@ -471,6 +472,8 @@ class CartComprar(TemplateView):
             return HttpResponseRedirect('/compra_exitosa?id='+str(factura.id))
         else:
             return render(request,"404.html",{})
+
+
 
 class CartSuccess(TemplateView):
     template_name = "tenant/carrito_success.html"
@@ -572,9 +575,100 @@ def factura_PDF(request, id_factura=None):
 
 def vender(request):
     if(request.user.usuario.rol=='v' and request.tenant.working==True):
-        return HttpResponse("Aqui va lo de la venta")
+        nombreFranquicia= request.tenant.nombre 
+        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        context = {
+            'pizzas':Pizza.objects.all(),        
+            'enventas': Pizza.objects.filter(enventa=True),
+            'franquicia':request,
+            'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
+            'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
+            'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
+            'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
+            'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
+            'logo':  franquicia.media,
+        }
+        return render(request, 'tenant/vender.html', context)
     else:
         return render(request,"404.html",{})
+
+class VentaCantidades(TemplateView):
+
+    def post(self, request):
+        if(request.tenant.working==True):
+            cantidades = request.POST.get("cantidades_venta", "")
+            detalles = []
+            self.request.session['cantidades_venta'] = cantidades
+            respuesta = {'estado': True, }
+            return JsonResponse(respuesta)
+        else:
+            return render(request,"404.html",{})
+
+def VenderPago(request):
+    if(request.user.usuario.rol=='v' and request.tenant.working==True):
+        nombreFranquicia= request.tenant.nombre 
+        franquicia = Franquicia.objects.get(schema_name=nombreFranquicia)
+        cantidades = request.session.get('cantidades_venta', {})
+        cantidades_dict = json.loads(cantidades) 
+        form = UsuarioForm(request.POST or None,prefix="form2") 
+        admin_franquicia = Usuario.objects.get(user_id=1)
+        cliente=None
+        customer = request.user    
+        id=[]     
+        if customer.is_authenticated: 
+            cliente = Usuario.objects.get(user_id=customer.id)                
+        for k, v in cantidades_dict.items():
+            id.append(v['id']) 
+        pizza_item = Pizza.objects.filter(id__in=id)           
+        if request.method == 'POST':
+            direccion= request.POST['direccion']
+            ciudad= request.POST['ciudad']
+            customer = request.user        
+            if customer.is_authenticated:
+                cliente = Usuario.objects.get(user_id=customer.id)
+                factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente)
+                factura.save()
+            else:
+                if not User.objects.filter(email="anonimo@superpizzas.com").exists():
+                    user_anonimo = User(username='anonimo@superpizzas.com',password="V7IyWywC9JZyno", email='anonimo@superpizzas.com', first_name='anonimo', last_name='anonimo')
+                    user_anonimo.save()
+                    assign_role(user_anonimo,'cliente')
+                    cliente_anonimo = Usuario(user=user_anonimo,cc=0000000000,telefono=0000000000,pais='CO',nombre_banco='bancolombia',fecha_vencimiento='2019-11-21',tipo_tarjeta='visa',numero_tarjeta=000000000000000,cvv=000,rol='c')
+                    cliente_anonimo.save()
+                usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
+                cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
+                factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente_anonimo)
+                factura.save()
+                                
+            for k, v in cantidades_dict.items():
+                print("for")
+                producto_item = Pizza.objects.filter(id=v['id']).values()[0] 
+                detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
+                                    producto_id=v['id'])
+                detalle_item.save()
+            request.session['cantidades_venta'] = {}
+            messages.success(request, 'Venta realizada')
+            return redirect('vender')
+        else:
+            context = {
+                'productos': pizza_item ,
+                'cantidades':cantidades_dict,
+                'franquicia':request,
+                'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
+                'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
+                'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
+                'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
+                'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
+                'logo':  franquicia.media,
+                'cliente':cliente,
+                'form2':form,
+                'admin_franquicia':admin_franquicia,
+            }
+            return render(request, 'tenant/vender_pago.html', context)
+    else:
+        return render(request,"404.html",{})
+
+
 
 def reportes(request):
     if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):

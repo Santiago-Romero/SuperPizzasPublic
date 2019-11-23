@@ -35,7 +35,7 @@
                                     <tbody>
                                     <script type="text/javascript">
                                             var ids = []
-                                     </script>
+                                    </script>
                                     {% for key, un_producto in productos.items %}
                                     <tr>
                                         <script type="text/javascript">
@@ -72,7 +72,7 @@
                                 {% csrf_token %}                                  
                                 <div class="form-group mx-sm-3 mb-2">
                                 <label for="barrio" class="sr-only">País</label>
-                                <input class="form-control" id="pais" placeholder="País" name="país" required>
+                                <input class="form-control" name="form2-pais" id="id_form2-pais" placeholder="País" value="{{ admin_franquicia.pais|default_if_none:"" }}"  required>
                                 </div>
 
                                 <div class="form-group mx-sm-3 mb-2">
@@ -206,8 +206,7 @@ function cambio_cantidad(id, algo, precio) {
 }
 
 $(document).ready(function() {
-    calcular_subtotal();
-    $('#efectivo').tooltip({'trigger':'focus', 'title': '¿Con cuanto efectivo pagará? Esta información se usará para evitar contratiempos al momento de dar cambio de dinero'});
+    calcular_subtotal();    
 });
 
 function calcular_subtotal(){
