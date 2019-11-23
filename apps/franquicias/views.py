@@ -293,15 +293,17 @@ def informacion(request):
                 username = request.POST['username']
                 password = request.POST['password']
                 acceso_user = authenticate(username = username, password = password)
-                if acceso_user is not None:
+                user = User.objects.get(username=acceso_user)
+                perfil = Usuario.objects.get(user=user)
+                if acceso_user is not None and perfil.rol== 'a':
                     if acceso_user.is_active:
                         return renuncia(request)
                     else:
-                        messages.add_message(request, messages.INFO, 'Error')
+                        messages.add_message(request, messages.INFO, 'Error en usuario y contraseña')
                 else:
-                    messages.add_message(request, messages.INFO, 'Por favor revisa tu password')
+                    messages.add_message(request, messages.INFO, 'Error en usuario y contraseña')
             else:
-                messages.add_message(request, messages.INFO, 'Error')
+                messages.add_message(request, messages.INFO, 'Error en usuario y contraseña')
         else:
             formulario = UserAuthenticationForm()
 
