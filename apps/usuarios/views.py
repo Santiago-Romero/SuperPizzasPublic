@@ -179,7 +179,7 @@ def inicio_sesion(request):
                     else:
                         messages.add_message(request, messages.INFO, 'Error')
                 else:
-                    messages.add_message(request, messages.INFO, 'Por favor revisa tu usuario o password')
+                    messages.add_message(request, messages.INFO, 'Por favor revisa tu usuario o contraseña')
             else:
                 messages.add_message(request, messages.INFO, 'Error')
         else:
@@ -223,7 +223,7 @@ def inicio_sesion_admin(request,id=None):
                 else:
                     messages.add_message(request, messages.INFO, 'Error')
             else:
-                messages.warning(request, 'Por favor revisa tu usuario o password')
+                messages.warning(request, 'Por favor revisa tu usuario o contraseña')
                 return render(request,  'landingpage/login.html', {'formulario':formulario}) 
                 #messages.add_message(request, messages.INFO, 'Por favor revisa tu usuario o password')
         else:
