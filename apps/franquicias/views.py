@@ -439,7 +439,7 @@ class CartComprar(TemplateView):
 
     def post(self, request):
         if(request.tenant.working==True):
-            direccion = request.POST['direccion']
+            direccion = request.POST['form2-direccion']
             ciudad= request.POST['ciudad']            
             customer = request.user        
             if customer.is_authenticated:
@@ -604,9 +604,7 @@ def VenderPago(request):
     if(request.user.usuario.rol=='v' and request.tenant.working==True):
         franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
         cantidades = request.session.get('cantidades_venta', {})
-        cantidades_dict = json.loads(cantidades) 
-        form = UsuarioForm(request.POST or None,prefix="form2") 
-        admin_franquicia = Usuario.objects.get(user_id=1)
+        cantidades_dict = json.loads(cantidades)  
         cliente=None
         customer = request.user    
         id=[]     
@@ -615,26 +613,12 @@ def VenderPago(request):
         for k, v in cantidades_dict.items():
             id.append(v['id']) 
         pizza_item = Pizza.objects.filter(id__in=id)           
-        if request.method == 'POST':
-            direccion= request.POST['direccion']
-            ciudad= request.POST['ciudad']
+        if request.method == 'POST': 
             customer = request.user        
             if customer.is_authenticated:
                 cliente = Usuario.objects.get(user_id=customer.id)
-                factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente)
-                factura.save()
-            else:
-                if not User.objects.filter(email="anonimo@superpizzas.com").exists():
-                    user_anonimo = User(username='anonimo@superpizzas.com',password="V7IyWywC9JZyno", email='anonimo@superpizzas.com', first_name='anonimo', last_name='anonimo')
-                    user_anonimo.save()
-                    assign_role(user_anonimo,'cliente')
-                    cliente_anonimo = Usuario(user=user_anonimo,cc=0000000000,telefono=0000000000,pais='CO',nombre_banco='bancolombia',fecha_vencimiento='2019-11-21',tipo_tarjeta='visa',numero_tarjeta=000000000000000,cvv=000,rol='c')
-                    cliente_anonimo.save()
-                usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
-                cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
-                factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente_anonimo)
-                factura.save()
-                                
+                factura = Factura(direccion='local', ciudad='local', cliente=cliente)
+                factura.save()                               
             for k, v in cantidades_dict.items():
                 print("for")
                 producto_item = Pizza.objects.filter(id=v['id']).values()[0] 
@@ -654,10 +638,7 @@ def VenderPago(request):
                 'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
                 'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
                 'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
-                'logo':  franquicia.media,
-                'cliente':cliente,
-                'form2':form,
-                'admin_franquicia':admin_franquicia,
+                'logo':  franquicia.media,               
             }
             return render(request, 'tenant/vender_pago.html', context)
     else:

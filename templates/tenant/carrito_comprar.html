@@ -71,45 +71,37 @@
                             <h4>Dirección de envío:</h4>
                             <form class="form-horizontal form-direccion" method="POST" enctype="multipart/form-data" onsubmit="direccioncita()">
                                 {% csrf_token %}                                  
-                                <div class="form-group mx-sm-3 mb-2">
-                                <label for="barrio" class="sr-only">País</label>
+                                <div class="form-group mx-sm-3 mb-2">                               
                                 {%  bootstrap_field form2.pais layout="horizontal" %}
                                 </div>
 
-                                <div class="form-group mx-sm-3 mb-2">
-                                <label for="barrio" class="sr-only">Ciudad</label>
+                                <div class="form-group mx-sm-3 mb-2">                                
                                 {%  bootstrap_field form.ciudad layout="horizontal" %}
                                 </div>
-                                <div class="form-group mx-sm-3 mb-2">
-                                <label for="direccion" class="sr-only">Dirección</label>
+                                <div class="form-group mx-sm-3 mb-2">                                
                                 {%  bootstrap_field form2.direccion layout="horizontal" %}
                               </div>  
                               {% if user.is_authenticated%}
                               {% else %}
                               <h4>Información del pago:</h4>                              
 
-                              <div class="form-group mx-sm-3 mb-2">                                  
-                              <label for="nombrebanco" class="sr-only">nombre banco</label>
+                              <div class="form-group mx-sm-3 mb-2">                              
                               {%  bootstrap_field form2.nombre_banco layout="horizontal" %}
                               </div> 
 
-                              <div class="form-group mx-sm-3 mb-2">                                  
-                                <label for="fechavencimiento" class="sr-only">fecha vencimiento</label>
+                              <div class="form-group mx-sm-3 mb-2"> 
                                 {%  bootstrap_field form2.fecha_vencimiento layout="horizontal" %}
                             </div> 
 
-                            <div class="form-group mx-sm-3 mb-2">                                  
-                                    <label for="numerotarjeta" class="sr-only">numero tarjeta</label>
+                            <div class="form-group mx-sm-3 mb-2"> 
                                     {%  bootstrap_field form2.numero_tarjeta layout="horizontal" %}
                                 </div> 
 
-                                <div class="form-group mx-sm-3 mb-2">                                  
-                                        <label for="tipotarjeta" class="sr-only">tipo tarjeta</label>
+                                <div class="form-group mx-sm-3 mb-2">  
                                         {%  bootstrap_field form2.tipo_tarjeta layout="horizontal"%}
                                     </div> 
 
-                                    <div class="form-group mx-sm-3 mb-2">                                  
-                                            <label for="cvv" class="sr-only">cvv</label>
+                                    <div class="form-group mx-sm-3 mb-2">  
                                             {%  bootstrap_field form2.cvv layout="horizontal"%}
                                         </div> 
                                         
