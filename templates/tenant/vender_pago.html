@@ -56,58 +56,16 @@
                     </div>
                     <br>
                   </tbody>                                  
-                                      
-            <h4 class="card-title">Información de pago</h4>
-             <h5 class="card-subtitle">Dirección de envío:</h5>
-             
+                     
              <form class="form-horizontal form-direccion" method="POST" enctype="multipart/form-data" onsubmit="direccioncita()">
                 {% csrf_token %}                                  
-                <div class="form-group mx-sm-3 mb-2">
-                <label for="barrio" class="sr-only">País</label>
-                <input class="form-control" name="form2-pais" id="id_form2-pais" placeholder="País" value="{{ admin_franquicia.pais|default_if_none:"" }}"  required>
-                </div>
-
-                <div class="form-group mx-sm-3 mb-2">
-                <label for="barrio" class="sr-only">Ciudad</label>
-                <input class="form-control" id="ciudad" placeholder="Ciudad" name="ciudad" required>
-                </div>
-                <div class="form-group mx-sm-3 mb-2">
-                <label for="direccion" class="sr-only">Dirección</label>
-                 <input class="form-control" id="direccion" placeholder="Dirección" name="direccion" value="{{ cliente.direccion|default_if_none:"" }}" required>
-              </div>  
-              
-              <h5 class="card-subtitle">Información de tarjeta:</h5>
-
-              <div class="form-group mx-sm-3 mb-2">                                  
-              <label for="nombrebanco" class="sr-only">nombre banco</label>
-              {{form.nombre_banco}}
-              </div> 
-
-              <div class="form-group mx-sm-3 mb-2">                                  
-                <label for="fechavencimiento" class="sr-only">fecha vencimiento</label>
-                {{form2.fecha_vencimiento}}
-            </div> 
-
-            <div class="form-group mx-sm-3 mb-2">                                  
-                    <label for="numerotarjeta" class="sr-only">numero tarjeta</label>
-                    {{form2.numero_tarjeta}}
-                </div> 
-
-                <div class="form-group mx-sm-3 mb-2">                                  
-                        <label for="tipotarjeta" class="sr-only">tipo tarjeta</label>
-                        {{form2.tipo_tarjeta}}
-                    </div> 
-
-                    <div class="form-group mx-sm-3 mb-2">                                  
-                            <label for="cvv" class="sr-only">cvv</label>
-                            {{form2.cvv}}
-                        </div> 
-              
+                            
               <div class="form-group">
                <input type="hidden" name="datos-direccion" id="mi_direccion" value=""/>
               </div>
-                <div class="text-center"><button type="submit" class="btn btn-danger float-right mb-3 mr-2">Vender</button></div>
-              
+              <a class="btn btn-danger float-right mb-3 mr-2" href="{% url 'vender' %}" role="button">Cancelar</a>
+              <div class="text-center"><button type="submit" class="btn btn-primary float-right mb-3 mr-2">Vender</button></div>
+             
             </form>
              
         </div>
