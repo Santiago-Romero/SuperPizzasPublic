@@ -35,7 +35,7 @@
                                     <tbody>
                                     <script type="text/javascript">
                                             var ids = []
-                                     </script>
+                                    </script>
                                     {% for key, un_producto in productos.items %}
                                     <tr>
                                         <script type="text/javascript">
@@ -206,8 +206,7 @@ function cambio_cantidad(id, algo, precio) {
 }
 
 $(document).ready(function() {
-    calcular_subtotal();
-    $('#efectivo').tooltip({'trigger':'focus', 'title': '¿Con cuanto efectivo pagará? Esta información se usará para evitar contratiempos al momento de dar cambio de dinero'});
+    calcular_subtotal();    
 });
 
 function calcular_subtotal(){

@@ -1,0 +1,241 @@
+{% extends 'base_tablas.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block page_title %}
+    Vender
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">                
+                <div class="card-body">
+                    <h4 class="card-title">Información de venta</h4>
+                    <hr>
+                    <div class="table-responsive">                        
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <script type="text/javascript">
+                                    var ids = []
+                            </script>
+                            {% for pizza in productos %}
+                            <tr>
+                                <script type="text/javascript">
+                                    ids.push({{pizza.id}});
+                                </script>
+                                <td>{{ pizza.nombre }} : {{ pizza.descripcion}}</td>
+                                {% for key, cantidad in cantidades.items %}
+                                    {% if cantidad.id == pizza.id %}
+                                        <td id="cantidad_{{pizza.id}}">
+                                            {{cantidad.cantidad}}
+                                        </td>
+                                    {% endif %}
+                                {% endfor %}
+    
+                                <td id="precio_{{pizza.id}}">{{ pizza.valor}}</td>
+                                <td id="total_{{pizza.id}}">{{ pizza.valor}}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="font-weight-bold">Total:</td>
+                                <td id="total" class="font-weight-bold"></td>
+                            </tr>
+                        </table>
+    
+                    </div>
+                    <br>
+                  </tbody>                                  
+                                      
+            <h4 class="card-title">Información de pago</h4>
+             <h5 class="card-subtitle">Dirección de envío:</h5>
+             
+             <form class="form-horizontal form-direccion" method="POST" enctype="multipart/form-data" onsubmit="direccioncita()">
+                {% csrf_token %}                                  
+                <div class="form-group mx-sm-3 mb-2">
+                <label for="barrio" class="sr-only">País</label>
+                <input class="form-control" name="form2-pais" id="id_form2-pais" placeholder="País" value="{{ admin_franquicia.pais|default_if_none:"" }}"  required>
+                </div>
+
+                <div class="form-group mx-sm-3 mb-2">
+                <label for="barrio" class="sr-only">Ciudad</label>
+                <input class="form-control" id="ciudad" placeholder="Ciudad" name="ciudad" required>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                <label for="direccion" class="sr-only">Dirección</label>
+                 <input class="form-control" id="direccion" placeholder="Dirección" name="direccion" value="{{ cliente.direccion|default_if_none:"" }}" required>
+              </div>  
+              
+              <h5 class="card-subtitle">Información de tarjeta:</h5>
+
+              <div class="form-group mx-sm-3 mb-2">                                  
+              <label for="nombrebanco" class="sr-only">nombre banco</label>
+              {{form.nombre_banco}}
+              </div> 
+
+              <div class="form-group mx-sm-3 mb-2">                                  
+                <label for="fechavencimiento" class="sr-only">fecha vencimiento</label>
+                {{form2.fecha_vencimiento}}
+            </div> 
+
+            <div class="form-group mx-sm-3 mb-2">                                  
+                    <label for="numerotarjeta" class="sr-only">numero tarjeta</label>
+                    {{form2.numero_tarjeta}}
+                </div> 
+
+                <div class="form-group mx-sm-3 mb-2">                                  
+                        <label for="tipotarjeta" class="sr-only">tipo tarjeta</label>
+                        {{form2.tipo_tarjeta}}
+                    </div> 
+
+                    <div class="form-group mx-sm-3 mb-2">                                  
+                            <label for="cvv" class="sr-only">cvv</label>
+                            {{form2.cvv}}
+                        </div> 
+              
+              <div class="form-group">
+               <input type="hidden" name="datos-direccion" id="mi_direccion" value=""/>
+              </div>
+                <div class="text-center"><button type="submit" class="btn btn-danger float-right mb-3 mr-2">Vender</button></div>
+              
+            </form>
+             
+        </div>
+    </div>
+</div> 
+
+
+
+            
+        
+        
+    </div>
+
+    
+    <script src="{% static 'landing-tenant/js/jquery.min.js' %}"></script>
+    <script src="{% static 'landing-tenant/js/jquery.min.js' %}"></script>
+
+    <script type="text/javascript">
+        function clic_cantidad(e, algo, precio){
+        e.preventDefault();
+        fieldName = $(algo).attr('data-field');
+        type      = $(algo).attr('data-type');
+        var input = $("input[name='"+fieldName+"']");
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if(type == 'minus') {
+    
+                if(currentVal > input.attr('min')) {
+                    input.val(currentVal - 1).change();
+                }
+                if(parseInt(input.val()) == input.attr('min')) {
+                    $(algo).attr('disabled', true);
+                }
+    
+            } else if(type == 'plus') {
+    
+                if(currentVal < input.attr('max')) {
+                    input.val(currentVal + 1).change();
+                }
+                if(parseInt(input.val()) == input.attr('max')) {
+                    $(algo).attr('disabled', true);
+                }
+            }
+            cambio_cantidad(fieldName, input, precio);
+        } else {
+            input.val(0);
+        }
+    }
+    $('.input-number').focusin(function(){
+       $(this).data('oldValue', $(this).val());
+    });
+    function cambio_cantidad(id, algo, precio) {
+        minValue =  parseInt($(algo).attr('min'));
+        maxValue =  parseInt($(algo).attr('max'));
+        valueCurrent = parseInt($(algo).val());
+        if(valueCurrent > minValue) {
+            $(".btn-number[data-type='minus'][data-field='"+id+"']").removeAttr('disabled')
+        } else {
+            $(this).val($(this).data('oldValue'));
+        }
+        if(valueCurrent <= maxValue) {
+            $(".btn-number[data-type='plus'][data-field='"+id+"']").removeAttr('disabled')
+        } else {
+            $(this).val($(this).data('oldValue'));
+        }
+        calcular_subtotal(id, algo, precio)
+    }
+    
+    $(document).ready(function() {
+        calcular_subtotal();       
+    });
+    
+    function calcular_subtotal(){
+        var cantidad = {{productos|length }};
+        var total = 0;
+        for(i=0; i<cantidad; i++){
+            total = parseInt(document.getElementById("cantidad_"+ids[i]).innerHTML) * parseInt(document.getElementById("precio_"+ids[i]).innerHTML);
+            elemento = document.getElementById('total_'+ids[i]);
+            elemento.innerText = "";
+            elemento.innerText = total;
+        }
+        calcular_total();
+    }
+    
+    function calcular_total(){
+        var cantidad = {{productos|length }};
+        var suma = 0;
+        for(i=0; i<cantidad; i++){
+            suma += parseInt(document.getElementById("total_"+ids[i]).innerHTML);
+        }
+        elemento = document.getElementById('total');
+        elemento.innerText = "";
+        elemento.innerText = suma;
+    }
+    
+    function cant_to_cart(event){
+            event.preventDefault();
+            inputs = []
+            var cantidad = {{productos|length }};
+            var suma = 0;
+            for(i=0; i<cantidad; i++){
+                var input = $("input[name='"+id[i]+"']");
+                var currentVal = parseInt(input.val());
+                inputs.push(currentVal);
+            }
+            $.ajax({
+                type: "POST",
+                url: "{% url 'venta_cantidades' %}",
+                dataType: "json",
+                async: true,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    cantidades_venta: JSON.stringify(inputs)
+                },
+                success: function(data){
+                    window.location = "{% url 'vender_pago' %}";
+                    if(data.estado){
+                        document.getElementById("cantidad_pedido").innerHTML=""+data.cantidad;
+                    }else{
+                    }
+                }
+            });
+        }
+    function direccioncita(){
+        var fields = $( ".form-direccion :input" ).serializeArray();
+        var campos = JSON.stringify(fields);
+        document.getElementById('mi_direccion').value = campos;
+    }
+    </script>   
+
+{% endblock %}
