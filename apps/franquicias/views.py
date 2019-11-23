@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.http import HttpResponse
 from apps.usuarios.forms import UsuarioForm, UserForm
+from apps.pizzas.forms import FacturaForm
 from django_tenants.utils import schema_context
 from django.contrib.auth.models import User
 from apps.usuarios.models import Usuario
@@ -408,12 +409,13 @@ class CartComprar(TemplateView):
             context = super(CartComprar, self).get_context_data(**kwargs)
             franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
             form = UsuarioForm(self.request.POST or None,prefix="form2") 
+            form_factura= FacturaForm(self.request.POST or None)
             admin_franquicia = Usuario.objects.get(user_id=1)
             cliente=None
             customer = self.request.user        
             if customer.is_authenticated:                
                 cliente = Usuario.objects.get(user_id=customer.id)            
-            context["form"] = form
+            context["form"] = form_factura
             context['franquicia']=self.request
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
             context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']

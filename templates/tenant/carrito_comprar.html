@@ -1,4 +1,5 @@
 {% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="en">
     {% include 'tenant/head.html' %}    
@@ -72,47 +73,46 @@
                                 {% csrf_token %}                                  
                                 <div class="form-group mx-sm-3 mb-2">
                                 <label for="barrio" class="sr-only">País</label>
-                                <input class="form-control" name="form2-pais" id="id_form2-pais" placeholder="País" value="{{ admin_franquicia.pais|default_if_none:"" }}"  required>
+                                {%  bootstrap_field form2.pais layout="horizontal" %}
                                 </div>
 
                                 <div class="form-group mx-sm-3 mb-2">
                                 <label for="barrio" class="sr-only">Ciudad</label>
-                                <input class="form-control" id="ciudad" placeholder="Ciudad" name="ciudad" required>
+                                {%  bootstrap_field form.ciudad layout="horizontal" %}
                                 </div>
                                 <div class="form-group mx-sm-3 mb-2">
                                 <label for="direccion" class="sr-only">Dirección</label>
-                                 <input class="form-control" id="direccion" placeholder="Dirección" name="direccion" value="{{ cliente.direccion|default_if_none:"" }}" required>
+                                {%  bootstrap_field form2.direccion layout="horizontal" %}
                               </div>  
                               {% if user.is_authenticated%}
                               {% else %}
-                              <h4>Información del pago:</h4>
+                              <h4>Información del pago:</h4>                              
 
                               <div class="form-group mx-sm-3 mb-2">                                  
                               <label for="nombrebanco" class="sr-only">nombre banco</label>
-                              {{form.nombre_banco}}
+                              {%  bootstrap_field form2.nombre_banco layout="horizontal" %}
                               </div> 
 
                               <div class="form-group mx-sm-3 mb-2">                                  
                                 <label for="fechavencimiento" class="sr-only">fecha vencimiento</label>
-                                {{form2.fecha_vencimiento}}
+                                {%  bootstrap_field form2.fecha_vencimiento layout="horizontal" %}
                             </div> 
 
                             <div class="form-group mx-sm-3 mb-2">                                  
                                     <label for="numerotarjeta" class="sr-only">numero tarjeta</label>
-                                    {{form2.numero_tarjeta}}
+                                    {%  bootstrap_field form2.numero_tarjeta layout="horizontal" %}
                                 </div> 
 
                                 <div class="form-group mx-sm-3 mb-2">                                  
                                         <label for="tipotarjeta" class="sr-only">tipo tarjeta</label>
-                                        {{form2.tipo_tarjeta}}
+                                        {%  bootstrap_field form2.tipo_tarjeta layout="horizontal"%}
                                     </div> 
 
                                     <div class="form-group mx-sm-3 mb-2">                                  
                                             <label for="cvv" class="sr-only">cvv</label>
-                                            {{form2.cvv}}
+                                            {%  bootstrap_field form2.cvv layout="horizontal"%}
                                         </div> 
-
-
+                                        
                               {%endif%}
                               <div class="form-group">
                                <input type="hidden" name="datos-direccion" id="mi_direccion" value=""/>
