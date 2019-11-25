@@ -1,0 +1,11 @@
+
+.badge {
+    font-size: 100%;
+    text-transform: capitalize;
+}
+
+.badge-spz {
+    background-color: #D3D4E5;
+    color: #000000;
+    cursor: help;
+}
