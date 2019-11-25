@@ -30,10 +30,12 @@ Reportes Gráficos
                     </div>
                 </div>
             </div>
+            
+            <hr>
             <div class="row mt">
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Radar</h4>
+                        <h4><i class="fa fa-angle-right"></i> Rendimiento vendedor</h4>
                         <div class="panel-body text-center">
                             <canvas id="radar" height="300" width="400"></canvas>
                         </div>
@@ -41,13 +43,44 @@ Reportes Gráficos
                 </div>
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Polar Area</h4>
+                        <style>
+                        #lunes {
+                            color: #f49797 ;
+                        }
+                    
+                        #martes {
+                            color: #f497f4;
+                        }
+
+                        #miercoles {
+                            color: #9a97f4;
+                        }
+
+                        #jueves {
+                            color: #97f4f3;
+                        }
+
+                        #viernes {
+                            color: #9df497;
+                        }
+
+                        #sabado {
+                            color: #f4f497;
+                        }
+
+                        #domingo {
+                            color: #f4bb97;
+                        }
+                    </style>
+                        <h4><i class="fa fa-angle-right"></i> Ventas en días de la semana <i id="lunes">L</i> <i id="martes">M</i> <i id="miercoles">Mi</i> <i id="jueves">J</i> <i id="viernes">V</i> <i id="sabado">S</i> <i id="domingo">D</i></h4>
                         <div class="panel-body text-center">
                             <canvas id="polarArea" height="300" width="400"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <hr>
             <div class="row mt">
                 <div class="col-lg-6">
                     <div class="content-panel">
@@ -83,24 +116,7 @@ Reportes Gráficos
             {
                 value: 30,
                 color:"#1abc9c"
-            },
-            {
-                value : 50,
-                color : "#2ecc71"
-            },
-            {
-                value : 100,
-                color : "#3498db"
-            },
-            {
-                value : 40,
-                color : "#9b59b6"
-            },
-            {
-                value : 120,
-                color : "#34495e"
             }
-
         ];
         var npizzas = {{ npizzas|safe }};
         var pizzas = {{ pizzas|safe }};
@@ -127,7 +143,6 @@ Reportes Gráficos
             }
 
         ];
-        lineChartData
         var lineChartData = {
             labels : ["E","F","M","A","M","J","J","A","S","O","N","D"],
             datasets : [
@@ -141,48 +156,48 @@ Reportes Gráficos
             ]
 
         };
-        var chartData = [
+        var diasSemana = {{ ventasdias|safe }}
+        var polarChartData = [
             {
-                value : Math.random(),
-                color: "#D97041"
+                value : diasSemana[0],
+                color: "#f49797"
             },
             {
-                value : Math.random(),
-                color: "#C7604C"
+                value : diasSemana[1],
+                color: "#f497f4"
             },
             {
-                value : Math.random(),
-                color: "#21323D"
+                value : diasSemana[2],
+                color: "#9a97f4"
             },
             {
-                value : Math.random(),
-                color: "#9D9B7F"
+                value : diasSemana[3],
+                color: "#97f4f3"
             },
             {
-                value : Math.random(),
-                color: "#7D4F6D"
+                value : diasSemana[4],
+                color: "#9df497"
             },
             {
-                value : Math.random(),
-                color: "#584A5E"
+                value : diasSemana[5],
+                color: "#f4f497"
+            },
+            {
+                value : diasSemana[6],
+                color: "#f4bb97"
             }
         ];
+        var vendedores = {{ vendedores|safe }};
+        var ventasVendedores = {{ ventasvendedores|safe }};
         var radarChartData = {
-            labels : ["","","","","","",""],
+            labels : vendedores,
             datasets : [
                 {
-                    fillColor : "rgba(220,220,220,0.5)",
-                    strokeColor : "rgba(220,220,220,1)",
+                    fillColor : "rgb(255, 145, 255)",
+                    strokeColor : "rgb(109, 57, 107)",
                     pointColor : "rgba(220,220,220,1)",
                     pointStrokeColor : "#fff",
-                    data : [65,59,90,81,56,55,40]
-                },
-                {
-                    fillColor : "rgba(151,187,205,0.5)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    data : [28,48,40,19,96,27,100]
+                    data : ventasVendedores
                 }
             ]
 
@@ -190,7 +205,7 @@ Reportes Gráficos
         new Chart(document.getElementById("doughnut").getContext("2d")).Doughnut(doughnutData);
         new Chart(document.getElementById("line").getContext("2d")).Line(lineChartData);
         new Chart(document.getElementById("radar").getContext("2d")).Radar(radarChartData);
-        new Chart(document.getElementById("polarArea").getContext("2d")).PolarArea(chartData);
+        new Chart(document.getElementById("polarArea").getContext("2d")).PolarArea(polarChartData);
         new Chart(document.getElementById("bar").getContext("2d")).Bar(barChartData);
         new Chart(document.getElementById("pie").getContext("2d")).Pie(pieData);
 

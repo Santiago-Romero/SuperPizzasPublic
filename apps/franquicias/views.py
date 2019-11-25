@@ -620,7 +620,6 @@ def VenderPago(request):
                 factura = Factura(direccion='local', ciudad='local', cliente=cliente)
                 factura.save()                               
             for k, v in cantidades_dict.items():
-                print("for")
                 producto_item = Pizza.objects.filter(id=v['id']).values()[0] 
                 detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
                                     producto_id=v['id'])
@@ -650,10 +649,23 @@ def reportes(request):
     if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
         vmeses=[0,0,0,0,0,0,0,0,0,0,0,0]
         npizzas=[]
+        vendedores=[]
+        ventasVendedores=[]
+        diasSemana=[0,0,0,0,0,0,0]
+        contador1=0
+        for cliente in Usuario.objects.all():
+            if(cliente.rol=='v'):
+                vendedores.append(cliente.user.username)
+                ventasVendedores.append(0)
+                for factura in Factura.objects.all():
+                    if(factura.cliente.id==cliente.id):
+                        ventasVendedores[contador1]+=1
+                contador1+=1
         sonespeciales=[0,0]
         total=0
         for pizza in Pizza.objects.all():
             npizzas.append(0)
+        
         for detalle in Detalle.objects.all():
             npizzas[detalle.producto.id-1] += detalle.cantidad
             total += detalle.cantidad
@@ -667,8 +679,10 @@ def reportes(request):
         laspizzas=list(Pizza.objects.values_list('id', flat=True))
 
         for factura in Factura.objects.all():
+            diasSemana[factura.fecha_creacion.weekday()]+=1
             vmeses[factura.fecha_creacion.month-1]+=1
-        contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'npizzas':npizzas,'pizzas':laspizzas,'especial':porcentajeEspecial,'noespecial':porcentajeNoEspecial}
+
+        contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'npizzas':npizzas,'pizzas':laspizzas,'especial':porcentajeEspecial,'noespecial':porcentajeNoEspecial, 'vendedores':vendedores, 'ventasvendedores':ventasVendedores,'ventasdias':diasSemana}
         return render(request,'franquicias/graficos.html', contexto)
     else:
         return render(request,"404.html",{})
