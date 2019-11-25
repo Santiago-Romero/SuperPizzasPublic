@@ -649,12 +649,26 @@ def VenderPago(request):
 def reportes(request):
     if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
         vmeses=[0,0,0,0,0,0,0,0,0,0,0,0]
-        pizza1="Hawa"
-        pizza2="Poll"
-        pizza3="Otr"
+        npizzas=[]
+        sonespeciales=[0,0]
+        total=0
+        for pizza in Pizza.objects.all():
+            npizzas.append(0)
+        for detalle in Detalle.objects.all():
+            npizzas[detalle.producto.id-1] += detalle.cantidad
+            total += detalle.cantidad
+            if(detalle.producto.especial==True):
+                sonespeciales[0]+=detalle.cantidad
+            else:
+                sonespeciales[1]+=detalle.cantidad
+        
+        porcentajeEspecial=(sonespeciales[0]*100)/total
+        porcentajeNoEspecial=(sonespeciales[1]*100)/total
+        laspizzas=list(Pizza.objects.values_list('id', flat=True))
+
         for factura in Factura.objects.all():
             vmeses[factura.fecha_creacion.month-1]+=1
-        contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'pizza1':pizza1,'pizza2':pizza2,'pizza3':pizza3,}
+        contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'npizzas':npizzas,'pizzas':laspizzas,'especial':porcentajeEspecial,'noespecial':porcentajeNoEspecial}
         return render(request,'franquicias/graficos.html', contexto)
     else:
         return render(request,"404.html",{})

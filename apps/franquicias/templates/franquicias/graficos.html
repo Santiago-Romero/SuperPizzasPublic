@@ -15,7 +15,7 @@ Reportes Gráficos
             <div class="row mt">
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i>N° Ventas Mensuales</h4>
+                        <h4><i class="fa fa-angle-right"></i> Pizzas vendidas</h4>
                         <div class="panel-body text-center">
                             <canvas id="bar" height="300" width="400"></canvas>
                         </div>
@@ -23,7 +23,7 @@ Reportes Gráficos
                 </div>
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Line</h4>
+                        <h4><i class="fa fa-angle-right"></i> N° Ventas Mensuales</h4>
                         <div class="panel-body text-center">
                             <canvas id="line" height="300" width="400"></canvas>
                         </div>
@@ -57,9 +57,18 @@ Reportes Gráficos
                         </div>
                     </div>
                 </div>
+                <style>
+                        .es {
+                            color: #D97041 ;
+                        }
+                    
+                        .nes {
+                            color: #16a085;
+                        }
+                    </style>
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Pie</h4>
+                        <h4><i class="fa fa-angle-right"></i> Relación ventas <i class="es">especiales</i> y <i class="nes">no especiales</i></h4>
                         <div class="panel-body text-center">
                             <canvas id="pie" height="300" width="400"></canvas>
                         </div>
@@ -93,47 +102,40 @@ Reportes Gráficos
             }
 
         ];
-        var lineChartData = {
-            labels : ["","","","","","",""],
+        var npizzas = {{ npizzas|safe }};
+        var pizzas = {{ pizzas|safe }};
+        var barChartData = {
+            labels : pizzas,
             datasets : [
                 {
-                    fillColor : "rgba(220,220,220,0.5)",
-                    strokeColor : "rgba(220,220,220,1)",
-                    pointColor : "rgba(220,220,220,1)",
-                    pointStrokeColor : "#fff",
-                    data : [65,59,90,81,56,55,40]
-                },
-                {
-                    fillColor : "rgba(151,187,205,0.5)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    data : [28,48,40,19,96,27,100]
+                    fillColor : "rgb(255, 249, 140)",
+                    strokeColor : "rgb(95, 96, 96)",
+                    data : npizzas
                 }
             ]
 
         };
+        
         var pieData = [
             {
-                value: 30,
-                color:"#1abc9c"
+                value: {{ especial|safe }},
+                color:"#D97041"
             },
             {
-                value : 50,
+                value : {{ noespecial|safe }},
                 color : "#16a085"
-            },
-            {
-                value : 100,
-                color : "#27ae60"
             }
 
         ];
-        var barChartData = {
+        lineChartData
+        var lineChartData = {
             labels : ["E","F","M","A","M","J","J","A","S","O","N","D"],
             datasets : [
                 {
-                    fillColor : "rgba(220,220,220,0.5)",
-                    strokeColor : "rgba(220,220,220,1)",
+                    fillColor : "rgb(160, 255, 251)",
+                    strokeColor : "rgb(95, 96, 96)",
+                    pointColor : "rgb(0, 0, 0)",
+                    pointStrokeColor : "rgb(0, 0, 0)",
                     data : ["{{vene}}","{{vfeb}}","{{vmarzo}}","{{vabr}}","{{vmay}}","{{vjun}}","{{vjul}}","{{vago}}","{{vsep}}","{{voct}}","{{vnov}}","{{vdic}}"]
                 }
             ]
