@@ -142,43 +142,46 @@ def compra_franquicia(request,tipo):
     return render(request, 'landingpage/compra.html', context)
 
 def reg_franquicia(request):
-    dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
-    if request.method == 'POST':
-        form = FranquiciaForm(request.POST,prefix="form1")
-        formUsuario = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'a'})
-        formUserDjango = UserForm(request.POST,prefix="form3")
-        if form.is_valid() and formUserDjango.is_valid():
-            try:
-                with transaction.atomic():
-                    franquicia = form.save()
-                    Dominio.objects.create(domain='%s%s' % (franquicia.schema_name, settings.DOMAIN), is_primary=True, tenant=franquicia)
-                    with schema_context(franquicia.schema_name):
-                        usuario = formUserDjango.save(commit=False)
-                        usuario = User(username=request.POST['form3-username'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
-                        usuario.set_password(request.POST['form3-password1'])
-                        usuario.save()
-                        assign_role(usuario,'administrador')
-                        perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
-                        perfil.save()
-                        
-            except Exception as e: 
-                print(e,"error")
-            messages.success(request, "Franquicia registrada")
-            return redirect('franquicias:registrar')
+    if(request.user.is_superuser):
+        dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
+        if request.method == 'POST':
+            form = FranquiciaForm(request.POST,prefix="form1")
+            formUsuario = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'a'})
+            formUserDjango = UserForm(request.POST,prefix="form3")
+            if form.is_valid() and formUserDjango.is_valid():
+                try:
+                    with transaction.atomic():
+                        franquicia = form.save()
+                        Dominio.objects.create(domain='%s%s' % (franquicia.schema_name, settings.DOMAIN), is_primary=True, tenant=franquicia)
+                        with schema_context(franquicia.schema_name):
+                            usuario = formUserDjango.save(commit=False)
+                            usuario = User(username=request.POST['form3-username'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
+                            usuario.set_password(request.POST['form3-password1'])
+                            usuario.save()
+                            assign_role(usuario,'administrador')
+                            perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='a')
+                            perfil.save()
+                            
+                except Exception as e: 
+                    print(e,"error")
+                messages.success(request, "Franquicia registrada")
+                return redirect('franquicias:registrar')
+            else:
+                messages.error(request, "Por favor verificar los campos en rojo")
         else:
-            messages.error(request, "Por favor verificar los campos en rojo")
+            form = FranquiciaForm(prefix="form1")
+            formUsuario = UsuarioForm(prefix="form2",initial={'rol': 'a'})
+            formUserDjango = UserForm(prefix="form3")
+        context = {
+            'form1': form,
+            'form2': formUsuario,
+            'form3': formUserDjango,
+            'dominios': dominios,
+            'regis':True
+            }
+        return render(request, 'franquicias/registrar.html', context)
     else:
-        form = FranquiciaForm(prefix="form1")
-        formUsuario = UsuarioForm(prefix="form2",initial={'rol': 'a'})
-        formUserDjango = UserForm(prefix="form3")
-    context = {
-        'form1': form,
-        'form2': formUsuario,
-        'form3': formUserDjango,
-        'dominios': dominios,
-        'regis':True
-        }
-    return render(request, 'franquicias/registrar.html', context)
+        return redirect('/')
 
 def inicio_tenants(request):
     if(request.tenant.working==True):
@@ -200,18 +203,21 @@ def inicio_tenants(request):
         return render(request,"404.html",{})
 
 def modificar_franquicia(request, id_franquicia):
-    franquicia = get_object_or_404(Franquicia, id=id_franquicia)
-    dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
-    form = ModificarFranquiciaForm(instance=franquicia)
-    if request.method == 'POST':
-        form = ModificarFranquiciaForm(request.POST, instance=franquicia)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Se ha modificado correctamente la franquicia")
-            return redirect('franquicias:registrar')
-        else:
-            messages.error(request, "Por favor verificar los campos en rojo")
-    return render(request, 'franquicias/registrar.html', {'form': form, 'dominios': dominios,'regis':False})
+    if(request.user.is_superuser):
+        franquicia = get_object_or_404(Franquicia, id=id_franquicia)
+        dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
+        form = ModificarFranquiciaForm(instance=franquicia)
+        if request.method == 'POST':
+            form = ModificarFranquiciaForm(request.POST, instance=franquicia)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Se ha modificado correctamente la franquicia")
+                return redirect('franquicias:registrar')
+            else:
+                messages.error(request, "Por favor verificar los campos en rojo")
+        return render(request, 'franquicias/registrar.html', {'form': form, 'dominios': dominios,'regis':False})
+    else:
+        return redirect('/')
 
 
 def check_schema(request):
@@ -708,3 +714,10 @@ def ventas(request):
         return render(request,'franquicias/ventas.html',context)
     else:
         return render(request,"404.html",{})
+
+def metricas(request):
+    if(request.user.is_superuser):
+        contexto={}
+        return render(request,'franquicias/metricas.html',contexto)
+    else:
+        return redirect('/')

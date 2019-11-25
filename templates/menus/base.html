@@ -1,6 +1,7 @@
 <li class="nav-item">
-    {% if request.tenant.schema_name == 'public' %}
+    {% if request.tenant.schema_name == 'public' and request.user.is_superuser %}
         {% include 'menus/apps/franquicias.html' %}
+        {% include 'menus/apps/metricas.html' %}
     {% else %}
         {% if request.user.usuario.rol == 'd' or request.user.usuario.rol == 'a'%}
             {% include 'menus/apps/ingredientes.html' %}
