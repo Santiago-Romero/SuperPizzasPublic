@@ -16,7 +16,9 @@ Registro de franquicias
                     <tr>
                         <th>Ciudad</th>
                         <th>Producto</th>
+                        <th>Cantidad</th>
                         <th>Precio</th>
+                        <th>Subtotal</th>
                         <th>Cliente</th>
                         <th>Fecha</th>
                     </tr>
@@ -28,6 +30,16 @@ Registro de franquicias
                             <td>{% for detalle in detalles %}
                                     {% if detalle.factura.id == factura.id %}
                                         {{detalle.producto}} <br>
+                                    {% endif %}
+                                {% endfor %}</td>
+                            <td>{% for detalle in detalles %}
+                                    {% if detalle.factura.id == factura.id %}
+                                        {{detalle.cantidad}} <br>
+                                    {% endif %}
+                                {% endfor %}</td>
+                            <td>{% for detalle in detalles %}
+                                    {% if detalle.factura.id == factura.id %}
+                                        {{detalle.precio}} <br>
                                     {% endif %}
                                 {% endfor %}</td>
                             <td>{% for detalle in detalles %}
