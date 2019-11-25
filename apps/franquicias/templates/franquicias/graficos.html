@@ -72,7 +72,7 @@ Reportes Gráficos
                             color: #f4bb97;
                         }
                     </style>
-                        <h4><i class="fa fa-angle-right"></i> Ventas en días de la semana <i id="lunes">L</i> <i id="martes">M</i> <i id="miercoles">Mi</i> <i id="jueves">J</i> <i id="viernes">V</i> <i id="sabado">S</i> <i id="domingo">D</i></h4>
+                        <h4><i class="fa fa-angle-right"></i> Ventas en días de la semana <x id="lunes">L</x> <x id="martes">M</x> <x id="miercoles">Mi</x> <x id="jueves">J</x> <x id="viernes">V</x> <x id="sabado">S</x> <x id="domingo">D</x></h4>
                         <div class="panel-body text-center">
                             <canvas id="polarArea" height="300" width="400"></canvas>
                         </div>
@@ -84,7 +84,20 @@ Reportes Gráficos
             <div class="row mt">
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Doughnut</h4>
+                    <style>
+                        #ncompra {
+                            color: #f49797 ;
+                        }
+                    
+                        #compra {
+                            color: #f497f4;
+                        }
+
+                        #scompra {
+                            color: #9a97f4;
+                        }
+                    </style>
+                        <h4><i class="fa fa-angle-right"></i> Relacion clientes que <x id="ncompra">no compran</x>, <x id="compra">compran una vez</x>, <x id="scompra">compran mas de una vez</x></h4>
                         <div class="panel-body text-center">
                             <canvas id="doughnut" height="300" width="400"></canvas>
                         </div>
@@ -101,7 +114,7 @@ Reportes Gráficos
                     </style>
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Relación ventas <i class="es">especiales</i> y <i class="nes">no especiales</i></h4>
+                        <h4><i class="fa fa-angle-right"></i> Relación ventas pizzas <x class="es">especiales</x> y <x class="nes">no especiales</x></h4>
                         <div class="panel-body text-center">
                             <canvas id="pie" height="300" width="400"></canvas>
                         </div>
@@ -112,12 +125,23 @@ Reportes Gráficos
     </section>
     <script src={% static 'graficos/assets/js/chart-master/Chart.js' %}> </script>
     <script>var Script = function () {
+        var comprara={{relacioncompras|safe}}
         var doughnutData = [
             {
-                value: 30,
-                color:"#1abc9c"
+                value: comprara[0],
+                color:"#f49797"
+            },
+            {
+                value: comprara[1],
+                color:"#f497f4"
+            },
+            {
+                value: comprara[2],
+                color:"#9a97f4"
             }
         ];
+
+
         var npizzas = {{ npizzas|safe }};
         var pizzas = {{ pizzas|safe }};
         var barChartData = {

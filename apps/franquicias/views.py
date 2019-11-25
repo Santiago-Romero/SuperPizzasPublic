@@ -653,6 +653,7 @@ def reportes(request):
         ventasVendedores=[]
         diasSemana=[0,0,0,0,0,0,0]
         contador1=0
+        relacioncompras=[0,0,0]
         for cliente in Usuario.objects.all():
             if(cliente.rol=='v'):
                 vendedores.append(cliente.user.username)
@@ -661,6 +662,17 @@ def reportes(request):
                     if(factura.cliente.id==cliente.id):
                         ventasVendedores[contador1]+=1
                 contador1+=1
+            if(cliente.rol=='c'):
+                contadorcliente=0
+                for factura in Factura.objects.all():
+                    if(cliente.id==factura.cliente.id):
+                        contadorcliente+=1
+                if(contadorcliente==0):
+                    relacioncompras[0]+=1
+                elif(contadorcliente==1):
+                    relacioncompras[1]+=1
+                else:
+                    relacioncompras[2]+=1
         sonespeciales=[0,0]
         total=0
         for pizza in Pizza.objects.all():
@@ -682,7 +694,8 @@ def reportes(request):
             diasSemana[factura.fecha_creacion.weekday()]+=1
             vmeses[factura.fecha_creacion.month-1]+=1
 
-        contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'npizzas':npizzas,'pizzas':laspizzas,'especial':porcentajeEspecial,'noespecial':porcentajeNoEspecial, 'vendedores':vendedores, 'ventasvendedores':ventasVendedores,'ventasdias':diasSemana}
+        contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'npizzas':npizzas,'pizzas':laspizzas,'especial':porcentajeEspecial,'noespecial':porcentajeNoEspecial, 'vendedores':vendedores, 'ventasvendedores':ventasVendedores,'ventasdias':diasSemana,'relacioncompras':relacioncompras}
+        print(relacioncompras)
         return render(request,'franquicias/graficos.html', contexto)
     else:
         return render(request,"404.html",{})
