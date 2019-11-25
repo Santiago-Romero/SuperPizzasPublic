@@ -717,7 +717,32 @@ def ventas(request):
 
 def metricas(request):
     if(request.user.is_superuser):
-        contexto={}
+        periodoActual=date.today().month
+        if(periodoActual!=1):
+            periodoAnterior=periodoActual-1
+        else:
+            periodoAnterior=12
+        totalCustomers=0
+        totalclientesAnterior=0
+        totalclientesActual=0
+        nuevosClientesActual=0
+        customersLost=0
+        for franquicia in Franquicia.objects.all():
+            if(franquicia.schema_name!='public'):
+                totalCustomers+=1
+                if(franquicia.working==True):
+                    if(franquicia.fecha_corte.month==periodoActual):
+                        nuevosClientesActual+=1
+                if(franquicia.fecha_corte.month==periodoAnterior):
+                        totalclientesAnterior+=1
+                if(franquicia.fecha_corte.month==periodoActual):
+                        totalclientesActual+=1
+        
+        customersLost=totalclientesAnterior+nuevosClientesActual-totalclientesActual
+        churnRate=customersLost/totalCustomers
+
+        
+        contexto={'customerlost':customersLost,'totalcustomers':totalCustomers,'churnrate':churnRate}
         return render(request,'franquicias/metricas.html',contexto)
     else:
         return redirect('/')
