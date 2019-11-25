@@ -19,6 +19,7 @@ def gestionar_usuario(request, id_usuario=None):
         if request.method == 'POST':
             
             if request.POST['user']=='':
+                #Crear Usuario Nuevo
                 form = UsuarioForm2(request.POST)
                 formUserDjango = UserForm(request.POST)
 
@@ -43,6 +44,7 @@ def gestionar_usuario(request, id_usuario=None):
                     print(str(formUserDjango.errors))
 
             else:
+                #Actualizar
                 usuario = get_object_or_404(Usuario, cc=request.POST['cc'])
                 user = User.objects.get(pk=usuario.user.id)
                 form = UsuarioForm2(request.POST, instance=usuario)
@@ -82,9 +84,10 @@ def gestionar_usuario(request, id_usuario=None):
     else:
         return render(request,"404.html",{})
 
-def gestionar_cliente(request):
+def gestionar_cliente(request,id_usuario=None):
     if(request.tenant.working==True):
         if request.method == 'POST':
+
             form = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'c'})
             formUserDjango = UserForm(request.POST,prefix="form3")
             
@@ -106,14 +109,53 @@ def gestionar_cliente(request):
 
                 messages.success(request, 'Cliente registrado correctamente')
                 return redirect('login')
+
             else:
-                messages.error(request, 'Por favor verificar los campos en rojo')
+                #Actualizar
+                usuario = get_object_or_404(Usuario, cc=request.POST['cc'])
+                user = User.objects.get(pk=usuario.user.id)
+                form = UsuarioForm2(request.POST, instance=usuario)
+                form2 = UpdateUser(data=request.POST, instance=user)
+
+                if form.is_valid():
+                    form.save()
+                    user.first_name = request.POST['first_name']
+                    user.last_name = request.POST['last_name']
+                    user.email = request.POST['email']
+                    user.username = request.POST['email']
+                    user.save()
+                    messages.success(request, 'Cliente actualizado correctamente')
+                    form = UsuarioForm2()
+                    form2 = UserForm()
+                    usuario = None
+                    
+                    return redirect('usuarios:registrar')
+            
+                else:
+                    messages.error(request, 'Por favor verificar los campos en rojo')
         else:
+            
             form = UsuarioForm(prefix="form2",initial={'rol': 'c'})
             formUserDjango = UserForm(prefix="form3")        
-        return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': formUserDjango})
+
+            if id_usuario:
+                usuario = get_object_or_404(Usuario, id=id_usuario)
+                user = User.objects.get(pk=usuario.user.id)
+                form = UsuarioForm2(instance=usuario)
+                form.fields['rol'].initial = [usuario.rol]
+                form2 = UpdateUser(instance=user)
+                flag = 0
+            else:
+                form = UsuarioForm2()    
+                form2 = UserForm()
+                flag = 1
+
+        print(formUserDjango,"test")
+        return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': form2})
     else:
         return render(request,"404.html",{})
+
+
 
 def eliminar_usuario(request, id_usuario):
     if(request.user.usuario.rol=='a' and request.tenant.working==True):
