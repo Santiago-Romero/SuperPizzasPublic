@@ -15,7 +15,7 @@ Reportes Gráficos
             <div class="row mt">
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i>N° Ventas Mensuales</h4>
+                        <h4><i class="fa fa-angle-right"></i> Pizzas vendidas</h4>
                         <div class="panel-body text-center">
                             <canvas id="bar" height="300" width="400"></canvas>
                         </div>
@@ -23,17 +23,19 @@ Reportes Gráficos
                 </div>
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Line</h4>
+                        <h4><i class="fa fa-angle-right"></i> N° Ventas Mensuales</h4>
                         <div class="panel-body text-center">
                             <canvas id="line" height="300" width="400"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <hr>
             <div class="row mt">
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Radar</h4>
+                        <h4><i class="fa fa-angle-right"></i> Rendimiento vendedor</h4>
                         <div class="panel-body text-center">
                             <canvas id="radar" height="300" width="400"></canvas>
                         </div>
@@ -41,25 +43,78 @@ Reportes Gráficos
                 </div>
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Polar Area</h4>
+                        <style>
+                        #lunes {
+                            color: #f49797 ;
+                        }
+                    
+                        #martes {
+                            color: #f497f4;
+                        }
+
+                        #miercoles {
+                            color: #9a97f4;
+                        }
+
+                        #jueves {
+                            color: #97f4f3;
+                        }
+
+                        #viernes {
+                            color: #9df497;
+                        }
+
+                        #sabado {
+                            color: #f4f497;
+                        }
+
+                        #domingo {
+                            color: #f4bb97;
+                        }
+                    </style>
+                        <h4><i class="fa fa-angle-right"></i> Ventas en días de la semana <x id="lunes">L</x> <x id="martes">M</x> <x id="miercoles">Mi</x> <x id="jueves">J</x> <x id="viernes">V</x> <x id="sabado">S</x> <x id="domingo">D</x></h4>
                         <div class="panel-body text-center">
                             <canvas id="polarArea" height="300" width="400"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <hr>
             <div class="row mt">
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Doughnut</h4>
+                    <style>
+                        #ncompra {
+                            color: #f49797 ;
+                        }
+                    
+                        #compra {
+                            color: #f497f4;
+                        }
+
+                        #scompra {
+                            color: #9a97f4;
+                        }
+                    </style>
+                        <h4><i class="fa fa-angle-right"></i> Relacion clientes que <x id="ncompra">no compran</x>, <x id="compra">compran una vez</x>, <x id="scompra">compran mas de una vez</x></h4>
                         <div class="panel-body text-center">
                             <canvas id="doughnut" height="300" width="400"></canvas>
                         </div>
                     </div>
                 </div>
+                <style>
+                        .es {
+                            color: #D97041 ;
+                        }
+                    
+                        .nes {
+                            color: #16a085;
+                        }
+                    </style>
                 <div class="col-lg-6">
                     <div class="content-panel">
-                        <h4><i class="fa fa-angle-right"></i> Pie</h4>
+                        <h4><i class="fa fa-angle-right"></i> Relación ventas pizzas <x class="es">especiales</x> y <x class="nes">no especiales</x></h4>
                         <div class="panel-body text-center">
                             <canvas id="pie" height="300" width="400"></canvas>
                         </div>
@@ -70,117 +125,103 @@ Reportes Gráficos
     </section>
     <script src={% static 'graficos/assets/js/chart-master/Chart.js' %}> </script>
     <script>var Script = function () {
+        var comprara={{relacioncompras|safe}}
         var doughnutData = [
             {
-                value: 30,
-                color:"#1abc9c"
+                value: comprara[0],
+                color:"#f49797"
             },
             {
-                value : 50,
-                color : "#2ecc71"
+                value: comprara[1],
+                color:"#f497f4"
             },
             {
-                value : 100,
-                color : "#3498db"
-            },
-            {
-                value : 40,
-                color : "#9b59b6"
-            },
-            {
-                value : 120,
-                color : "#34495e"
+                value: comprara[2],
+                color:"#9a97f4"
             }
-
         ];
-        var lineChartData = {
-            labels : ["","","","","","",""],
+
+
+        var npizzas = {{ npizzas|safe }};
+        var pizzas = {{ pizzas|safe }};
+        var barChartData = {
+            labels : pizzas,
             datasets : [
                 {
-                    fillColor : "rgba(220,220,220,0.5)",
-                    strokeColor : "rgba(220,220,220,1)",
-                    pointColor : "rgba(220,220,220,1)",
-                    pointStrokeColor : "#fff",
-                    data : [65,59,90,81,56,55,40]
-                },
-                {
-                    fillColor : "rgba(151,187,205,0.5)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    data : [28,48,40,19,96,27,100]
+                    fillColor : "rgb(255, 249, 140)",
+                    strokeColor : "rgb(95, 96, 96)",
+                    data : npizzas
                 }
             ]
 
         };
+        
         var pieData = [
             {
-                value: 30,
-                color:"#1abc9c"
+                value: {{ especial|safe }},
+                color:"#D97041"
             },
             {
-                value : 50,
+                value : {{ noespecial|safe }},
                 color : "#16a085"
-            },
-            {
-                value : 100,
-                color : "#27ae60"
             }
 
         ];
-        var barChartData = {
+        var lineChartData = {
             labels : ["E","F","M","A","M","J","J","A","S","O","N","D"],
             datasets : [
                 {
-                    fillColor : "rgba(220,220,220,0.5)",
-                    strokeColor : "rgba(220,220,220,1)",
+                    fillColor : "rgb(160, 255, 251)",
+                    strokeColor : "rgb(95, 96, 96)",
+                    pointColor : "rgb(0, 0, 0)",
+                    pointStrokeColor : "rgb(0, 0, 0)",
                     data : ["{{vene}}","{{vfeb}}","{{vmarzo}}","{{vabr}}","{{vmay}}","{{vjun}}","{{vjul}}","{{vago}}","{{vsep}}","{{voct}}","{{vnov}}","{{vdic}}"]
                 }
             ]
 
         };
-        var chartData = [
+        var diasSemana = {{ ventasdias|safe }}
+        var polarChartData = [
             {
-                value : Math.random(),
-                color: "#D97041"
+                value : diasSemana[0],
+                color: "#f49797"
             },
             {
-                value : Math.random(),
-                color: "#C7604C"
+                value : diasSemana[1],
+                color: "#f497f4"
             },
             {
-                value : Math.random(),
-                color: "#21323D"
+                value : diasSemana[2],
+                color: "#9a97f4"
             },
             {
-                value : Math.random(),
-                color: "#9D9B7F"
+                value : diasSemana[3],
+                color: "#97f4f3"
             },
             {
-                value : Math.random(),
-                color: "#7D4F6D"
+                value : diasSemana[4],
+                color: "#9df497"
             },
             {
-                value : Math.random(),
-                color: "#584A5E"
+                value : diasSemana[5],
+                color: "#f4f497"
+            },
+            {
+                value : diasSemana[6],
+                color: "#f4bb97"
             }
         ];
+        var vendedores = {{ vendedores|safe }};
+        var ventasVendedores = {{ ventasvendedores|safe }};
         var radarChartData = {
-            labels : ["","","","","","",""],
+            labels : vendedores,
             datasets : [
                 {
-                    fillColor : "rgba(220,220,220,0.5)",
-                    strokeColor : "rgba(220,220,220,1)",
+                    fillColor : "rgb(255, 145, 255)",
+                    strokeColor : "rgb(109, 57, 107)",
                     pointColor : "rgba(220,220,220,1)",
                     pointStrokeColor : "#fff",
-                    data : [65,59,90,81,56,55,40]
-                },
-                {
-                    fillColor : "rgba(151,187,205,0.5)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    data : [28,48,40,19,96,27,100]
+                    data : ventasVendedores
                 }
             ]
 
@@ -188,7 +229,7 @@ Reportes Gráficos
         new Chart(document.getElementById("doughnut").getContext("2d")).Doughnut(doughnutData);
         new Chart(document.getElementById("line").getContext("2d")).Line(lineChartData);
         new Chart(document.getElementById("radar").getContext("2d")).Radar(radarChartData);
-        new Chart(document.getElementById("polarArea").getContext("2d")).PolarArea(chartData);
+        new Chart(document.getElementById("polarArea").getContext("2d")).PolarArea(polarChartData);
         new Chart(document.getElementById("bar").getContext("2d")).Bar(barChartData);
         new Chart(document.getElementById("pie").getContext("2d")).Pie(pieData);
 
