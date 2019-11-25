@@ -1,0 +1,7 @@
+{% url 'metricas' as metricas %}
+<li class="nav-item {% if metricas in request.path %}active{% endif %}">
+    <a class="nav-link" href="{{ metricas }}">
+        <i class="menu-icon mdi mdi-coin"></i>
+        <span class="menu-title text-uppercase">Métricas</span>
+    </a>
+</li>
