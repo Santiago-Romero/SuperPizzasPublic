@@ -658,3 +658,12 @@ def reportes(request):
         return render(request,'franquicias/graficos.html', contexto)
     else:
         return render(request,"404.html",{})
+
+def ventas(request):
+    if(request.user.usuario.rol=='a' and request.tenant.working==True):
+        facturas=Factura.objects.all()
+        detalles=Detalle.objects.all()
+        context={'facturas':facturas,'detalles':detalles}
+        return render(request,'franquicias/ventas.html',context)
+    else:
+        return render(request,"404.html",{})

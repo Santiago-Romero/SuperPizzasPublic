@@ -1,0 +1,47 @@
+{% extends 'base_tablas.html' %}
+{% load bootstrap4 %}
+
+{% block page_title %}
+Registro de franquicias
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Listado de franquiciass </h4>
+        <hr>
+        <div class="table-responsive">
+            <table class="table table-bordered data-combine">
+                <thead>
+                    <tr>
+                        <th>Ciudad</th>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for factura in facturas %}
+                        <tr>
+                            <td>{{factura.ciudad}}</td>
+                            <td>{% for detalle in detalles %}
+                                    {% if detalle.factura.id == factura.id %}
+                                        {{detalle.producto}} <br>
+                                    {% endif %}
+                                {% endfor %}</td>
+                            <td>{% for detalle in detalles %}
+                                    {% if detalle.factura.id == factura.id %}
+                                        {% widthratio detalle.cantidad 1 detalle.precio %} <br>
+                                    {% endif %}
+                                {% endfor %}</td>
+                            <td>{{factura.cliente.user}}</td>
+                            <td>{{factura.fecha_creacion}}</td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
