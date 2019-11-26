@@ -11,11 +11,12 @@ class TipoFranquicia(models.Model):
 		 
 class Franquicia(TenantMixin):
     nombre = models.CharField(max_length=50)    
-    fecha_corte =  models.DateField(auto_now_add=True)
+    fecha_corte = models.DateField(auto_now_add=True)
     tipo = models.ForeignKey(TipoFranquicia,default=None, on_delete=models.CASCADE)
-    configuracion  = models.CharField(max_length=200, default='{"colorprimario":"#1D1D1D","colorsecundario":"#E9951F", "tamanioletra":100}')
+    configuracion = models.CharField(max_length=200, default='{"colorprimario":"#1D1D1D","colorsecundario":"#E9951F", "tamanioletra":100}')
     media = models.FileField(upload_to='media/logos-franquicias/', default='media/logos-franquicias/1_logo_default.png', blank=True, null=True)
     working=models.BooleanField(default=True)
+    fecha_cancelada = models.DateField(blank=True, null=True)
     auto_create_schema = True
 
     def __str__(self):
