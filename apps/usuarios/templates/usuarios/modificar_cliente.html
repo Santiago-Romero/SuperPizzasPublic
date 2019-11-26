@@ -23,64 +23,6 @@
             <form method="POST"  id="signup-form" class="signup-form" >{% csrf_token %}
             {{form2}}
             {{form}}
-                <!--<div class="form-group">
-                    <label for="" class="form-label required">Nombre</label>
-                    {{ form2.first_name }}
-                </div>
-                <div class="form-group">
-                    <label for="" class="form-label required">Apellido</label>
-                    {{ form2.last_name }}
-                </div>
-                <div class="form-group">
-                    <label for="" class="form-label required">Email</label>
-                    {{ form2.email }}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Contraseña</label>
-                    {{ form2.password1 }}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Confirme Contraseña</label>
-                    {{ form2.password2 }}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required"> CC </label>
-                    {{form.cc}}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Telefono</label>
-                    {{form.telefono}}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Pais</label>
-                    {{form.pais}}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Nombre banco</label>
-                    {{form.nombre_banco}}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Fecha vencimiento</label>
-                    {{form.fecha_vencimiento}}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Tipo tarjeta</label>
-                    {{form.tipo_tarjeta}}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Numero tarjeta</label>
-                    {{form.numero_tarjeta}}
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">cvv</label>
-                    {{form.cvv}}
-                </div>
-                <div class="form-group">
-                    {{form.rol}}
-                </div>
-                <div class="form-group">
-                {{form.captcha}}
-                </div>-->
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
         </div>
