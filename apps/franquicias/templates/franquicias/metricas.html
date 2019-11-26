@@ -14,80 +14,120 @@ Métricas
         <table>
             <tr>
                 <td>
+                    <h2 class="badge badge2-spz" data-toggle="tooltip"
+                        title="Mes actual">
+                        Periodo Actual</h2>
+                </td>
+                <td>
+                    <h2 class="badge">{{periodoactual}}</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <h2 class="badge badge-spz" data-toggle="tooltip"
                         title="Tasa de desgaste: número de clientes que deciden dejar de usar el servicio en un mes, determinan las ganancias y el crecimiento del negocio. Clientes Perdidos {{customerlost}} / Total Clientes {{totalcustomers}}">
                         CHURN</h2>
                 </td>
                 <td>
-                    <h2 class="badge">{{churnrate}}%</h2> 
+                    <h2 class="badge">{{churnrate}}%</h2>
                 </td>
             </tr>
             <tr>
                 <td>
                     <h2 class="badge badge-spz" data-toggle="tooltip"
-                    title="Average Customer Lifetime (La vida media del cliente).">ACL</h2>
+                        title="Average Customer Lifetime (La vida media del cliente). ACL=1/ChurnRate">ACL</h2>
                 </td>
                 <td>
-                    <h2 class="badge">XXX</h2>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h2 class="badge badge-spz" data-toggle="tooltip"
-                    title="Customer Retention Rate (Taza de retención de clientes). Porcentaje de sus clientes que regresan a su producto o servicio durante un período">CRR</h2>
-                </td>
-                <td>
-                    <h2 class="badge">XXX</h2>
+                    <h2 class="badge">{{acl}}</h2>
                 </td>
             </tr>
             <tr>
                 <td>
                     <h2 class="badge badge-spz" data-toggle="tooltip"
-                    title="Evolución del churn por antigüedad. ">Cohort</h2>
+                        title="Customer Retention Rate (Taza de retención de clientes). Porcentaje de sus clientes que regresan a su producto o servicio durante un período. CRR=1-ChurnRate">
+                        CRR</h2>
                 </td>
                 <td>
-                    <h2 class="badge">XXX</h2>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h2 class="badge badge-spz" data-toggle="tooltip"
-                    title="Venta media por periodo por usuario. ">ARPU</h2>
-                </td>
-                <td>
-                    <h2 class="badge">XXX</h2>
+                    <h2 class="badge">{{crr}}%</h2>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h2 class="badge badge-spz" data-toggle="tooltip"
-                    title="Valor de vida del cliente. ">LTV</h2>
+                    <h2 class="badge badge-spz" data-toggle="tooltip" title="Evolución del churn por antigüedad. ">
+                        Cohort</h2>
                 </td>
                 <td>
-                    <h2 class="badge">XXX</h2>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h2 class="badge badge-spz" data-toggle="tooltip"
-                    title="Costo de adquisición por cliente. ">CAC</h2>
-                </td>
-                <td>
-                    <h2 class="badge">XXX</h2>
+                    <h2 class="badge"><canvas id="bar" height="300" width="400"></canvas></h2>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h2 class="badge badge-spz" data-toggle="tooltip"
-                    title="Usuarios invitados por usuarios. ">Virality</h2>
+                    <h2 class="badge badge-spz" data-toggle="tooltip" title="Venta media por periodo por usuario. ">ARPU
+                    </h2>
                 </td>
                 <td>
-                    <h2 class="badge">XXX</h2>
+                    <h2 class="badge">{{arpu}}</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip" title="Valor de vida del cliente. ">LTV</h2>
+                </td>
+                <td>
+                    <h2 class="badge">{{ltv}}</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip" title="Costo de adquisición por cliente. ">CAC
+                    </h2>
+                </td>
+                <td>
+                    <h2 class="badge"><input type="number" placeholder="Inversión en Marketing" id="dinero"><input type="button" onclick="multiplicar()" value="="><p id="result">
+                            0
+                        </p></h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip" title="Renatilidad por cliente">Rentabilidad
+                    </h2>
+                </td>
+                <td>
+                    <h2 class="badge"><p id="result2">
+                            0
+                        </p></h2>
                 </td>
             </tr>
         </table>
     </div>
 </div>
+<script src={% static 'graficos/assets/js/chart-master/Chart.js' %}> </script>
 <script>
+    function multiplicar()
+    {
+            num1 = document.getElementById("dinero").value;
+            num2 = {{ nuevosclientes|safe }};
+            if(num2!=0){
+                document.getElementById("result").innerHTML = num1 / num2;
+                document.getElementById("result2").innerHTML = {{ltv|safe}}-(num1 / num2);
+                }
+            else{
+                document.getElementById("result").innerHTML = "No hay nuevos clientes";
+                document.getElementById("result2").innerHTML = "No hay nuevos clientes";
+            }
+    }
+    var barChartData = {
+            labels : ["E","F","M","A","M","J","J","A","S","O","N","D"],
+            datasets : [
+                {
+                    fillColor : "rgb(211, 212, 229)",
+                    strokeColor : "rgb(95, 96, 96)",
+                    data : {{ cohort|safe }}
+                }
+            ]
+
+        };
+    new Chart(document.getElementById("bar").getContext("2d")).Bar(barChartData);
 </script>
 {% endblock %}
