@@ -1,0 +1,93 @@
+{% extends 'base_tablas.html' %}
+{% load bootstrap4 %}
+{% load staticfiles %}
+{% block page_title %}
+Métricas
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/metricas.css' %}">
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title"><b>Métricas </b></h1>
+        <hr>
+        <table>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip"
+                        title="Tasa de desgaste: número de clientes que deciden dejar de usar el servicio en un mes, determinan las ganancias y el crecimiento del negocio.">
+                        CHURN</h2>
+                </td>
+                <td>
+                    <h2 class="badge">XXX</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip"
+                    title="Average Customer Lifetime (La vida media del cliente).">ACL</h2>
+                </td>
+                <td>
+                    <h2 class="badge">XXX</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip"
+                    title="Customer Retention Rate (Taza de retención de clientes). Porcentaje de sus clientes que regresan a su producto o servicio durante un período">CRR</h2>
+                </td>
+                <td>
+                    <h2 class="badge">XXX</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip"
+                    title="Evolución del churn por antigüedad. ">Cohort</h2>
+                </td>
+                <td>
+                    <h2 class="badge">XXX</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip"
+                    title="Venta media por periodo por usuario. ">ARPU</h2>
+                </td>
+                <td>
+                    <h2 class="badge">XXX</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip"
+                    title="Valor de vida del cliente. ">LTV</h2>
+                </td>
+                <td>
+                    <h2 class="badge">XXX</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip"
+                    title="Costo de adquisición por cliente. ">CAC</h2>
+                </td>
+                <td>
+                    <h2 class="badge">XXX</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 class="badge badge-spz" data-toggle="tooltip"
+                    title="Usuarios invitados por usuarios. ">Virality</h2>
+                </td>
+                <td>
+                    <h2 class="badge">XXX</h2>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+</script>
+{% endblock %}

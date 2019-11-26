@@ -34,16 +34,18 @@
                     <li class="nav-item dropdown d-xl-inline-block">
                         <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown"
                            aria-expanded="false">
-                           {% if request.user.usuario.rol == 'a' %}
+                           {% if request.user.is_superuser %}
+                           {% firstof "Super Administrador" as rol %}
+                           {% elif request.user.usuario.rol == 'a' %}
                            {% firstof "Administrador" as rol %}
                            {% elif request.user.usuario.rol == 'd' %}
                            {% firstof "Digitador" as rol %}  
                            {% else %}
                            {% firstof "Vendedor" as rol %}
                            {% endif %}
-                            <html>
+                            
                             <span class="profile-text">{{request.user}} - {{rol}} </span>
-                            </html>
+                            
                             
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">

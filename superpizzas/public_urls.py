@@ -14,4 +14,5 @@ urlpatterns = [
     path('validate/', check_schema, name='check_schema'),  
     path('validate_email/', check_email, name='check_email'),  
     path('admin/franquicias/', include('apps.franquicias.urls', namespace='franquicias')),
+    path('admin/metricas/', metricas, name='metricas'),
 ]
