@@ -370,6 +370,7 @@ class CartListar(TemplateView):
             context = super(CartListar, self).get_context_data(**kwargs)
             franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
             context['franquicia']=self.request
+            context['pizzas']=Pizza.objects.filter(enventa=True)
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
             context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
             context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
