@@ -28,6 +28,7 @@ from django.contrib.auth import authenticate
 from reportlab.pdfgen import canvas
 from django.views.generic import View
 from io import BytesIO
+from django.core.mail import send_mail
 
 
 
@@ -61,6 +62,9 @@ def home_admin(request):
     else:
         return redirect('/')
 
+def enviarcorreo(subject,message,recipient_list):
+    email_from = settings.EMAIL_HOST_USER
+    send_mail(subject, message, email_from, recipient_list)
 
 def inicio_franquicia(request):
     dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
@@ -126,6 +130,7 @@ def compra_franquicia(request,tipo):
                 'nombre': form.data.get('form1-nombre'),
                 'schema': form.data.get('form1-schema_name'),
             }
+            enviarcorreo("Compra de Franquicia {t}".format(t=tipoir),"Gracias por adquirir nuestra franquicia para ingresara al portal utiliza tu correo: {u}  y la contraseña que digitaste".format(u=usuario.username),[usuario.username])
             return render(request,'landingpage/comprado.html',context)
         else:
             messages.error(request, "Por favor verificar los campos en rojo")
@@ -320,6 +325,7 @@ def informacion(request):
         return render(request,"404.html",{})
 
 def renuncia(request):
+    enviarcorreo("Retiro de franquicia {r}".format(r=request.tenant.nombre),"Gracias por haber adquirirdo nuestra franquicia te esperamos pronto de vuelta",[request.user.username])
     if(request.tenant.working==True):
         franquiciafields={"nombre":request.tenant.nombre,"dominio":request.tenant.schema_name,"tipo":request.tenant.tipo.nombre}
         franquicia={"model":"franquicias.franquicia","pk":request.tenant.id,"fields":franquiciafields}

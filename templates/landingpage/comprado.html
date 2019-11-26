@@ -20,8 +20,10 @@
             {% csrf_token %}
             <h2>Nombre: {{nombre}}</h2> 
             <h2>Dominio: <a href="http://{{schema}}.localhost:8000">{{schema}}.localhost:8000</a></h2> 
+            <div style="margin:10px">
             <h3>Podrás acceder dentro de las siguientes 24 horas cuando %tenantadministrator% verfique y apruebe el dominio</h3>
-            <h3>Se ha enviado un correo con tu usuario y contraseña para acceder a administrar tu pizzeria</h3> 
+            <h3>Se te ha enviado un correo verificando tu compra, empieza a administrar tu pizzeria!</h3>
+            </div>
         </div>
 
     </div>
