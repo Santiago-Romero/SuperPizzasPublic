@@ -1,0 +1,103 @@
+{% load static %}
+{% load bootstrap4 %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="colorlib.com">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mi información</title>
+    <link rel="stylesheet" href="{% static 'pago/fonts/themify-icons/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'pago/css/style.css' %}">
+    <link rel="shortcut icon" href="/static/{{ request.tenant.media }}" />
+</head>
+
+<body>
+
+    {% include 'landingpage/nav.html' %}
+
+    <div class="main">
+        <div class="container">
+            <h2>Información de cliente</h2>
+            <form method="POST"  id="signup-form" class="signup-form" >{% csrf_token %}
+            {{form2}}
+            {{form}}
+                <!--<div class="form-group">
+                    <label for="" class="form-label required">Nombre</label>
+                    {{ form2.first_name }}
+                </div>
+                <div class="form-group">
+                    <label for="" class="form-label required">Apellido</label>
+                    {{ form2.last_name }}
+                </div>
+                <div class="form-group">
+                    <label for="" class="form-label required">Email</label>
+                    {{ form2.email }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Contraseña</label>
+                    {{ form2.password1 }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Confirme Contraseña</label>
+                    {{ form2.password2 }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required"> CC </label>
+                    {{form.cc}}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Telefono</label>
+                    {{form.telefono}}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Pais</label>
+                    {{form.pais}}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Nombre banco</label>
+                    {{form.nombre_banco}}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Fecha vencimiento</label>
+                    {{form.fecha_vencimiento}}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Tipo tarjeta</label>
+                    {{form.tipo_tarjeta}}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Numero tarjeta</label>
+                    {{form.numero_tarjeta}}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">cvv</label>
+                    {{form.cvv}}
+                </div>
+                <div class="form-group">
+                    {{form.rol}}
+                </div>
+                <div class="form-group">
+                {{form.captcha}}
+                </div>-->
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </form>
+        </div>
+
+    </div>
+    <div class="footer">
+
+    </div>
+    <!-- JS -->
+    <script src="{% static 'pago/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/jquery-validation/dist/additional-methods.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/jquery-steps/jquery.steps.min.js' %}"></script>
+    <script src="{% static 'pago/vendor/minimalist-picker/dobpicker.js' %}"></script>
+    <script src="{% static 'pago/js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'landingpage/js/app.js' %}"></script>
+    {% include 'landingpage/footer.html' %}
+</body>
+
+</html>

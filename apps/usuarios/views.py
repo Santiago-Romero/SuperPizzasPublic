@@ -43,7 +43,7 @@ def gestionar_usuario(request, id_usuario=None):
                     print(str(formUserDjango.errors))
 
             else:
-                usuario = get_object_or_404(Usuario, cc=request.POST['cc'])
+                usuario = get_object_or_404(Usuario, id=id_usuario)
                 user = User.objects.get(pk=usuario.user.id)
                 form = UsuarioForm2(request.POST, instance=usuario)
                 form2 = UpdateUser(data=request.POST, instance=user)
@@ -267,11 +267,6 @@ def mostrarclientes(request):
     else:
         return render(request,"404.html",{})
 
-def modificarcliente(request):
-    if(request.user.usuario.rol=='c' and request.tenant.working==True):
-        return HttpResponse("Acá iría la info a modificar con el id de usuario del que está logged")
-    else:
-        return render(request,"404.html",{})
 #Retorna 1 si es anonimo / 2 si es admin / 3 si es digitador / 4 si es vendedor / 5 si es cliente / 6 error
 def get_role_user(request):
     if request.user.is_anonymous:
@@ -291,3 +286,31 @@ def get_role_user(request):
             return 5
         else:
             return 6
+
+def modificarcliente(request):
+    if(request.user.usuario.rol=='c' and request.tenant.working==True):
+        if request.method == 'POST':
+            usuario = get_object_or_404(Usuario, id=request.user.usuario.id)
+            user = User.objects.get(pk=usuario.user.id)
+            form = UsuarioForm2(request.POST, instance=usuario)
+            form2 = UpdateUser(data=request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                user.first_name = request.POST['first_name']
+                user.last_name = request.POST['last_name']
+                user.email = request.POST['email']
+                user.username = request.POST['email']
+                user.set_password(request.POST['password1'])
+                user.save()
+                messages.success(request, 'Usuario actualizado correctamente')
+                return redirect('/')
+            else:
+                messages.error(request, 'Por favor verificar los campos en rojo')
+        usuario = get_object_or_404(Usuario, id=request.user.usuario.id)
+        user = User.objects.get(pk=usuario.user.id)
+        form = UsuarioForm2(instance=usuario)
+        form.fields['rol'].initial = [usuario.rol]
+        form2 = UpdateUser(instance=user)
+        return render(request, 'usuarios/modificar_cliente.html', {'form': form, 'usuario': usuario,'form2':form2})
+    else:
+        return render(request,"404.html",{})
