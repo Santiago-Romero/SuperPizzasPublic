@@ -325,6 +325,7 @@ def informacion(request):
         return render(request,"404.html",{})
 
 def renuncia(request):
+    enviarcorreo("Retiro de franquicia {r}".format(r=request.tenant.nombre),"Gracias por haber adquirirdo nuestra franquicia te esperamos pronto de vuelta",[request.user.username])
     if(request.tenant.working==True):
         franquiciafields={"nombre":request.tenant.nombre,"dominio":request.tenant.schema_name,"tipo":request.tenant.tipo.nombre}
         franquicia={"model":"franquicias.franquicia","pk":request.tenant.id,"fields":franquiciafields}
