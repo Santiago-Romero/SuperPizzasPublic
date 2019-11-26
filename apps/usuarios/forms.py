@@ -37,6 +37,7 @@ class UsuarioForm2(forms.ModelForm):
         'pais',
         'nombre_banco',
         'fecha_vencimiento',
+        'direccion',
         'tipo_tarjeta',
         'numero_tarjeta',
         'cvv',
