@@ -62,6 +62,7 @@
                             </thead>
                             <tbody>
                                 {% for usuario in usuarios %}
+                                {% if usuario.usuario.rol != 'c'%}
                                     <tr>
                                         <td>{{ usuario.username }}</td>
                                         <td>{{ usuario.first_name }}</td>
@@ -81,6 +82,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>
