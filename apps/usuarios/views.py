@@ -19,7 +19,6 @@ def gestionar_usuario(request, id_usuario=None):
         if request.method == 'POST':
             
             if request.POST['user']=='':
-                #Crear Usuario Nuevo
                 form = UsuarioForm2(request.POST)
                 formUserDjango = UserForm(request.POST)
 
@@ -44,7 +43,6 @@ def gestionar_usuario(request, id_usuario=None):
                     print(str(formUserDjango.errors))
 
             else:
-                #Actualizar
                 usuario = get_object_or_404(Usuario, cc=request.POST['cc'])
                 user = User.objects.get(pk=usuario.user.id)
                 form = UsuarioForm2(request.POST, instance=usuario)
@@ -84,82 +82,38 @@ def gestionar_usuario(request, id_usuario=None):
     else:
         return render(request,"404.html",{})
 
-def gestionar_cliente(request,id_usuario=None):
+def gestionar_cliente(request):
     if(request.tenant.working==True):
         if request.method == 'POST':
             form = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'c'})
             formUserDjango = UserForm(request.POST,prefix="form3")
-
-            if request.POST['user']=='':
-                #Crear Usuario Nuevo
-                form = UsuarioForm2(request.POST)
-                formUserDjango = UserForm(request.POST)
             
-                if formUserDjango.is_valid():
+            if formUserDjango.is_valid():
 
-                    usuario = formUserDjango.save(commit=False)
+                usuario = formUserDjango.save(commit=False)
                                     
-                    usuario = User(username=request.POST['form3-email'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
+                usuario = User(username=request.POST['form3-email'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
                             
-                    usuario.set_password(request.POST['form3-password1'])
+                usuario.set_password(request.POST['form3-password1'])
                             
-                    usuario.save()            
+                usuario.save()            
 
-                 #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
+                #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
 
-                    perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],direccion=request.POST['form2-direccion'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='c')
+                perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],direccion=request.POST['form2-direccion'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='c')
 
-                    perfil.save()  
+                perfil.save()  
 
-                    messages.success(request, 'Cliente registrado correctamente')
-                    return redirect('login')
-
-                else:
-                #Actualizar
-                    usuario = get_object_or_404(Usuario, cc=request.POST['cc'])
-                    user = User.objects.get(pk=usuario.user.id)
-                    form = UsuarioForm2(request.POST, instance=usuario)
-                    form2 = UpdateUser(data=request.POST, instance=user)
-
-                    if form.is_valid():
-                        form.save()
-                        user.first_name = request.POST['first_name']
-                        user.last_name = request.POST['last_name']
-                        user.email = request.POST['email']
-                        user.username = request.POST['email']
-                        user.save()
-                        messages.success(request, 'Cliente actualizado correctamente')
-                        form = UsuarioForm2()
-                        form2 = UserForm()
-                        usuario = None
-                    
-                        return redirect('usuarios:registrar')
-            
-                    else:
-                        messages.error(request, 'Por favor verificar los campos en rojo')
+                messages.success(request, 'Cliente registrado correctamente')
+                return redirect('login')
             else:
-            
-                form = UsuarioForm(prefix="form2",initial={'rol': 'c'})
-                formUserDjango = UserForm(prefix="form3")        
-
-                if id_usuario:
-                    usuario = get_object_or_404(Usuario, id=id_usuario)
-                    user = User.objects.get(pk=usuario.user.id)
-                    form = UsuarioForm2(instance=usuario)
-                    form.fields['rol'].initial = [usuario.rol]
-                    form2 = UpdateUser(instance=user)
-                    flag = 0
-                else:
-                    form = UsuarioForm2()    
-                    form2 = UserForm()
-                    flag = 1
-
-            print(formUserDjango,"test")
-            return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': form2})
+                messages.error(request, 'Por favor verificar los campos en rojo')
         else:
-            return render(request,"404.html",{})
-
-
+            form = UsuarioForm(prefix="form2",initial={'rol': 'c'})
+            formUserDjango = UserForm(prefix="form3")        
+        return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': formUserDjango})
+    else:
+        return render(request,"404.html",{})
 
 def eliminar_usuario(request, id_usuario):
     if(request.user.usuario.rol=='a' and request.tenant.working==True):

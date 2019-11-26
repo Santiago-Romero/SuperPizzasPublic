@@ -13,7 +13,6 @@ urlpatterns = [
     path('admin/pizzas/', include('apps.pizzas.urls', namespace='pizzas')),
     path('admin/usuarios/', include('apps.usuarios.urls', namespace='usuarios')),
     path('registroclientes/',gestionar_cliente,name='registro'),  
-    path('modificarclientes/<int:id_usuario>/', gestionar_cliente, name='modificar'),
     path('validate_email/', check_email, name='check_email'),  
     path('admin/ingredientes/', include('apps.ingredientes.urls', namespace='ingredientes')),
     path('admin/configuraciones/',configuraciones, name='configuraciones'),
