@@ -698,9 +698,12 @@ def reportes(request):
                 sonespeciales[0]+=detalle.cantidad
             else:
                 sonespeciales[1]+=detalle.cantidad
-        
-        porcentajeEspecial=(sonespeciales[0]*100)/total
-        porcentajeNoEspecial=(sonespeciales[1]*100)/total
+        if(total!=0):
+            porcentajeEspecial=(sonespeciales[0]*100)/total
+            porcentajeNoEspecial=(sonespeciales[1]*100)/total
+        else:
+            porcentajeEspecial=0
+            porcentajeNoEspecial=0
         laspizzas=list(Pizza.objects.values_list('id', flat=True))
 
         for factura in Factura.objects.all():
