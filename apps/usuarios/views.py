@@ -266,6 +266,12 @@ def mostrarclientes(request):
         return render(request,'usuarios/clientes.html',context)
     else:
         return render(request,"404.html",{})
+
+def modificarcliente(request):
+    if(request.user.usuario.rol=='c' and request.tenant.working==True):
+        return HttpResponse("Acá iría la info a modificar con el id de usuario del que está logged")
+    else:
+        return render(request,"404.html",{})
 #Retorna 1 si es anonimo / 2 si es admin / 3 si es digitador / 4 si es vendedor / 5 si es cliente / 6 error
 def get_role_user(request):
     if request.user.is_anonymous:

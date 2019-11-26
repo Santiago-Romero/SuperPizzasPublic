@@ -17,15 +17,18 @@
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
-            <li class="{% if request.path == cart_url %}nav-item active{%else%}nav-item{% endif %}"><a href="{% url 'cart_listar' %}" class="nav-link"> <span id="cantidad_pedido">{{ request.session.cart |length }}</span> <i class="fa fa-shopping-cart"></i> Cart </a></li>
-            <li class="{% if request.path == inicio_url %}nav-item active{%else%}nav-item{% endif %}"><a href="{% url 'inicio_t' %}" class="nav-link">Inicio</a></li>
+            <li class="{% if request.path == cart_url %}nav-item active {% else %} nav-item{% endif %}"><a href="{% url 'cart_listar' %}" class="nav-link"> <span id="cantidad_pedido">{{ request.session.cart |length }}</span> <i class="fa fa-shopping-cart"></i> Cart </a></li>
+            <li class="{% if request.path == inicio_url %}nav-item active {% else %} nav-item{% endif %}"><a href="{% url 'inicio_t' %}" class="nav-link">Inicio</a></li>
             <li class="nav-item"><a href="#menu" class="nav-link">Menú</a></li>
-            <li class="{% if request.path == ordenar_url %}nav-item active{%else%}nav-item{% endif %}"><a href="{% url 'ordenar' %}" class="nav-link">Pide en Línea</a></li>            
-            <li class="{% if request.path == registro_url %}nav-item active{%else%}nav-item{% endif %}"><a href="{% url 'registro' %}" class="nav-link">Registrarse</a></li>
-             {% if user.is_authenticated %}
-              <li class="{% if request.path == registro_url %}nav-item active{%else%}nav-item{% endif %}"><a href="{% url 'cerrar_sesion' %}" class="nav-link">Cerrar Sesión</a></li>
+            <li class="{% if request.path == ordenar_url %}nav-item active {% else %} nav-item{% endif %}"><a href="{% url 'ordenar' %}" class="nav-link">Pide en Línea</a></li>            
+            {% if user.is_authenticated %}
+            {% if user.usuario.rol == 'c'%}
+            <li class="nav-item"><a href="{% url 'modificarcliente' %}" class="nav-link">Mi Información</a></li>
+            {% endif %}
+            <li class="nav-item"><a href="{% url 'cerrar_sesion' %}" class="nav-link">Cerrar Sesión</a></li>
             {% else %}
-              <li class="{% if request.path == registro_url %}nav-item active{%else%}nav-item{% endif %}"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></li>
+            <li class="nav-item"><a href="{% url 'registro' %}" class="nav-link">Registrarse</a></li>
+            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></li>
             {% endif %}
             
           </ul>
