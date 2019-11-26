@@ -155,7 +155,7 @@ def reg_franquicia(request):
                         Dominio.objects.create(domain='%s%s' % (franquicia.schema_name, settings.DOMAIN), is_primary=True, tenant=franquicia)
                         with schema_context(franquicia.schema_name):
                             usuario = formUserDjango.save(commit=False)
-                            usuario = User(username=request.POST['form3-username'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
+                            usuario = User(username=request.POST['form3-email'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
                             usuario.set_password(request.POST['form3-password1'])
                             usuario.save()
                             assign_role(usuario,'administrador')
@@ -330,6 +330,7 @@ def renuncia(request):
         detalles = serializers.serialize("json", Detalle.objects.all())
         context={'f':json.dumps(franquicia),'u':usuarios,'i':ingredientes,'p':pizzas,'fc':facturas,'dt':detalles}
         Franquicia.objects.filter(pk=request.tenant.id).update(working=False)
+        Franquicia.objects.filter(pk=request.tenant.id).update(fecha_cancelada=datetime.datetime.now())
         return render(request,'tenant/renuncia.html',context)
     else:
         return render(request,"404.html",{})
@@ -715,9 +716,73 @@ def ventas(request):
     else:
         return render(request,"404.html",{})
 
+def encontrarChurnRate(periodoActual,periodoAnterior):
+    totalCustomers=0
+    totalclientesAnterior=0
+    totalclientesActual=0
+    nuevosClientesActual=0
+    customersLost=0
+    for franquicia in Franquicia.objects.all():
+        if(franquicia.schema_name!='public'):
+            totalCustomers+=1
+            if(franquicia.working==True):
+                if(franquicia.fecha_corte.month==periodoActual):
+                    nuevosClientesActual+=1
+            if(franquicia.fecha_corte.month==periodoAnterior):
+                    totalclientesAnterior+=1
+            if(franquicia.fecha_corte.month==periodoActual):
+                    totalclientesActual+=1
+    
+    customersLost=totalclientesAnterior+nuevosClientesActual-totalclientesActual
+    churnRate=(customersLost/totalCustomers)*-100
+    if(churnRate<0):
+        return 0
+    else:
+        return churnRate
+
 def metricas(request):
     if(request.user.is_superuser):
-        contexto={}
-        return render(request,'franquicias/metricas.html',contexto)
+        periodoActual=date.today().month
+        if(periodoActual!=1):
+            periodoAnterior=periodoActual-1
+        else:
+            periodoAnterior=12
+        totalCustomers=0
+        totalclientesAnterior=0
+        totalclientesActual=0
+        nuevosClientesActual=0
+        customersLost=0
+        cuentasCanceladasActual=0
+        for franquicia in Franquicia.objects.all():
+            if(franquicia.schema_name!='public'):
+                if(franquicia.fecha_corte.year==datetime.datetime.now().year):
+                    totalCustomers+=1
+                    if(franquicia.working==True):
+                        if(franquicia.fecha_corte.month==periodoActual):
+                            nuevosClientesActual+=1
+                    else:
+                        if(franquicia.fecha_corte.month==periodoActual):
+                            cuentasCanceladasActual+=1
+                    if(franquicia.fecha_corte.month<=periodoAnterior and franquicia.fecha_cancelada.month>=periodoActual):
+                            totalclientesAnterior+=1
+                    if(franquicia.fecha_corte.month==periodoActual):
+                            totalclientesActual+=1
+        if(totalCustomers>0):
+            customersLost=totalclientesAnterior+nuevosClientesActual-totalclientesActual
+            churnRate=(customersLost/totalCustomers)*-100
+            arpu=cuentasCanceladasActual/totalCustomers
+            
+            if(churnRate!=0):
+                acl=str(1/(churnRate/100))+" Meses"
+                ltv=arpu*(1/(churnRate/100))
+            else:
+                acl="No calculable dado que su churnRate es 0"
+                ltv="No calculable dado que su churnRate es 0"
+
+            contexto={'periodoactual':periodoActual,'customerlost':customersLost,'totalcustomers':totalCustomers,'churnrate':churnRate,'acl':acl,'crr':(1-churnRate/100)*100,'cohort':[encontrarChurnRate(1,12),encontrarChurnRate(2,1),encontrarChurnRate(3,2),encontrarChurnRate(4,3),encontrarChurnRate(5,4),encontrarChurnRate(6,5),encontrarChurnRate(7,6),encontrarChurnRate(8,7),encontrarChurnRate(9,8),encontrarChurnRate(10,9),encontrarChurnRate(11,10),encontrarChurnRate(12,11)],'arpu':arpu,'ltv':ltv,'nuevosclientes':nuevosClientesActual}
+            return render(request,'franquicias/metricas.html',contexto)
+        else:
+            messages.error(request, 'Aún no hay franquicias como para mostrat métricas')
+            return redirect('/')
     else:
         return redirect('/')
