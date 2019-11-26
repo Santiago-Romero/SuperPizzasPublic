@@ -28,9 +28,10 @@ class Migration(migrations.Migration):
                 ('tipo_tarjeta', models.CharField(choices=[('visa', 'Visa'), ('master', 'Master Card')], default='visa', max_length=50)),
                 ('numero_tarjeta', models.BigIntegerField(default=123456789012345)),
                 ('cvv', models.IntegerField(default=123)),
-                ('direccion', models.TextField(blank=True, default='calle 13a 5e-01 Buga', null=True)),
+                ('direccion', models.CharField(blank=True, default='calle 100 100 av 100', max_length=200, null=True)),
                 ('rol', models.CharField(choices=[('d', 'Digitador'), ('v', 'Vendedor'), ('a', 'Admin'), ('c', 'Cliente')], max_length=1)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('fecha_creacion', models.DateField(auto_now_add=True)),
             ],
         ),
     ]

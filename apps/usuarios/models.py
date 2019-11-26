@@ -19,3 +19,4 @@ class Usuario(models.Model):
     cvv=models.IntegerField(default=123)
     direccion=models.CharField(max_length=200,default='calle 100 100 av 100', blank=True,null=True)
     rol=models.CharField(max_length=1, choices=Roles)
+    fecha_creacion = models.DateField(auto_now_add=True)

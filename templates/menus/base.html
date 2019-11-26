@@ -10,6 +10,7 @@
 
         {% if request.user.usuario.rol == 'a' %}
             {% include 'menus/apps/usuarios.html' %}
+            {% include 'menus/apps/clientes.html' %}
             {% include 'menus/apps/ventas.html' %}
         {% endif %}
 

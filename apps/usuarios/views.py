@@ -260,7 +260,12 @@ def check_email(request):
     else:
         return render(request,"404.html",{})
 
-
+def mostrarclientes(request):
+    if(request.user.usuario.rol=='a' and request.tenant.working==True):
+        context={'usuarios':User.objects.all()}
+        return render(request,'usuarios/clientes.html',context)
+    else:
+        return render(request,"404.html",{})
 #Retorna 1 si es anonimo / 2 si es admin / 3 si es digitador / 4 si es vendedor / 5 si es cliente / 6 error
 def get_role_user(request):
     if request.user.is_anonymous:

@@ -1,7 +1,7 @@
 
 from django.urls import path, include
 from apps.franquicias.views import home, inicio_tenants, configuraciones,informacion, factura_PDF,renuncia, ordenar,CartAgregar,CartListar, CartDelete,AgregarCantidadCarrito,CartComprar,CartSuccess, vender, reportes,VentaCantidades,VenderPago,ventas
-from apps.usuarios.views import inicio_sesion, cerrar_sesion,gestionar_cliente, check_email
+from apps.usuarios.views import inicio_sesion, cerrar_sesion,gestionar_cliente, check_email,mostrarclientes
 from django.conf.urls import url
 
 urlpatterns = [
@@ -32,5 +32,6 @@ urlpatterns = [
     path('cantidades_ventas', VentaCantidades.as_view(), name='venta_cantidades'),
     path('admin/reportes/',reportes,name='reportes'),
     path('admin/ventas/',ventas,name='ventas'),
+    path('admin/clientes/',mostrarclientes,name='clientes'),
 
 ]
