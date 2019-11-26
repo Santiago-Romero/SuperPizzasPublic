@@ -20,7 +20,7 @@ import json
 import os
 from datetime import date
 from django.core import serializers
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from apps.usuarios.forms import UserAuthenticationForm
@@ -375,7 +375,9 @@ class CartListar(TemplateView):
         if(self.request.tenant.working==True):
             context = super(CartListar, self).get_context_data(**kwargs)
             franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
+            context['ingredientes']= Ingrediente.objects.all()
             context['franquicia']=self.request
+            context['pizzas']=Pizza.objects.filter(enventa=True)
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
             context['colorsecundario'] = json.loads(franquicia.configuracion)['colorsecundario']
             context['tamanioletra']=json.loads(franquicia.configuracion)['tamanioletra']
@@ -795,3 +797,4 @@ def metricas(request):
             return redirect('/')
     else:
         return redirect('/')
+

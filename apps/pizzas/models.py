@@ -13,7 +13,7 @@ class Pizza(models.Model):
 
 class Factura(models.Model):    
     cliente = models.ForeignKey('usuarios.usuario', on_delete=models.CASCADE)
-    ciudad= models.CharField(max_length=80,default="Cali")
+    ciudad= models.CharField(max_length=80)
     direccion = models.TextField()
     fecha_creacion = models.DateField(auto_now_add=True)
     hora_creacion = models.TimeField(auto_now_add=True)

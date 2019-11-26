@@ -1,4 +1,5 @@
 {% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="en">
     {% include 'tenant/head.html' %}    
@@ -26,6 +27,7 @@
                                     <tbody>
                                     <script type="text/javascript">
                                             var ids = []
+                                            var id_ingredientes=[]
                                      </script>
                                     {% for key, un_producto in productos.items %}
                                     <tr>
@@ -33,7 +35,17 @@
                                             ids.push({{un_producto.id}});
                                         </script>                                      
                                         <td><img src="{% static 'landing-tenant/images/pizza-1.jpg' %}" alt="Foto Producto" height="150" width="150"></td>
-                                        <td>{{ un_producto.nombre }}: {{ un_producto.descripcion}}</td>
+                                        <td>{{ un_producto.nombre }}: {{ un_producto.descripcion}}
+                                            <br>    
+                                            ingredientes:                                          
+                                            {% for pizza in pizzas %}                 
+                                            {% if un_producto.id == pizza.id%}       
+                                            {% for ingrediente in pizza.ingrediente.all %}                                           
+                                            {{ingrediente.nombre}},
+                                            {% endfor %}
+                                            {%endif%}    
+                                            {%endfor%}      
+                                        </td>                                       
                                         <td>
                                             <div class="input-group mb-3">
                                                   <div class="input-group-prepend">
@@ -58,13 +70,23 @@
                                             </a>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td></td>
+                                            <td>
+                                                <div>
+                                                        <span class="text-danger"> Desea añadir ingredientes adicionales? </span>
+                                                        <a class="btn btn-danger float-right mb-3 mr-2" data-toggle="modal" data-target="#exampleModalCenter" > <span> Si </span> </a>                                                
+                                                      </div>
+                                            </td>
+                                            
+                                    </tr>
                                     {% endfor %}
                                     <tr>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td class="font-weight-bold">Total:</td>
-                                        <td id="total" class="font-weight-bold"></td>
+                                        <td id="total" class="font-weight-bold"></td>                                        
                                         <td></td>
                                     </tr>
                                 </table>
@@ -94,6 +116,73 @@
                 </div>
             </section>      
     
+<!--MODAL 1-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+                <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+            
+            <div class="modal-body">
+                    <div class="table-responsive">                        
+                            <table class="table table-hover">
+                                <thead >
+                                <tr>                                    
+                                    <th>Ingrediente</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Subtotal</th>                                  
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>                                                                  
+                                    {% for ingrediente in ingredientes %}
+                                    <script type="text/javascript">
+                                        id_ingredientes.push({{ingrediente.id}});
+                                    </script> 
+                                    <tr>                                                                       
+                                        <td>{{ ingrediente}}</td>
+                                        <td>
+                                            <div class="input-group mb-3">
+                                                  <div class="input-group-prepend">
+                                                        <span style="cursor:pointer" class="input-group-text" onclick="clic_cantidad(event,this,{{ingrediente.valor}})" data-type="minus" data-field="ig_{{ingrediente.id}}">
+                                                            <i class="fa fa-minus text-danger"></i>
+                                                        </span>
+                                                  </div>
+                                                  <input type="number" name="ig_{{ingrediente.id}}" class="form-control input-number" value="0"
+                                                  min="0" max="3" disabled>
+                                                    <div class="input-group-append">
+                                                        <span style="cursor:pointer" class="input-group-text " onclick="clic_cantidad(event,this,{{ingrediente.valor}})" data-type="plus" data-field="ig_{{ingrediente.id}}">
+                                                            <i class="fa fa-plus text-success"></i>
+                                                        </span>
+                                                  </div>
+                                            </div>
+                                        </td>
+                                        <td id="precio_{{ingrediente.id}}">{{ ingrediente.valor}}</td>
+                                        <td id="total_ig_{{ingrediente.id}}">0</td>                                   
+                                    </tr>
+                                    {% endfor  %}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>                                        
+                                        <td class="font-weight-bold">Total:</td>
+                                        <td id="total_i" class="font-weight-bold"></td>                                        
+                                    </tr> 
+                            </table>
+                        </div> 
+                      
+            </div>
+            <div class="modal-footer">
+             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+             <button type="button" class="btn btn-primary">Guardar cambios</button>
+            </div>
+          </div>
+        </div>
+      </div>
 {% include 'tenant/footer.html' %}
 		 
 
@@ -183,10 +272,12 @@ function calcular_subtotal(id, algo, precio){
     elemento.innerText = "";
     elemento.innerText = resultado;
     calcular_total();
+    calcular_total_i();
 }
 
 $(document).ready(function() {
     calcular_total();
+    calcular_total_i();
 });
 
 function calcular_total(){
@@ -199,6 +290,18 @@ function calcular_total(){
     elemento.innerText = "";
     elemento.innerText = suma;
 }
+
+function calcular_total_i(){
+    var cantidad = {{ingredientes|length }};    
+    var suma = 0;
+    for(i=0; i<cantidad; i++){
+        suma += parseInt(document.getElementById("total_ig_"+id_ingredientes[i]).innerHTML);        
+    }    
+    elemento = document.getElementById('total_i');
+    elemento.innerText = "";
+    elemento.innerText = suma;
+}
+
 
 function del_to_cart(event,producto){
         event.preventDefault();
