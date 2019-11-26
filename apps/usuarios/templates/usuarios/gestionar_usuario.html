@@ -53,14 +53,16 @@
                         <table class="table table-bordered data-combine">
                             <thead>
                                 <tr>
-                                    <th>username</th>
-                                    <th>first_name</th>
-                                    <th>last_name</th>
-                                    <th>rol</th>
+                                    <th>E-mail</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Rol</th>
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for usuario in usuarios %}
+                                {% if usuario.usuario.rol != 'c'%}
                                     <tr>
                                         <td>{{ usuario.username }}</td>
                                         <td>{{ usuario.first_name }}</td>
@@ -80,6 +82,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>

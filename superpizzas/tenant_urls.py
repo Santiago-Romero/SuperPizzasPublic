@@ -1,7 +1,7 @@
 
 from django.urls import path, include
 from apps.franquicias.views import home, inicio_tenants, configuraciones,informacion, factura_PDF,renuncia, ordenar,CartAgregar,CartListar, CartDelete,AgregarCantidadCarrito,CartComprar,CartSuccess, vender, reportes,VentaCantidades,VenderPago,ventas
-from apps.usuarios.views import inicio_sesion, cerrar_sesion,gestionar_cliente, check_email
+from apps.usuarios.views import inicio_sesion, cerrar_sesion,gestionar_cliente, check_email,mostrarclientes
 from django.conf.urls import url
 
 urlpatterns = [
@@ -13,7 +13,6 @@ urlpatterns = [
     path('admin/pizzas/', include('apps.pizzas.urls', namespace='pizzas')),
     path('admin/usuarios/', include('apps.usuarios.urls', namespace='usuarios')),
     path('registroclientes/',gestionar_cliente,name='registro'),  
-    path('modificarclientes/<int:id_usuario>/', gestionar_cliente, name='modificar'),
     path('validate_email/', check_email, name='check_email'),  
     path('admin/ingredientes/', include('apps.ingredientes.urls', namespace='ingredientes')),
     path('admin/configuraciones/',configuraciones, name='configuraciones'),
@@ -33,5 +32,6 @@ urlpatterns = [
     path('cantidades_ventas', VentaCantidades.as_view(), name='venta_cantidades'),
     path('admin/reportes/',reportes,name='reportes'),
     path('admin/ventas/',ventas,name='ventas'),
+    path('admin/clientes/',mostrarclientes,name='clientes'),
 
 ]
