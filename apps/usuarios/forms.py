@@ -35,6 +35,7 @@ class UsuarioForm2(forms.ModelForm):
         'cc',
         'telefono',
         'pais',
+        'direccion',
         'nombre_banco',
         'fecha_vencimiento',
         'tipo_tarjeta',

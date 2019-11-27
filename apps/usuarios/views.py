@@ -292,7 +292,7 @@ def modificarcliente(request):
         if request.method == 'POST':
             usuario = get_object_or_404(Usuario, id=request.user.usuario.id)
             user = User.objects.get(pk=usuario.user.id)
-            form = UsuarioForm2(request.POST, instance=usuario)
+            form = UsuarioForm(request.POST, instance=usuario)
             form2 = UpdateUser(data=request.POST, instance=user)
             if form.is_valid():
                 form.save()
@@ -308,7 +308,7 @@ def modificarcliente(request):
                 messages.error(request, 'Por favor verificar los campos en rojo')
         usuario = get_object_or_404(Usuario, id=request.user.usuario.id)
         user = User.objects.get(pk=usuario.user.id)
-        form = UsuarioForm2(instance=usuario)
+        form = UsuarioForm(instance=usuario)
         form.fields['rol'].initial = [usuario.rol]
         form2 = UpdateUser(instance=user)
         return render(request, 'usuarios/modificar_cliente.html', {'form': form, 'usuario': usuario,'form2':form2})
