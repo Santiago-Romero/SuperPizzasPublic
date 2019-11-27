@@ -44,7 +44,8 @@
                                             {{ingrediente.nombre}},
                                             {% endfor %}
                                             {%endif%}    
-                                            {%endfor%}      
+                                            {%endfor%} 
+                                 
                                         </td>                                       
                                         <td>
                                             <div class="input-group mb-3">
@@ -153,8 +154,7 @@
                                                             <i class="fa fa-minus text-danger"></i>
                                                         </span>
                                                   </div>
-                                                  <input type="number" name="ig_{{ingrediente.id}}" class="form-control input-number" value="0"
-                                                  min="0" max="3" disabled>
+                                                  <input type="number" name="ig_{{ingrediente.id}}" class="form-control input-number" value="0"  min="0" max="3" disabled>
                                                     <div class="input-group-append">
                                                         <span style="cursor:pointer" class="input-group-text " onclick="clic_cantidad(event,this,{{ingrediente.valor}})" data-type="plus" data-field="ig_{{ingrediente.id}}">
                                                             <i class="fa fa-plus text-success"></i>
@@ -178,7 +178,7 @@
             </div>
             <div class="modal-footer">
              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-             <button type="button" class="btn btn-primary">Guardar cambios</button>
+             <button type="button" class="btn btn-primary " onclick="ingredientes_adicionales(event);">Guardar cambios</button>
             </div>
           </div>
         </div>
@@ -213,7 +213,7 @@
     
   </body>
 </html>
-<script type="text/javascript">
+<script type="text/javascript">    
     function clic_cantidad(e, algo, precio){
     e.preventDefault();
     fieldName = $(algo).attr('data-field');
@@ -277,7 +277,7 @@ function calcular_subtotal(id, algo, precio){
 
 $(document).ready(function() {
     calcular_total();
-    calcular_total_i();
+    calcular_total_i();    
 });
 
 function calcular_total(){
@@ -334,7 +334,7 @@ function del_to_cart(event,producto){
         var suma = 0;
         for(i=0; i<cantidad; i++){
             var item = {}
-            var input = $("input[name='"+ids[i]+"']");
+            var input = $("input[name='"+ids[i]+"']");            
             var currentVal = parseInt(input.val());
             item = {'id': ids[i], 'cantidad':currentVal}
             inputs[ids[i]]= item;
@@ -348,10 +348,49 @@ function del_to_cart(event,producto){
             data: {
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 cantidades: JSON.stringify(inputs)
+                
             },
             success: function(data){
                 window.location = "{% url 'cart_comprar' %}";
             }
         });
     }
+
+    function ingredientes_adicionales(event){
+        console.log("entro adicionales")
+        event.preventDefault();
+        inputs = {}
+        var cantidad = {{ingredientes|length }};
+        var suma = 0;
+        for(i=0; i<cantidad; i++){
+            var item = {}
+            var input = $("input[name='"+"ig_"+id_ingredientes[i]+"']");
+            console.log("ig_"+id_ingredientes[i]);
+            console.log(input);
+            var currentVal = parseInt(input.val());
+            if (currentVal !=0){            
+            item = {'id': id_ingredientes[i], 'cantidad':currentVal}
+            inputs[id_ingredientes[i]]= item;
+        }}
+        console.log(inputs);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'ingredientes_cantidades' %}",
+            dataType: "json",
+            async: true,
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                ingredientes_add: JSON.stringify(inputs)   
+                             
+            },
+            
+            success: function(data){                        
+             $("#exampleModalCenter").modal("hide");                 
+            }
+            
+        });
+    } 
+
+
+
 </script>
