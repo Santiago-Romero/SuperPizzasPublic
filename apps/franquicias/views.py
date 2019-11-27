@@ -71,8 +71,7 @@ def inicio_franquicia(request):
     tipos = TipoFranquicia.objects.all()
     return render(request, 'landingpage/index.html', {'tenants':dominios,'tipos':tipos})
 
-def compra_franquicia(request,tipo):
-    
+def compra_franquicia(request,tipo):    
     dominios = Dominio.objects.exclude(tenant__schema_name='public').select_related('tenant')
 
     tipoir=TipoFranquicia.objects.get(nombre=tipo)
@@ -375,7 +374,8 @@ class CartListar(TemplateView):
         if(self.request.tenant.working==True):
             context = super(CartListar, self).get_context_data(**kwargs)
             franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
-            context['ingredientes']= Ingrediente.objects.all()
+                    
+            context['ingredientes']= Ingrediente.objects.all() 
             context['franquicia']=self.request
             context['pizzas']=Pizza.objects.filter(enventa=True)
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
@@ -610,6 +610,18 @@ class VentaCantidades(TemplateView):
             cantidades = request.POST.get("cantidades_venta", "")
             detalles = []
             self.request.session['cantidades_venta'] = cantidades
+            respuesta = {'estado': True, }
+            return JsonResponse(respuesta)
+        else:
+            return render(request,"404.html",{})
+
+class IngredientesAd(TemplateView):
+
+    def post(self, request):
+        if(request.tenant.working==True):            
+            ingredientes = request.POST.get("ingredientes_add", "")
+            detalles = []
+            self.request.session['ingredientes_add'] = ingredientes
             respuesta = {'estado': True, }
             return JsonResponse(respuesta)
         else:
