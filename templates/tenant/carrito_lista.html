@@ -44,6 +44,16 @@
                                             {{ingrediente.nombre}},
                                             {% endfor %}
                                             {%endif%}    
+                                            {%endfor%}
+                                            <br>
+                                            adicionales:
+                                            {% for key, adiciones in adicionales.items %}
+                                            {% for ingrediente in ingredientes %}                                            
+                                            {% if adiciones.id == ingrediente.id %}
+                                            {{adiciones.cantidad}}
+                                            {{ingrediente.nombre}},                                           
+                                            {%endif%}
+                                            {%endfor%}                                                                                       
                                             {%endfor%} 
                                  
                                         </td>                                       
@@ -63,7 +73,11 @@
                                                   </div>
                                             </div>
                                         </td>
-                                        <td>{{ un_producto.valor}}</td>
+                                        <td>{{ un_producto.valor}}
+                                            <br>
+                                            <br>                                           
+                                            <label id="total_adicionales">test</label>
+                                        </td>
                                         <td id="total_{{un_producto.id}}">{{ un_producto.valor}}</td>
                                         <td>
                                             <a class="text-danger" href="#" onclick="del_to_cart(event,{{un_producto.id}})">
@@ -366,7 +380,7 @@ function del_to_cart(event,producto){
             var item = {}
             var input = $("input[name='"+"ig_"+id_ingredientes[i]+"']");
             console.log("ig_"+id_ingredientes[i]);
-            console.log(input);
+            console.log(input.val());
             var currentVal = parseInt(input.val());
             if (currentVal !=0){            
             item = {'id': id_ingredientes[i], 'cantidad':currentVal}
@@ -384,8 +398,9 @@ function del_to_cart(event,producto){
                              
             },
             
-            success: function(data){                        
-             $("#exampleModalCenter").modal("hide");                 
+            success: function(data){    
+             window.location = "{% url 'cart_listar' %}";                    
+                            
             }
             
         });
