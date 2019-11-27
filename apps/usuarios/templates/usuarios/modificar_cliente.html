@@ -19,11 +19,75 @@
 
     <div class="main">
         <div class="container">
-            <h2>Información de cliente</h2>
+            
             <form method="POST"  id="signup-form" class="signup-form" >{% csrf_token %}
-            {{form2}}
-            {{form}}
-                <button type="submit" class="btn btn-primary">Guardar</button>
+            <h2>Información de Usuario</h2>
+            <hr>
+            <div class="form-group">
+            <label class="form-label required">Correo electrónico</label>
+            {{form2.email}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">Contraseña</label>
+            {{form2.password1}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">Confirmar contraseña</label>
+            {{form2.password2}}
+            </div>
+            <h2>Información personal</h2>
+            <hr>
+            <div class="form-group">
+            <label class="form-label required">Nombres</label>
+            {{form2.first_name}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">Apellidos</label>
+            {{form2.last_name}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">CC</label>
+            {{form.cc}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">Telefono</label>
+            {{form.telefono}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">Pais</label>
+            {{form.pais}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">Dirección</label>
+            {{form.direccion}}
+            </div>
+            <h2>Información de pago</h2>
+            <hr>
+            <div class="form-group">
+            <label class="form-label required">Banco</label>
+            {{form.nombre_banco}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">Tipo Tarjeta</label>
+            {{form.tipo_tarjeta}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">Número de Tarjeta</label>
+            {{form.numero_tarjeta}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">Fecha Vencimiento</label>
+            {{form.fecha_vencimiento}}
+            </div>
+            <div class="form-group">
+            <label class="form-label required">CVV</label>
+            {{form.cvv}}
+            </div>
+            {{form.rol}}
+            {{form.user}}
+            {{form.captcha}}
+            
+            <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
         </div>
 
