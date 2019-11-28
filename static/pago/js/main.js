@@ -270,7 +270,7 @@ $.ajaxSetup({
         labels: {
             previous : 'Anterior',
             next : 'Siguiente',
-            finish : 'Finish',
+            finish : 'Terminar',
             current : ''
         },
         titleTemplate : '<span class="title">#title#</span>',

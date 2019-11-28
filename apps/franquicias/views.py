@@ -428,13 +428,15 @@ class CartComprar(TemplateView):
         if(self.request.tenant.working==True):
             context = super(CartComprar, self).get_context_data(**kwargs)
             franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
-            form = UsuarioForm(self.request.POST or None,prefix="form2") 
             form_factura= FacturaForm(self.request.POST or None)
             admin_franquicia = Usuario.objects.get(user_id=1)
             cliente=None
             customer = self.request.user        
-            if customer.is_authenticated:                
-                cliente = Usuario.objects.get(user_id=customer.id)            
+            if customer.is_authenticated:
+                form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais': customer.usuario.pais,'direccion':customer.usuario.direccion})
+                cliente = Usuario.objects.get(user_id=customer.id)
+            else:
+                form = UsuarioForm(self.request.POST or None,prefix="form2")
             context["form"] = form_factura
             context['franquicia']=self.request
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
