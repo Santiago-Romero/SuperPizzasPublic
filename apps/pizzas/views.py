@@ -1,20 +1,28 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
+import os
 
 
 def gestionar_pizza(request, id_pizza=None):
     if((request.user.usuario.rol=='a' or request.user.usuario.rol=='d') and request.tenant.working==True):
         if id_pizza:
             pizza = get_object_or_404(Pizza, id=id_pizza)
+            pizzaTem = get_object_or_404(Pizza, id=id_pizza)
         else:
             pizza = None
+        
         form = PizzaForm(instance=pizza)
         pizzas = Pizza.objects.all()
         if request.method == 'POST':
-            form = PizzaForm(request.POST, instance=pizza)
+            form = PizzaForm(request.POST, request.FILES, instance=pizza )
             if form.is_valid():
                 form.save()
+                try:
+                    if(pizzaTem.imagen !='media/pizzas/pizza_default.jpg'):
+                        os.remove(pizzaTem.imagen.path)
+                except:
+                    print('***No se pudo Eliminar imagen anterior***')
                 messages.success(request, 'Pizza creado correctamente')
                 return redirect('pizzas:registrar')
             else:

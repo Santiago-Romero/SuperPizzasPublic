@@ -4,13 +4,13 @@ from django.db import migrations
 
 def CreaPizzas(apps, schema_editor):
 	 pizza = apps.get_model('pizzas', 'pizza')
-	 p1 = pizza(nombre = "Hawaiana", valor = 10, descripcion = "Tradicional")
+	 p1 = pizza(nombre = "Hawaiana", valor = 10, descripcion = "Tradicional", imagen = "media/pizzas/pizza_default.jpg")
 	 p1.save()
 	 pizza = apps.get_model('pizzas', 'pizza')
-	 p2 = pizza(nombre = "Pollo y Champiñones", valor = 10, descripcion = "Tradicional")
+	 p2 = pizza(nombre = "Pollo y Champiñones", valor = 10, descripcion = "Tradicional", imagen = "media/pizzas/pizza_default.jpg")
 	 p2.save()
 	 pizza = apps.get_model('pizzas', 'pizza')
-	 p3 = pizza(nombre = "Jamon y Queso", valor = 10, descripcion = "Tradicional")
+	 p3 = pizza(nombre = "Jamon y Queso", valor = 10, descripcion = "Tradicional", imagen = "media/pizzas/pizza_default.jpg")
 	 p3.save()
 	 
 	 

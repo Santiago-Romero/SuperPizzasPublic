@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_protect
 from rolepermissions.roles import assign_role
 from django.http import HttpResponse
 from django.http import HttpRequest
+from apps.franquicias.models import Franquicia
+import json
 
 def gestionar_usuario(request, id_usuario=None):
     ## DE ESTE NO ESTOY SEGURO
@@ -110,8 +112,11 @@ def gestionar_cliente(request):
                 messages.error(request, 'Por favor verificar los campos en rojo')
         else:
             form = UsuarioForm(prefix="form2",initial={'rol': 'c'})
-            formUserDjango = UserForm(prefix="form3")        
-        return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': formUserDjango})
+            formUserDjango = UserForm(prefix="form3")
+
+        datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
+       
+        return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': formUserDjango, 'colorprimario': json.loads(datosfran.configuracion)['colorprimario'], 'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario']})
     else:
         return render(request,"404.html",{})
 
@@ -184,9 +189,12 @@ def inicio_sesion(request):
                 messages.add_message(request, messages.INFO, 'Error')
         else:
             formulario = UserAuthenticationForm()
-            
+
+        datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
         contexto = {
-            'formulario': formulario
+            'formulario': formulario,
+            'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
+            'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
         }
 
         return render(request,  'tenant/login.html', context=contexto)
@@ -311,6 +319,7 @@ def modificarcliente(request):
         form = UsuarioForm2(instance=usuario)
         form.fields['rol'].initial = [usuario.rol]
         form2 = UpdateUser(instance=user)
-        return render(request, 'usuarios/modificar_cliente.html', {'form': form, 'usuario': usuario,'form2':form2})
+        datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
+        return render(request, 'usuarios/modificar_cliente.html', {'form': form, 'usuario': usuario,'form2':form2, 'colorprimario': json.loads(datosfran.configuracion)['colorprimario'], 'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario']})
     else:
         return render(request,"404.html",{})

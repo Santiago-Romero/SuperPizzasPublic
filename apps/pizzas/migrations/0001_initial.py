@@ -23,6 +23,7 @@ class Migration(migrations.Migration):
                 ('descripcion', models.CharField(default='', max_length=250)),
                 ('especial', models.BooleanField(default=True)),
                 ('enventa', models.BooleanField(default=True)),
+                ('imagen', models.FileField(upload_to='media/pizzas/', blank=True, null=True)),
                 ('ingrediente', models.ManyToManyField(to='ingredientes.Ingrediente')),
             ],
         ),
