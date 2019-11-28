@@ -254,33 +254,11 @@ def ordenar(request):
         return render(request,"404.html",{})
     
 def configuraciones(request):
-    if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
-        if(request.tenant.tipo.nombre=="premium"):
-            datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
-            contexto = {'franquicia': datosfran, 
-            'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
-            'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
-            'logo':  datosfran.media,
-            'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
-            }
-
-            if request.method == 'POST':
-                datosfran.configuracion = '{\"colorprimario\":\"#'+ request.POST.get("colorpimario") +'\",\"colorsecundario\":\"#'+ request.POST.get("colorsecundario") +'\", \"tamanioletra\":'+ request.POST.get("tamanioLetra") +'}'
-                
-                if request.FILES.get('inputFileLogoConfig') != None:
-                    pathLogoAnterior = datosfran.media
-                    if pathLogoAnterior != 'media/logos-franquicias/1_logo_default.png':
-                        try:
-                            os.remove(datosfran.media.path)
-                        except:
-                            print('***No se pudo Eliminar imagen anterior***')
-                    datosfran.media = request.FILES.get('inputFileLogoConfig')
-                try:    
-                    datosfran.save()
-                    messages.success(request, 'Configuraciones guardadas correctamente')
-                except:
-                    messages.error(request, 'Error al intentar guardar configuraciones')
-
+    if request.user.is_anonymous:
+        return render(request,"404.html",{})
+    else:
+        if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
+            if(request.tenant.tipo.nombre=="premium"):
                 datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
                 contexto = {'franquicia': datosfran, 
                 'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
@@ -288,40 +266,68 @@ def configuraciones(request):
                 'logo':  datosfran.media,
                 'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
                 }
-            return render(request,'franquicias/configuraciones.html', contexto)
+
+                if request.method == 'POST':
+                    datosfran.configuracion = '{\"colorprimario\":\"#'+ request.POST.get("colorpimario") +'\",\"colorsecundario\":\"#'+ request.POST.get("colorsecundario") +'\", \"tamanioletra\":'+ request.POST.get("tamanioLetra") +'}'
+                    
+                    if request.FILES.get('inputFileLogoConfig') != None:
+                        pathLogoAnterior = datosfran.media
+                        if pathLogoAnterior != 'media/logos-franquicias/1_logo_default.png':
+                            try:
+                                os.remove(datosfran.media.path)
+                            except:
+                                print('***No se pudo Eliminar imagen anterior***')
+                        datosfran.media = request.FILES.get('inputFileLogoConfig')
+                    try:    
+                        datosfran.save()
+                        messages.success(request, 'Configuraciones guardadas correctamente')
+                    except:
+                        messages.error(request, 'Error al intentar guardar configuraciones')
+
+                    datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
+                    contexto = {'franquicia': datosfran, 
+                    'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
+                    'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
+                    'logo':  datosfran.media,
+                    'tamanioletra': json.loads(datosfran.configuracion)['tamanioletra']
+                    }
+                return render(request,'franquicias/configuraciones.html', contexto)
+            else:
+                return redirect('/admin')
         else:
-            return redirect('/admin')
-    else:
-        return render(request,"404.html",{})
+            return render(request,"404.html",{})
 
 def informacion(request):
-    if(request.user.usuario.rol=='a' and request.tenant.working==True):
-        inicio=request.tenant.fecha_corte
-        dias=date.today()-inicio
-        if request.method == 'POST':
-            formulario = UserAuthenticationForm(request.POST)
-            if formulario.is_valid:
-                username = request.POST['username']
-                password = request.POST['password']
-                acceso_user = authenticate(username = username, password = password)
-                user = User.objects.get(username=acceso_user)
-                perfil = Usuario.objects.get(user=user)
-                if acceso_user is not None and perfil.rol== 'a':
-                    if acceso_user.is_active:
-                        return renuncia(request)
+    if request.user.is_anonymous:
+        return render(request,"404.html",{})
+    else:
+        if(request.user.usuario.rol=='a' and request.tenant.working==True):
+            inicio=request.tenant.fecha_corte
+            dias=date.today()-inicio
+            if request.method == 'POST':
+                formulario = UserAuthenticationForm(request.POST)
+                if formulario.is_valid:
+                    username = request.POST['username']
+                    password = request.POST['password']
+                    acceso_user = authenticate(username = username, password = password)
+                    user = User.objects.get(username=acceso_user)
+                    perfil = Usuario.objects.get(user=user)
+                    if acceso_user is not None and perfil.rol== 'a':
+                        if acceso_user.is_active:
+                            return renuncia(request)
+                        else:
+                            messages.add_message(request, messages.INFO, 'Error en usuario y contraseña')
                     else:
                         messages.add_message(request, messages.INFO, 'Error en usuario y contraseña')
                 else:
                     messages.add_message(request, messages.INFO, 'Error en usuario y contraseña')
             else:
-                messages.add_message(request, messages.INFO, 'Error en usuario y contraseña')
-        else:
-            formulario = UserAuthenticationForm()
+                formulario = UserAuthenticationForm()
 
-        context={'dias':dias.days,'formulario':formulario}
-        return render(request,'franquicias/info.html',context)
-    else:
-        return render(request,"404.html",{})
+            context={'dias':dias.days,'formulario':formulario}
+            return render(request,'franquicias/info.html',context)
+        else:
+            return render(request,"404.html",{})
 
 def renuncia(request):
     enviarcorreo("Retiro de franquicia {r}".format(r=request.tenant.nombre),"Gracias por haber adquirirdo nuestra franquicia te esperamos pronto de vuelta",[request.user.username])
@@ -428,13 +434,15 @@ class CartComprar(TemplateView):
         if(self.request.tenant.working==True):
             context = super(CartComprar, self).get_context_data(**kwargs)
             franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
-            form = UsuarioForm(self.request.POST or None,prefix="form2") 
             form_factura= FacturaForm(self.request.POST or None)
             admin_franquicia = Usuario.objects.get(user_id=1)
             cliente=None
             customer = self.request.user        
-            if customer.is_authenticated:                
-                cliente = Usuario.objects.get(user_id=customer.id)            
+            if customer.is_authenticated:
+                form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais': customer.usuario.pais,'direccion':customer.usuario.direccion})
+                cliente = Usuario.objects.get(user_id=customer.id)
+            else:
+                form = UsuarioForm(self.request.POST or None,prefix="form2")
             context["form"] = form_factura
             context['franquicia']=self.request
             context['colorprimario'] = json.loads(franquicia.configuracion)['colorprimario']
@@ -589,22 +597,25 @@ def factura_PDF(request, id_factura=None):
     return response
 
 def vender(request):
-    if(request.user.usuario.rol=='v' and request.tenant.working==True):
-        franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
-        context = {
-            'pizzas':Pizza.objects.all(),        
-            'enventas': Pizza.objects.filter(enventa=True),
-            'franquicia':request,
-            'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
-            'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
-            'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
-            'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
-            'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
-            'logo':  franquicia.media,
-        }
-        return render(request, 'tenant/vender.html', context)
-    else:
+    if request.user.is_anonymous:
         return render(request,"404.html",{})
+    else:
+        if(request.user.usuario.rol=='v' and request.tenant.working==True):
+            franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
+            context = {
+                'pizzas':Pizza.objects.all(),        
+                'enventas': Pizza.objects.filter(enventa=True),
+                'franquicia':request,
+                'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
+                'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
+                'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
+                'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
+                'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
+                'logo':  franquicia.media,
+            }
+            return render(request, 'tenant/vender.html', context)
+        else:
+            return render(request,"404.html",{})
 
 class VentaCantidades(TemplateView):
 
@@ -631,116 +642,125 @@ class IngredientesAd(TemplateView):
             return render(request,"404.html",{})
 
 def VenderPago(request):
-    if(request.user.usuario.rol=='v' and request.tenant.working==True):
-        franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
-        cantidades = request.session.get('cantidades_venta', {})
-        cantidades_dict = json.loads(cantidades)  
-        cliente=None
-        customer = request.user    
-        id=[]     
-        if customer.is_authenticated: 
-            cliente = Usuario.objects.get(user_id=customer.id)                
-        for k, v in cantidades_dict.items():
-            id.append(v['id']) 
-        pizza_item = Pizza.objects.filter(id__in=id)           
-        if request.method == 'POST': 
-            customer = request.user        
-            if customer.is_authenticated:
-                cliente = Usuario.objects.get(user_id=customer.id)
-                factura = Factura(direccion='local', ciudad='local', cliente=cliente)
-                factura.save()                               
-            for k, v in cantidades_dict.items():
-                producto_item = Pizza.objects.filter(id=v['id']).values()[0] 
-                detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
-                                    producto_id=v['id'])
-                detalle_item.save()
-            request.session['cantidades_venta'] = {}
-            messages.success(request, 'Venta realizada')
-            return redirect('vender')
-        else:
-            context = {
-                'productos': pizza_item ,
-                'cantidades':cantidades_dict,
-                'franquicia':request,
-                'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
-                'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
-                'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
-                'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
-                'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
-                'logo':  franquicia.media,               
-            }
-            return render(request, 'tenant/vender_pago.html', context)
-    else:
+    if request.user.is_anonymous:
         return render(request,"404.html",{})
+    else:
+        if(request.user.usuario.rol=='v' and request.tenant.working==True):
+            franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
+            cantidades = request.session.get('cantidades_venta', {})
+            cantidades_dict = json.loads(cantidades)  
+            cliente=None
+            customer = request.user    
+            id=[]     
+            if customer.is_authenticated: 
+                cliente = Usuario.objects.get(user_id=customer.id)                
+            for k, v in cantidades_dict.items():
+                id.append(v['id']) 
+            pizza_item = Pizza.objects.filter(id__in=id)           
+            if request.method == 'POST': 
+                customer = request.user        
+                if customer.is_authenticated:
+                    cliente = Usuario.objects.get(user_id=customer.id)
+                    factura = Factura(direccion='local', ciudad='local', cliente=cliente)
+                    factura.save()                               
+                for k, v in cantidades_dict.items():
+                    producto_item = Pizza.objects.filter(id=v['id']).values()[0] 
+                    detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
+                                        producto_id=v['id'])
+                    detalle_item.save()
+                request.session['cantidades_venta'] = {}
+                messages.success(request, 'Venta realizada')
+                return redirect('vender')
+            else:
+                context = {
+                    'productos': pizza_item ,
+                    'cantidades':cantidades_dict,
+                    'franquicia':request,
+                    'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
+                    'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
+                    'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
+                    'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
+                    'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
+                    'logo':  franquicia.media,               
+                }
+                return render(request, 'tenant/vender_pago.html', context)
+        else:
+            return render(request,"404.html",{})
 
 
 
 def reportes(request):
-    if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
-        vmeses=[0,0,0,0,0,0,0,0,0,0,0,0]
-        npizzas=[]
-        vendedores=[]
-        ventasVendedores=[]
-        diasSemana=[0,0,0,0,0,0,0]
-        contador1=0
-        relacioncompras=[0,0,0]
-        for cliente in Usuario.objects.all():
-            if(cliente.rol=='v'):
-                vendedores.append(cliente.user.username)
-                ventasVendedores.append(0)
-                for factura in Factura.objects.all():
-                    if(factura.cliente.id==cliente.id):
-                        ventasVendedores[contador1]+=1
-                contador1+=1
-            if(cliente.rol=='c'):
-                contadorcliente=0
-                for factura in Factura.objects.all():
-                    if(cliente.id==factura.cliente.id):
-                        contadorcliente+=1
-                if(contadorcliente==0):
-                    relacioncompras[0]+=1
-                elif(contadorcliente==1):
-                    relacioncompras[1]+=1
-                else:
-                    relacioncompras[2]+=1
-        sonespeciales=[0,0]
-        total=0
-        for pizza in Pizza.objects.all():
-            npizzas.append(0)
-        
-        for detalle in Detalle.objects.all():
-            npizzas[detalle.producto.id-1] += detalle.cantidad
-            total += detalle.cantidad
-            if(detalle.producto.especial==True):
-                sonespeciales[0]+=detalle.cantidad
-            else:
-                sonespeciales[1]+=detalle.cantidad
-        if(total!=0):
-            porcentajeEspecial=(sonespeciales[0]*100)/total
-            porcentajeNoEspecial=(sonespeciales[1]*100)/total
-        else:
-            porcentajeEspecial=0
-            porcentajeNoEspecial=0
-        laspizzas=list(Pizza.objects.values_list('id', flat=True))
-
-        for factura in Factura.objects.all():
-            diasSemana[factura.fecha_creacion.weekday()]+=1
-            vmeses[factura.fecha_creacion.month-1]+=1
-
-        contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'npizzas':npizzas,'pizzas':laspizzas,'especial':porcentajeEspecial,'noespecial':porcentajeNoEspecial, 'vendedores':vendedores, 'ventasvendedores':ventasVendedores,'ventasdias':diasSemana,'relacioncompras':relacioncompras}
-        print(relacioncompras)
-        return render(request,'franquicias/graficos.html', contexto)
-    else:
+    if request.user.is_anonymous:
         return render(request,"404.html",{})
+    else:
+        if(request.user.usuario.rol=='a' and request.tenant.working==True and request.tenant.tipo.nombre=='premium'):
+            vmeses=[0,0,0,0,0,0,0,0,0,0,0,0]
+            npizzas=[]
+            vendedores=[]
+            ventasVendedores=[]
+            diasSemana=[0,0,0,0,0,0,0]
+            contador1=0
+            relacioncompras=[0,0,0]
+            for cliente in Usuario.objects.all():
+                if(cliente.rol=='v'):
+                    vendedores.append(cliente.user.username)
+                    ventasVendedores.append(0)
+                    for factura in Factura.objects.all():
+                        if(factura.cliente.id==cliente.id):
+                            ventasVendedores[contador1]+=1
+                    contador1+=1
+                if(cliente.rol=='c'):
+                    contadorcliente=0
+                    for factura in Factura.objects.all():
+                        if(cliente.id==factura.cliente.id):
+                            contadorcliente+=1
+                    if(contadorcliente==0):
+                        relacioncompras[0]+=1
+                    elif(contadorcliente==1):
+                        relacioncompras[1]+=1
+                    else:
+                        relacioncompras[2]+=1
+            sonespeciales=[0,0]
+            total=0
+            for pizza in Pizza.objects.all():
+                npizzas.append(0)
+            
+            for detalle in Detalle.objects.all():
+                npizzas[detalle.producto.id-1] += detalle.cantidad
+                total += detalle.cantidad
+                if(detalle.producto.especial==True):
+                    sonespeciales[0]+=detalle.cantidad
+                else:
+                    sonespeciales[1]+=detalle.cantidad
+            if(total!=0):
+                porcentajeEspecial=(sonespeciales[0]*100)/total
+                porcentajeNoEspecial=(sonespeciales[1]*100)/total
+            else:
+                porcentajeEspecial=0
+                porcentajeNoEspecial=0
+            laspizzas=list(Pizza.objects.values_list('id', flat=True))
+
+            for factura in Factura.objects.all():
+                diasSemana[factura.fecha_creacion.weekday()]+=1
+                vmeses[factura.fecha_creacion.month-1]+=1
+
+            contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'npizzas':npizzas,'pizzas':laspizzas,'especial':porcentajeEspecial,'noespecial':porcentajeNoEspecial, 'vendedores':vendedores, 'ventasvendedores':ventasVendedores,'ventasdias':diasSemana,'relacioncompras':relacioncompras}
+            print(relacioncompras)
+            return render(request,'franquicias/graficos.html', contexto)
+        else:
+            return render(request,"404.html",{})
 
 def ventas(request):
-    if(request.user.usuario.rol=='a' and request.tenant.working==True):
-        facturas=Factura.objects.all()
-        detalles=Detalle.objects.all()
-        context={'facturas':facturas,'detalles':detalles}
-        return render(request,'franquicias/ventas.html',context)
-    else:
+    if request.user.is_anonymous:
         return render(request,"404.html",{})
+    else:
+        if(request.user.usuario.rol=='a' and request.tenant.working==True):
+            facturas=Factura.objects.all()
+            detalles=Detalle.objects.all()
+            context={'facturas':facturas,'detalles':detalles}
+            return render(request,'franquicias/ventas.html',context)
+        else:
+            return render(request,"404.html",{})
 
 def encontrarChurnRate(periodoActual,periodoAnterior):
     totalCustomers=0
