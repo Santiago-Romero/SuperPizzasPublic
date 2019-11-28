@@ -9,6 +9,7 @@ urlpatterns = [
     path('compra/<str:tipo>', compra_franquicia, name='compra'),
     path('accounts/', include('allauth.urls')),
     path('admin/', home_admin, name='home'),
+    #path('admin/',admin.site.urls),
     path('login/', inicio_sesion_admin,name='login'), 
     path('cerrar_sesion/',cerrar_sesion, name='cerrar_sesion'),    
     path('validate/', check_schema, name='check_schema'),  
