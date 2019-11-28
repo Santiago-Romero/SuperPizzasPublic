@@ -211,7 +211,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID=1
-LOGIN_REDIRECT_URL= '/admin'
+LOGIN_REDIRECT_URL= '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
