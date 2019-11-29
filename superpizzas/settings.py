@@ -199,9 +199,9 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_collected')
 MEDIA_ROOT = os.path.join(BASE_DIR, "static")
 
-NORECAPTCHA_SITE_KEY = "6LduqL8UAAAAAFLmpECMTGr1qkCueUDg5NYDDFcr"
-NORECAPTCHA_SECRET_KEY = "6LduqL8UAAAAAM0P2SZslr4SJ9koM0ZWv9BOsU7"
-SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+RECAPTCHA_PUBLIC_KEY = "6LdEWMUUAAAAAHwBecBbPQVp4Yjc0sYBK92_DWUO"
+RECAPTCHA_PRIVATE_KEY = "6LdEWMUUAAAAAJqE8EN4AKMUOnlYxXuCo6iCnG1l"
+#SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 # Django all auth settings
 
