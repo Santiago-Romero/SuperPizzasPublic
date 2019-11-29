@@ -29,11 +29,13 @@
                                     <script type="text/javascript">
                                             var ids = []
                                             var id_ingredientes=[]
+                                            var precio_i=1  
+                                            var pizzas_adici=0                                          
                                      </script>
-                                    {% for key, un_producto in productos.items %}
+                                         {% for key, un_producto in productos.items %}
                                     <tr>
                                         <script type="text/javascript">
-                                            ids.push({{un_producto.id}});
+                                            ids.push({{un_producto.id}});                                                                                                                        
                                         </script>                                      
                                         <td><img src="{% static 'landing-tenant/images/pizza-1.jpg' %}" alt="Foto Producto" height="150" width="150"></td>
                                         <td>{{ un_producto.nombre }}: {{ un_producto.descripcion}}
@@ -47,15 +49,21 @@
                                             {%endif%}    
                                             {%endfor%}
                                             <br>
-                                            adicionales:
-                                            {% for key, adiciones in adicionales.items %}
-                                            {% for ingrediente in ingredientes %}                                            
-                                            {% if adiciones.id == ingrediente.id %}
+                                            adicionales:                                               
+                                            {% for key, adiciones in adicionales.items %} 
+                                            <script type="text/javascript">
+                                            console.log({{adiciones.id}});                                                                                                                       
+                                            </script>                                     
+                                            {%if adiciones.id_pizza == un_producto.id%}  
+                                            {% for ingrediente in ingredientes %}
+                                            {% if adiciones.id == ingrediente.id %}                                            
                                             {{adiciones.cantidad}}
-                                            {{ingrediente.nombre}},                                                                                  
-                                            {%endif%}
-                                            {%endfor%}                                                                                       
+                                            {{ingrediente.nombre}}, 
+                                            {%endif%}                                           
                                             {%endfor%} 
+                                            {%endif%}                                                                                      
+                                            {%endfor%} 
+                                            
                                  
                                         </td>                                       
                                         <td>
@@ -81,11 +89,14 @@
                                         <br> 
                                         {% for key, adiciones in adicionales.items %}                                        
                                         {% if forloop.last %}
-                                        {{adiciones.total}}
+                                        <label id="precio_ingredientes_{{un_producto.id}}">{{adiciones.total}}</label>
+                                        <script type="text/javascript">
+                                            var precio_i = {{adiciones.total}};                                            
+                                        </script>
                                         {%endif%}                                                                                     
                                         {%endfor%} 
                                         </td>
-                                        <td id="adicionales_{{un_producto.id}}"></td>
+                                        <td id="total_pizza_adicional_{{un_producto.id}}"></td>
                                         <td>
                                             <a class="text-danger" href="#" onclick="del_to_cart(event,{{un_producto.id}})">
                                                 <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
@@ -97,10 +108,8 @@
                                             <td>
                                                 <div>
                                                         <span class="text-danger"> Desea añadir ingredientes adicionales? </span>
-                                                        <a class="btn btn-danger float-right mb-3 mr-2" data-toggle="modal" data-target="#exampleModalCenter" > <span> Si </span> 
-                                                        <script type="text/javascript">
-                                                         var pizza_adicional={{un_producto.id}};
-                                                         </script>
+                                                        <a class="btn btn-danger float-right mb-3 mr-2" data-toggle="modal" data-target="#exampleModalCenter"onclick="pizzas_adici={{un_producto.id}}" data-id="{{ un_producto.id }}"> <span> Si </span> 
+                                                                                                        
                                                         </a>                                                
                                                       </div>
                                             </td>
@@ -239,7 +248,8 @@
     
   </body>
 </html>
-<script type="text/javascript">    
+<script type="text/javascript">  
+
     function clic_cantidad(e, algo, precio){
     e.preventDefault();
     fieldName = $(algo).attr('data-field');
@@ -294,9 +304,23 @@ function calcular_subtotal(id, algo, precio){
     var input = $("input[name='"+id+"']");
     var currentVal = Number(input.val());
     resultado = currentVal*precio;
+    resultado_i=currentVal*precio_i;
+    totalPizza=resultado+resultado_i;
+    //
     elemento = document.getElementById('total_'+id);
     elemento.innerText = "";
     elemento.innerText = resultado;
+    //
+    elemento1 = document.getElementById('precio_ingredientes_'+id);  
+    if(elemento1!=null){
+    elemento1.innerText = "";
+    elemento1.innerText = resultado_i;
+    }
+    //
+    elemento2= document.getElementById('total_pizza_adicional_'+id);      
+    elemento2.innerText = "";
+    elemento2.innerText = totalPizza;
+    
     calcular_total();
     calcular_total_i();
 }
@@ -384,7 +408,7 @@ function del_to_cart(event,producto){
 
     function ingredientes_adicionales(event){
         console.log("entro adicionales")
-        event.preventDefault();
+        event.preventDefault();        
         inputs = {}
         var cantidad = {{ingredientes|length }};
         var suma = 0;
@@ -393,8 +417,8 @@ function del_to_cart(event,producto){
             var item = {}
             var input = $("input[name='"+"ig_"+id_ingredientes[i]+"']");        
             var currentVal = parseInt(input.val());
-            if (currentVal !=0){            
-            item = {'id': id_ingredientes[i], 'cantidad':currentVal, 'total':total_precio}
+            if (currentVal !=0){ 
+            item = {'id': id_ingredientes[i], 'cantidad':currentVal, 'total':total_precio,'id_pizza':pizzas_adici}
             inputs[id_ingredientes[i]]= item;
         }}
         console.log(inputs);
@@ -410,7 +434,7 @@ function del_to_cart(event,producto){
             },
             
             success: function(data){    
-             window.location = "{% url 'cart_listar' %}";                    
+           window.location = "{% url 'cart_listar' %}";                    
                             
             }
             
