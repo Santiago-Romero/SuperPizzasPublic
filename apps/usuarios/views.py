@@ -28,21 +28,12 @@ def gestionar_usuario(request, id_usuario=None):
 
                     if formUserDjango.is_valid():
                         usuario = formUserDjango.save(commit=False)
-                                
                         usuario = User(username=request.POST['email'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
-                                
                         usuario.set_password(request.POST['password1'])
-                                
                         usuario.save()
-
-                        #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
-
                         perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol'])
-
                         perfil.save()
-
                     else:
-
                         print(str(form.errors))
                         print(str(formUserDjango.errors))
 

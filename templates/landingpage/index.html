@@ -160,7 +160,7 @@
                 <div class="centered service">
                     <div class="zoom-in">
                         <a href="http://{{tenant.domain}}:8000">
-                    <img class="logos" src="/static/{{tenant.tenant.media}}" alt="{{tenant.tenant.nombre}}">
+                    <img class="logos" src="{% get_static_prefix %}{{tenant.tenant.media}}" alt="{{tenant.tenant.nombre}}">
                     <h3>{{tenant.tenant.nombre}}</h3>
                     </a>
                     </div>
