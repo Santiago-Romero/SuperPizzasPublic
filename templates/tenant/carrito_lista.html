@@ -21,6 +21,7 @@
                                         <th>Cantidad</th>
                                         <th>Precio</th>
                                         <th>Subtotal</th>
+                                        <th>SUBTOTAL</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -44,7 +45,18 @@
                                             {{ingrediente.nombre}},
                                             {% endfor %}
                                             {%endif%}    
-                                            {%endfor%}      
+                                            {%endfor%}
+                                            <br>
+                                            adicionales:
+                                            {% for key, adiciones in adicionales.items %}
+                                            {% for ingrediente in ingredientes %}                                            
+                                            {% if adiciones.id == ingrediente.id %}
+                                            {{adiciones.cantidad}}
+                                            {{ingrediente.nombre}},                                                                                  
+                                            {%endif%}
+                                            {%endfor%}                                                                                       
+                                            {%endfor%} 
+                                 
                                         </td>                                       
                                         <td>
                                             <div class="input-group mb-3">
@@ -63,7 +75,17 @@
                                             </div>
                                         </td>
                                         <td>{{ un_producto.valor}}</td>
-                                        <td id="total_{{un_producto.id}}">{{ un_producto.valor}}</td>
+                                        <td >
+                                        <label id="total_{{un_producto.id}}">{{ un_producto.valor}}</label>  
+                                        <br>
+                                        <br> 
+                                        {% for key, adiciones in adicionales.items %}                                        
+                                        {% if forloop.last %}
+                                        {{adiciones.total}}
+                                        {%endif%}                                                                                     
+                                        {%endfor%} 
+                                        </td>
+                                        <td id="adicionales_{{un_producto.id}}"></td>
                                         <td>
                                             <a class="text-danger" href="#" onclick="del_to_cart(event,{{un_producto.id}})">
                                                 <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
@@ -75,13 +97,18 @@
                                             <td>
                                                 <div>
                                                         <span class="text-danger"> Desea añadir ingredientes adicionales? </span>
-                                                        <a class="btn btn-danger float-right mb-3 mr-2" data-toggle="modal" data-target="#exampleModalCenter" > <span> Si </span> </a>                                                
+                                                        <a class="btn btn-danger float-right mb-3 mr-2" data-toggle="modal" data-target="#exampleModalCenter" > <span> Si </span> 
+                                                        <script type="text/javascript">
+                                                         var pizza_adicional={{un_producto.id}};
+                                                         </script>
+                                                        </a>                                                
                                                       </div>
                                             </td>
                                             
                                     </tr>
                                     {% endfor %}
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -125,7 +152,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
-                      </div>
+                 </div>
             
             <div class="modal-body">
                     <div class="table-responsive">                        
@@ -153,8 +180,7 @@
                                                             <i class="fa fa-minus text-danger"></i>
                                                         </span>
                                                   </div>
-                                                  <input type="number" name="ig_{{ingrediente.id}}" class="form-control input-number" value="0"
-                                                  min="0" max="3" disabled>
+                                                  <input type="number" name="ig_{{ingrediente.id}}" class="form-control input-number" value="0"  min="0" max="3" disabled>
                                                     <div class="input-group-append">
                                                         <span style="cursor:pointer" class="input-group-text " onclick="clic_cantidad(event,this,{{ingrediente.valor}})" data-type="plus" data-field="ig_{{ingrediente.id}}">
                                                             <i class="fa fa-plus text-success"></i>
@@ -178,7 +204,7 @@
             </div>
             <div class="modal-footer">
              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-             <button type="button" class="btn btn-primary">Guardar cambios</button>
+             <button type="button" class="btn btn-primary " onclick="ingredientes_adicionales(event);">Guardar cambios</button>
             </div>
           </div>
         </div>
@@ -213,7 +239,7 @@
     
   </body>
 </html>
-<script type="text/javascript">
+<script type="text/javascript">    
     function clic_cantidad(e, algo, precio){
     e.preventDefault();
     fieldName = $(algo).attr('data-field');
@@ -277,7 +303,7 @@ function calcular_subtotal(id, algo, precio){
 
 $(document).ready(function() {
     calcular_total();
-    calcular_total_i();
+    calcular_total_i();    
 });
 
 function calcular_total(){
@@ -334,7 +360,7 @@ function del_to_cart(event,producto){
         var suma = 0;
         for(i=0; i<cantidad; i++){
             var item = {}
-            var input = $("input[name='"+ids[i]+"']");
+            var input = $("input[name='"+ids[i]+"']");            
             var currentVal = parseInt(input.val());
             item = {'id': ids[i], 'cantidad':currentVal}
             inputs[ids[i]]= item;
@@ -348,10 +374,49 @@ function del_to_cart(event,producto){
             data: {
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 cantidades: JSON.stringify(inputs)
+                
             },
             success: function(data){
                 window.location = "{% url 'cart_comprar' %}";
             }
         });
     }
+
+    function ingredientes_adicionales(event){
+        console.log("entro adicionales")
+        event.preventDefault();
+        inputs = {}
+        var cantidad = {{ingredientes|length }};
+        var suma = 0;
+        var total_precio=document.getElementById("total_i").innerHTML;
+        for(i=0; i<cantidad; i++){
+            var item = {}
+            var input = $("input[name='"+"ig_"+id_ingredientes[i]+"']");        
+            var currentVal = parseInt(input.val());
+            if (currentVal !=0){            
+            item = {'id': id_ingredientes[i], 'cantidad':currentVal, 'total':total_precio}
+            inputs[id_ingredientes[i]]= item;
+        }}
+        console.log(inputs);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'ingredientes_cantidades' %}",
+            dataType: "json",
+            async: true,
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                ingredientes_add: JSON.stringify(inputs)   
+                             
+            },
+            
+            success: function(data){    
+             window.location = "{% url 'cart_listar' %}";                    
+                            
+            }
+            
+        });
+    } 
+
+
+
 </script>

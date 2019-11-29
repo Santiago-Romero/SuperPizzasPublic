@@ -155,6 +155,7 @@
             </div>
             <ul class="row client-slider" id="clint-slider">
             {% for tenant in tenants%}
+            {% if tenant.tenant.working %}
             <div class="span4">
                 <div class="centered service">
                     <div class="zoom-in">
@@ -165,6 +166,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             {% endfor %}
             </ul>
         </div>

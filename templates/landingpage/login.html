@@ -37,7 +37,7 @@
         {% endif %}
         <div class="form-row">
             {{ formulario.username.errors }}
-            <label for="id_username">Correo Electronico:</label>
+            <label for="id_username">Nombre de usuario:</label>
             {{ formulario.username }}
         </div>
         <div class="form-row">
@@ -47,9 +47,6 @@
         </div><br>
         <div class="submit-row">
             <label>&nbsp;</label><input class="btn btn-primary" type="submit" value="Entrar" />
-            <a href="{% provider_login_url 'google' %}">Google Connect</a>           
-
-            <a href="/index" class="btn btn-default " >Volver</a>
         </div>
     </form> 
   </div>
