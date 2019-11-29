@@ -4,9 +4,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from captcha.fields import ReCaptchaField
 
-
+class DateInput(forms.DateInput):
+    input_type = 'date'
 class UsuarioForm(forms.ModelForm):
-    captcha = ReCaptchaField(label="Debe realizar la verificación captcha.")    
+    captcha = ReCaptchaField(label="Debe realizar la verificación captcha.")
     class Meta:
         model = Usuario
 
@@ -24,10 +25,10 @@ class UsuarioForm(forms.ModelForm):
         'user'
         ]
 
-        widgets = {'rol': forms.HiddenInput(),'user': forms.HiddenInput(),}
+        widgets = {'user': forms.HiddenInput(),'rol': forms.HiddenInput(),'fecha_vencimiento':DateInput(),}
 
 class UsuarioForm2(forms.ModelForm):
-    captcha = ReCaptchaField(label="Debe realizar la verificación captcha.")    
+    captcha = ReCaptchaField(label="Debe realizar la verificación captcha.")
     class Meta:
         model = Usuario
 
@@ -45,7 +46,7 @@ class UsuarioForm2(forms.ModelForm):
         'user'
         ]
 
-        widgets = {'user': forms.HiddenInput(),}
+        widgets = {'user': forms.HiddenInput(),'fecha_vencimiento':DateInput(),}
 
 class UserForm(UserCreationForm):
     class Meta:

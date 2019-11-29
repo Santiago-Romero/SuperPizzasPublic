@@ -745,7 +745,6 @@ def reportes(request):
                 vmeses[factura.fecha_creacion.month-1]+=1
 
             contexto={'vene':vmeses[0],'vfeb':vmeses[1],'vmar':vmeses[2],'vabr':vmeses[3],'vmay':vmeses[4],'vjun':vmeses[5],'vjul':vmeses[6],'vago':vmeses[7],'vsep':vmeses[8],'voct':vmeses[9],'vnov':vmeses[10],'vdic':vmeses[11],'npizzas':npizzas,'pizzas':laspizzas,'especial':porcentajeEspecial,'noespecial':porcentajeNoEspecial, 'vendedores':vendedores, 'ventasvendedores':ventasVendedores,'ventasdias':diasSemana,'relacioncompras':relacioncompras}
-            print(relacioncompras)
             return render(request,'franquicias/graficos.html', contexto)
         else:
             return render(request,"404.html",{})

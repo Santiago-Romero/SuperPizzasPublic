@@ -13,7 +13,7 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="{% static 'login/css/style.css' %}">
-    <link rel="shortcut icon" href="/static/{{ request.tenant.media }}"/>
+    <link rel="shortcut icon" href="{% get_static_prefix %}{{ request.tenant.media }}"/>
     
 </head>
 <div class="wrapper fadeInDown">
@@ -23,14 +23,14 @@
 
     <!-- Icon -->
     <div class="fadeIn first">
-      <img src="/static/{{ request.tenant.media }}" id="icon" alt="User Icon" />
+      <img src="{% get_static_prefix %}{{ request.tenant.media }}" id="icon" alt="User Icon" />
     </div>
 
     <!-- Login Form -->
     <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
         {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" style="color: red">
                 {{ message }}
             </div>
             {% endfor %}
