@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="{% static 'pago/fonts/themify-icons/themify-icons.css' %}">
     <link rel="stylesheet" href="{% static 'pago/css/style.css' %}">
     <link rel="shortcut icon" href="{% get_static_prefix %}{{ request.tenant.media }}" />
+    
+    <link rel="stylesheet" href="{% static 'vendors/toast/toastr/toastr.min.css' %}">
+    
 </head>
 
 <body style="background: {{ colorprimario }} !important;" >
@@ -104,6 +107,21 @@
     <script src="{% static 'pago/js/main.js' %}"></script>
     <script type="text/javascript" src="{% static 'landingpage/js/app.js' %}"></script>
     {% include 'landingpage/footer.html' %}
+    <script src="{% static 'vendors/toast/toastr-js/toastr.min.js' %}"></script>
+    <script>
+        {% for msg in messages %}
+            $(document).ready(function(){
+                setTimeout(function() {
+                    toastr.options = {
+                        "closeButton": true,
+                        "progressBar": true,
+                        "showEasing": "swing"
+                    }
+                    toastr["{{ msg.tags }}"]("{{msg}}")
+                },500);
+            });
+        {% endfor %}
+    </script>
 </body>
 
 </html>
