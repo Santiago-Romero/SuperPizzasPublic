@@ -34,7 +34,7 @@
                                         <script type="text/javascript">
                                             ids.push({{pizza.id}});
                                         </script>                                    
-                                    <td><img src="{% static 'landing-tenant/images/pizza-1.jpg' %}" alt="Foto Producto" height="150" width="150"></td>
+                                    <td><img src="{% get_static_prefix %}{{pizza.imagen}}" alt="Foto Producto" height="150" width="150"></td>
                                     <td>{{ pizza.nombre }}: {{ pizza.descripcion}}</td>
                                     <td>
                                         <div class="input-group mb-3">
