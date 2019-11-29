@@ -14,6 +14,7 @@
     <!-- Main css -->
     <link rel="stylesheet" href="{% static 'pago/css/style.css' %}">
     <link rel="shortcut icon" href="{% get_static_prefix %}{{ request.tenant.media }}"/>
+    <link rel="stylesheet" href="{% static 'vendors/toast/toastr/toastr.min.css' %}">
     <style type="text/css">
         .actions ul li a {
             background: {{ colorsecundario }} !important;
@@ -124,13 +125,7 @@
                         <div class="form-group">
                             <label for="" class="form-label required">Confirme Contraseña</label>
                             {{form3.password2}}
-                        </div>                                                                      
-<!--
-                        <div class="form-group">
-                                    <label for="password" class="form-label required"> Repita Password</label>
-                                    <input type="password" name="password" id="password" />
-                                </div> -->
-
+                        </div>
                             <div class="form-group">                                
                                 {{form2.rol}}
                             </div>
@@ -149,39 +144,10 @@
                             <span class="step-heading">Información del pago: </span>
                             <span class="step-number">Paso 3 / 3</span>
                         </legend>
-                        
-<!---
-                        <div class="form-group">
-                                <label for="bank_name" class="form-label required">Cantidad a pagar</label>
-                                <input type="text" name="bank_name" id="bank_name" />
-                            </div>
--->
-
                         <div class="form-group">
                             <label for="{{form2.nombre_banco.name}}" class="form-label required">Nombre Banco</label>
                             {{form2.nombre_banco}}
                         </div>
-          <!---    
-                        <div class="form-row">
-                            <div class="form-date">
-                                <label for="expiry_date" class="form-label">Fecha de vencimiento</label>
-                                <div class="form-date-group">
-                                    <div class="form-date-item">
-                                        <select id="expiry_date" name="expiry_date"></select>
-                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
-                                    </div>
-                                    <div class="form-date-item">
-                                        <select id="expiry_month" name="expiry_month"></select>
-                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
-                                    </div>
-                                    <div class="form-date-item">
-                                        <select id="expiry_year" name="expiry_year"></select>
-                                        <span class="select-icon"><i class="ti-angle-down"></i></span>
-                                    </div>
-                                </div>
-                            </div>
- -->  
-                         
                         <div class="form-group">
                                 <label for="{{form2.fecha_vencimiento.name}}" class="form-label required">{{form2.fecha_vencimiento.label}}</label>
                                 {{form2.fecha_vencimiento}}
@@ -230,5 +196,20 @@
     <script src="{% static 'pago/js/main.js' %}"></script>
     <script type="text/javascript" src="{% static 'landingpage/js/app.js' %}"></script>
     {% include 'landingpage/footer.html' %}
+    <script src="{% static 'vendors/toast/toastr-js/toastr.min.js' %}"></script>
+    <script>
+        {% for msg in messages %}
+            $(document).ready(function(){
+                setTimeout(function() {
+                    toastr.options = {
+                        "closeButton": true,
+                        "progressBar": true,
+                        "showEasing": "swing"
+                    }
+                    toastr["{{ msg.tags }}"]("{{msg}}")
+                },500);
+            });
+        {% endfor %}
+    </script>
 </body>
 </html>
