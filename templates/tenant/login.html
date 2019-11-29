@@ -4,7 +4,7 @@
 {% providers_media_js %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: {{ colorprimario }} !important;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="{% static 'login/css/style.css' %}">
-    <link rel="shortcut icon" href="/static/{{ request.tenant.media }}"/>
+    <link rel="shortcut icon" href="{% get_static_prefix %}{{ request.tenant.media }}"/>
     
 </head>
 <div class="wrapper fadeInDown">
@@ -23,14 +23,14 @@
 
     <!-- Icon -->
     <div class="fadeIn first">
-      <img src="/static/{{ request.tenant.media }}" id="icon" alt="User Icon" />
+      <img src="{% get_static_prefix %}{{ request.tenant.media }}" id="icon" alt="User Icon" />
     </div>
 
     <!-- Login Form -->
     <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
         {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" style="color: red">
                 {{ message }}
             </div>
             {% endfor %}
@@ -46,8 +46,8 @@
             <input type="hidden" name="next" value="{{ next }}" />
         </div><br>
         <div class="submit-row">
-            <label>&nbsp;</label><input class="btn btn-primary" type="submit" value="Entrar" />
-            <label>&nbsp;</label><input class="btn btn-second" type="button" value="Inicia sesión con google"  onclick="location.href='#';"/>
+            <label>&nbsp;</label><input class="btn btn-primary" style="background-color: {{ colorsecundario }} !important;" type="submit" value="Entrar" />
+            <label>&nbsp;</label><input class="btn btn-second" style="background-color: {{ colorsecundario }} !important;" type="button" value="Inicia sesión con google"  onclick="location.href='#';"/>
             <a href="{% provider_login_url 'google' %}">Google Connect</a>
             <a href="/" class="btn btn-default " >Volver</a>
         </div>

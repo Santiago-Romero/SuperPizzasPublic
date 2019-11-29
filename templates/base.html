@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,7 +22,7 @@
     {% block css %}
     {% endblock css %}
     <!-- endinject -->
-    <link rel="shortcut icon" href="/static/{{ request.tenant.media }}"/>
+    <link rel="shortcut icon" href="{% get_static_prefix %}{{ request.tenant.media }}"/>
 </head>
 
 <body>

@@ -8,6 +8,7 @@ class Pizza(models.Model):
     descripcion = models.CharField(max_length=250,default="")
     especial =  models.BooleanField(default=True)
     enventa = models.BooleanField(default=True)
+    imagen = models.FileField(upload_to='media/pizzas/', blank=True, null=True)
     def __str__(self):
         return self.nombre
 

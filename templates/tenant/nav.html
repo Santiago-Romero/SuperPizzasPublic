@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 {% url 'inicio_t' as inicio_url %}
 {% url 'cart_listar' as cart_url %}
 {% url 'ordenar' as ordenar_url %}
@@ -8,7 +8,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
         <div class="row">
-          <div class="col" style="padding-right: 0px;"><a class="navbar-brand" href="{% url 'inicio_t' %}"><img src="/static/{{ logo }}" alt="" height="50" > </a></div>
+          <div class="col" style="padding-right: 0px;"><a class="navbar-brand" href="{% url 'inicio_t' %}"><img src="{% get_static_prefix %}{{ logo }}" alt="" height="50" > </a></div>
           <div class="col" style="padding-top: 12px; padding-left: 0px;">  <a  class="navbar-brand" href="{% url 'inicio_t' %}"> SuperPizzas<br><small>{{request.tenant.nombre}}</small></a></div>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">

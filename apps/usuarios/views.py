@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_protect
 from rolepermissions.roles import assign_role
 from django.http import HttpResponse
 from django.http import HttpRequest
+from apps.franquicias.models import Franquicia
+import json
 
 def gestionar_usuario(request, id_usuario=None):
     if request.user.is_anonymous:
@@ -26,21 +28,12 @@ def gestionar_usuario(request, id_usuario=None):
 
                     if formUserDjango.is_valid():
                         usuario = formUserDjango.save(commit=False)
-                                
                         usuario = User(username=request.POST['email'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
-                                
                         usuario.set_password(request.POST['password1'])
-                                
                         usuario.save()
-
-                        #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
-
                         perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol'])
-
                         perfil.save()
-
                     else:
-
                         print(str(form.errors))
                         print(str(formUserDjango.errors))
 
@@ -112,8 +105,11 @@ def gestionar_cliente(request):
                 messages.error(request, 'Por favor verificar los campos en rojo')
         else:
             form = UsuarioForm(prefix="form2",initial={'rol': 'c'})
-            formUserDjango = UserForm(prefix="form3")        
-        return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': formUserDjango})
+            formUserDjango = UserForm(prefix="form3")
+
+        datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
+       
+        return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': formUserDjango, 'colorprimario': json.loads(datosfran.configuracion)['colorprimario'], 'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario']})
     else:
         return render(request,"404.html",{})
 
@@ -189,9 +185,12 @@ def inicio_sesion(request):
                 messages.add_message(request, messages.INFO, 'Error')
         else:
             formulario = UserAuthenticationForm()
-            
+
+        datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
         contexto = {
-            'formulario': formulario
+            'formulario': formulario,
+            'colorprimario': json.loads(datosfran.configuracion)['colorprimario'],
+            'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario'],
         }
 
         return render(request,  'tenant/login.html', context=contexto)
@@ -322,6 +321,7 @@ def modificarcliente(request):
             form = UsuarioForm(instance=usuario)
             form.fields['rol'].initial = [usuario.rol]
             form2 = UpdateUser(instance=user)
-            return render(request, 'usuarios/modificar_cliente.html', {'form': form, 'usuario': usuario,'form2':form2})
+            datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
+            return render(request, 'usuarios/modificar_cliente.html', {'form': form, 'usuario': usuario,'form2':form2, 'colorprimario': json.loads(datosfran.configuracion)['colorprimario'], 'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario']})
         else:
             return render(request,"404.html",{})

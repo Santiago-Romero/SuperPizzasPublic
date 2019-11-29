@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <head>
     <title>{{request.tenant.nombre}}</title>
     <meta charset="utf-8">
@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="{% static 'landing-tenant/css/icomoon.css' %}">
     <link rel="stylesheet" href="{% static 'landing-tenant/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'vendors/toast/toastr/toastr.min.css' %}">    
-    <link rel="shortcut icon" href="/static/{{ logo }}"/>
+    <link rel="shortcut icon" href="{% get_static_prefix %}{{ logo }}"/>
     <style type="text/css">
         .btn.btn-primary {
           background: {{ colorsecundario }};

@@ -13,10 +13,20 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="{% static 'pago/css/style.css' %}">
-    <link rel="shortcut icon" href="/static/{{ request.tenant.media }}"/>
+    <link rel="shortcut icon" href="{% get_static_prefix %}{{ request.tenant.media }}"/>
+    <style type="text/css">
+        .actions ul li a {
+            background: {{ colorsecundario }} !important;
+        } 
+        .current .title {
+            background: {{ colorsecundario }} !important;
+        }
+
+    </style>
+        
 </head>
-<body>
-    
+<body style="background: {{ colorprimario }} !important;" >
+
     {% include 'landingpage/nav.html' %}   
     
     <div class="main">
