@@ -41,7 +41,7 @@
     {% if forloop.counter|divisibleby:2 %}
     {% else %}
     <div class="pricing-entry d-flex ftco-animate">
-                <div class="img" style="background-image: url(/static/{{ pizza.imagen }});"></div>
+                <div class="img" style="background-image: url({% get_static_prefix %}{{pizza.imagen}});"></div>
                 <div class="desc pl-3">
                     <div class="d-flex text align-items-center" style="border-bottom: 1px dashed {{ colorsecundario }};z-index: -1;">
                         <h3><span>{{pizza.nombre}}</span></h3>
