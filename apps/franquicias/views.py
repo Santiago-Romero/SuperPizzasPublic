@@ -380,10 +380,15 @@ class CartListar(TemplateView):
         if(self.request.tenant.working==True):
             context = super(CartListar, self).get_context_data(**kwargs)
             franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
-            adicionales = self.request.session.get('ingredientes_add', "")
-            if(adicionales != ""):                
-                adicionales_dict = json.loads(adicionales)
-                context['adicionales']=adicionales_dict     
+            adicionales = self.request.session.get('ingredientes_add', "")                
+            diccionario=""
+            adicionales_dic="" 
+            if(adicionales != ""):
+                for key,adiciones in adicionales.items():                
+                    diccionario+=adiciones[1 : -1]+","                                                             
+                adicionales_dic="{"+diccionario[:-1]+"}" 
+                adicionales_dict = json.loads(adicionales_dic)  
+                context['adicionales']=adicionales_dict    
             context['ingredientes']= Ingrediente.objects.all() 
             context['franquicia']=self.request
             context['pizzas']=Pizza.objects.filter(enventa=True)
@@ -394,7 +399,7 @@ class CartListar(TemplateView):
             context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
             context['logo'] = franquicia.media
             cart = self.request.session.get('cart', {})
-            context['productos'] = cart
+            context['productos'] = cart            
             return context
         else:
             return render(self.request,"404.html",{})
@@ -632,12 +637,15 @@ class VentaCantidades(TemplateView):
 class IngredientesAd(TemplateView):
 
     def post(self, request):
-        if(request.tenant.working==True):            
-            ingredientes = request.POST.get("ingredientes_add", "")
-            detalles = []
-            self.request.session['ingredientes_add'] = ingredientes
+        if(request.tenant.working==True):   
+            ingredientes = request.POST.get("ingredientes_add", "") 
+            id_pizza = request.POST.get("id_producto", "")
+            ingredientes_add = request.session.get('ingredientes_add', {})
+            ingredientes_add[id_pizza] = ingredientes
+            self.request.session['ingredientes_add'] = ingredientes_add  
             respuesta = {'estado': True, }
-            return JsonResponse(respuesta)
+            return JsonResponse(respuesta)                            
+            
         else:
             return render(request,"404.html",{})
 
