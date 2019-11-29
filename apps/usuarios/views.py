@@ -27,15 +27,17 @@ def gestionar_usuario(request, id_usuario=None):
                     formUserDjango = UserForm(request.POST)
 
                     if formUserDjango.is_valid():
-                        usuario = formUserDjango.save(commit=False)
-                        usuario = User(username=request.POST['email'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
-                        usuario.set_password(request.POST['password1'])
-                        usuario.save()
-                        perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol'])
-                        perfil.save()
+                        if not User.objects.filter(email=request.POST['email']):
+                            usuario = formUserDjango.save(commit=False)
+                            usuario = User(username=request.POST['email'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
+                            usuario.set_password(request.POST['password1'])
+                            usuario.save()
+                            perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol'])
+                            perfil.save()
+                        else:
+                            messages.error(request, 'Ya existe ese usuario con ese correo')
                     else:
-                        print(str(form.errors))
-                        print(str(formUserDjango.errors))
+                        messages.error(request,'Por favor verificar los campos, recuerda poner una contraseña segura')
 
                 else:
                     usuario = get_object_or_404(Usuario, id=id_usuario)
@@ -44,18 +46,20 @@ def gestionar_usuario(request, id_usuario=None):
                     form2 = UpdateUser(data=request.POST, instance=user)
 
                     if form.is_valid():
-                        form.save()
-                        user.first_name = request.POST['first_name']
-                        user.last_name = request.POST['last_name']
-                        user.email = request.POST['email']
-                        user.username = request.POST['email']
-                        user.save()
-                        messages.success(request, 'Usuario actualizado correctamente')
-                        form = UsuarioForm2()
-                        form2 = UserForm()
-                        usuario = None
-                        
-                        return redirect('usuarios:registrar')
+                        if(not User.objects.filter(email=request.POST['email']) or user.email==request.POST['email']):
+                            form.save()
+                            user.first_name = request.POST['first_name']
+                            user.last_name = request.POST['last_name']
+                            user.email = request.POST['email']
+                            user.username = request.POST['email']
+                            user.save()
+                            messages.success(request, 'Usuario actualizado correctamente')
+                            form = UsuarioForm2()
+                            form2 = UserForm()
+                            usuario = None
+                            return redirect('usuarios:registrar')
+                        else:
+                            messages.error(request, 'Ya existe ese usuario con ese correo')
                 
                     else:
                         messages.error(request, 'Por favor verificar los campos en rojo')
@@ -82,33 +86,21 @@ def gestionar_cliente(request):
         if request.method == 'POST':
             form = UsuarioForm(request.POST,prefix="form2",initial={'rol': 'c'})
             formUserDjango = UserForm(request.POST,prefix="form3")
-            
             if formUserDjango.is_valid():
-
                 usuario = formUserDjango.save(commit=False)
-                                    
                 usuario = User(username=request.POST['form3-email'], email=request.POST['form3-email'], first_name=request.POST['form3-first_name'], last_name=request.POST['form3-last_name'])
-                            
                 usuario.set_password(request.POST['form3-password1'])
-                            
                 usuario.save()            
-
-                #CREACION DEL USUARIO - INFORMACIÓN ADICIONAL
-
                 perfil = Usuario(user=usuario,cc=request.POST['form2-cc'],telefono=request.POST['form2-telefono'],pais=request.POST['form2-pais'],direccion=request.POST['form2-direccion'],nombre_banco=request.POST['form2-nombre_banco'],fecha_vencimiento=request.POST['form2-fecha_vencimiento'],tipo_tarjeta=request.POST['form2-tipo_tarjeta'],numero_tarjeta=request.POST['form2-numero_tarjeta'],cvv=request.POST['form2-cvv'],rol='c')
-
-                perfil.save()  
-
+                perfil.save()
                 messages.success(request, 'Cliente registrado correctamente')
                 return redirect('login')
             else:
-                messages.error(request, 'Por favor verificar los campos en rojo')
+                messages.error(request,'Por favor verificar los campos, recuerda poner una contraseña segura')
         else:
             form = UsuarioForm(prefix="form2",initial={'rol': 'c'})
             formUserDjango = UserForm(prefix="form3")
-
         datosfran = Franquicia.objects.get(schema_name=request.tenant.schema_name)
-       
         return render(request, 'usuarios/registro_cliente.html', {'form2': form, 'form3': formUserDjango, 'colorprimario': json.loads(datosfran.configuracion)['colorprimario'], 'colorsecundario': json.loads(datosfran.configuracion)['colorsecundario']})
     else:
         return render(request,"404.html",{})
@@ -305,17 +297,20 @@ def modificarcliente(request):
                 form = UsuarioForm(request.POST, instance=usuario)
                 form2 = UpdateUser(data=request.POST, instance=user)
                 if form.is_valid():
-                    form.save()
-                    user.first_name = request.POST['first_name']
-                    user.last_name = request.POST['last_name']
-                    user.email = request.POST['email']
-                    user.username = request.POST['email']
-                    user.set_password(request.POST['password1'])
-                    user.save()
-                    messages.success(request, 'Usuario actualizado correctamente')
-                    return redirect('/')
+                    if(not User.objects.filter(email=request.POST['email']) or user.email==request.POST['email']):
+                        form.save()
+                        user.first_name = request.POST['first_name']
+                        user.last_name = request.POST['last_name']
+                        user.email = request.POST['email']
+                        user.username = request.POST['email']
+                        user.set_password(request.POST['password1'])
+                        user.save()
+                        messages.success(request, 'Usuario actualizado correctamente')
+                        return redirect('/')
+                    else:
+                        messages.error(request, 'El correo ya pertenece a otro usuario')
                 else:
-                    messages.error(request, 'Por favor verificar los campos en rojo')
+                    messages.error(request,'Por favor verificar los campos, recuerda poner una contraseña segura')
             usuario = get_object_or_404(Usuario, id=request.user.usuario.id)
             user = User.objects.get(pk=usuario.user.id)
             form = UsuarioForm(instance=usuario)
