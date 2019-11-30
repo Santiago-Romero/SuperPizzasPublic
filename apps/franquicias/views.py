@@ -442,7 +442,16 @@ class CartComprar(TemplateView):
             form_factura= FacturaForm(self.request.POST or None)
             admin_franquicia = Usuario.objects.get(user_id=1)
             cliente=None
-            customer = self.request.user        
+            customer = self.request.user 
+            adicionales = self.request.session.get('ingredientes_add', "")                
+            diccionario=""
+            adicionales_dic="" 
+            if(adicionales != ""):
+                for key,adiciones in adicionales.items():                
+                    diccionario+=adiciones[1 : -1]+","                                                             
+                adicionales_dic="{"+diccionario[:-1]+"}" 
+                adicionales_dict = json.loads(adicionales_dic)  
+                context['adicionales']=adicionales_dict         
             if customer.is_authenticated:
                 form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais': customer.usuario.pais,'direccion':customer.usuario.direccion})
                 cliente = Usuario.objects.get(user_id=customer.id)
@@ -463,6 +472,7 @@ class CartComprar(TemplateView):
             context['cliente']=cliente 
             context["form2"] = form
             context['admin_franquicia']=admin_franquicia
+            context['ingredientes']= Ingrediente.objects.all() 
 
             return context
         else:
