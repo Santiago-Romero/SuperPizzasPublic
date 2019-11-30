@@ -518,12 +518,13 @@ class CartComprar(TemplateView):
                 producto_item = Pizza.objects.filter(id=v['id']).values()[0]
                 detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
                                     producto_id=v['id'])
-                detalle_item.save()
+                detalle_item.save()            
             for k, v in adicionales_dict.items():
-                adicionales_item=Ingrediente.objects.filter(id=v['id']).values()[0]
+                adicionales_item=Ingrediente.objects.filter(id=v['id']).values()[0]  
                 adicion_item=IngredientesA(cantidad=v['cantidad'],precio=adicionales_item['valor'],detalle=detalle_item,
                 ingredientes_id=v['id'])
                 adicion_item.save()
+            
             self.request.session['cart'] = {}
             self.request.session['ingredientes_add']={}
             #return HttpResponseRedirect(self.get_success_url())
