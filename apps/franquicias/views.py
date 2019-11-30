@@ -569,57 +569,95 @@ def factura_PDF(request, id_factura=None):
     archivo_imagen = settings.MEDIA_ROOT+'/images/favicon.png'
     pdf.drawImage(archivo_imagen, 25, 240, 50, 50,preserveAspectRatio=True)
     
-    pdf.setFont("Helvetica", 8)
+    pdf.setFont("Helvetica", 7)
     
     pdf.drawString(80, 280, request.tenant.nombre)
     pdf.drawString(80, 270, u"FACTURA DE VENTA")
-    pdf.setFont("Helvetica", 7)
+    pdf.setFont("Helvetica", 6)
     pdf.drawString(80, 260, id_factura)
     pdf.drawString(80, 250, str(datetime.datetime.now().strftime("%Y-%m-%d")))
 
     factura = Factura.objects.get(id=id_factura)
     detalles = Detalle.objects.filter(factura=factura)
+    ingredientes_adi=IngredientesA.objects.filter(factura=factura)
 
-    
-    pdf.drawString(25, 230, "---------------------------------------------------------------")
-    pdf.setFont("Helvetica", 8)
-    pdf.drawString(25, 220, "Nombre:")
+    pdf.setFont("Helvetica", 4)
+    pdf.drawString(25, 230, "----------------------------------------------------------------------------------------------------------------------")
+    pdf.drawString(25, 225, "Nombre:")
+    if factura.cliente.user.first_name == "anonimo":
+        pdf.drawString(70, 225, "No disponible")
+    else:
+        pdf.drawString(70, 225, factura.cliente.user.first_name+" "+factura.cliente.user.last_name)
+
+    pdf.drawString(25, 220, "Email:")
     if factura.cliente.user.first_name == "anonimo":
         pdf.drawString(70, 220, "No disponible")
     else:
-        pdf.drawString(70, 220, factura.cliente.user.first_name+" "+factura.cliente.user.last_name)
-
-    pdf.drawString(25, 210, "Email:")
-    if factura.cliente.user.first_name == "anonimo":
-        pdf.drawString(70, 210, "No disponible")
-    else:
-        pdf.drawString(70, 210, factura.cliente.user.username)
-    pdf.drawString(25, 200, "Dirección:")
-    pdf.drawString(70, 200, factura.direccion)
-    pdf.setFont("Helvetica", 7)
-    pdf.drawString(25, 190, "---------------------------------------------------------------")
-    pdf.setFont("Helvetica", 8)
-    pdf.drawString(25, 180, "Resumen de Venta:")
-    pdf.setFont("Helvetica", 6)
-    pdf.drawString(25, 170, "Cant")
-    pdf.drawString(50, 170, "Descripción")
-    pdf.drawString(150, 170, "Valor")
+        pdf.drawString(70, 220, factura.cliente.user.username)
+    pdf.drawString(25, 215, "Ciudad:")
+    pdf.drawString(70, 215, factura.ciudad)
+    pdf.drawString(25, 210, "Dirección:")
+    pdf.drawString(70, 210, factura.direccion)
+    pdf.setFont("Helvetica", 4)
+    pdf.drawString(25, 205, "--------------------------------------------------------------------------------------------------------------------")
+    pdf.setFont("Helvetica", 5)
+    pdf.drawString(25, 200, "Resumen de Venta:")
+    pdf.setFont("Helvetica", 4)
+    pdf.drawString(25, 192, "Cant")
+    pdf.drawString(50, 192, "Descripción")    
+    pdf.drawString(150, 192, "Valor")
     total = 0
-    line = 160
+    total1=0
+    total_pago=0
+    line = 184
+    pdf.setFont("Helvetica", 4)
     for detalle in detalles:
 
         pdf.drawString(25, line, str(detalle.cantidad))
         pdf.drawString(50, line, detalle.producto.nombre)
         valor = int(detalle.cantidad)*int(detalle.precio)
         pdf.drawString(150, line, "$ "+str(valor))
-        line -= 10
+        line -= 5
         total += valor
 
-    pdf.setFont("Helvetica", 8)
-    pdf.drawString(120, line-10, "Total")
-    pdf.drawString(150, line-10, "$ "+str(total))
-
+    line=line-5
     pdf.setFont("Helvetica", 5)
+    pdf.drawString(120, line, "Subtotal")
+    pdf.drawString(150, line, "$ "+str(total))
+
+    line=line-4
+    pdf.setFont("Helvetica",5)
+    pdf.drawString(25, line, "Ingredientes adicionales:")
+    line=line-8
+    pdf.setFont("Helvetica",4)
+    pdf.drawString(25, line, "Cant")
+    pdf.drawString(50, line, "Descripción")  
+    pdf.drawString(85, line, "Pizza")
+    pdf.drawString(150, line, "Valor")
+
+    line=line-7
+    for ingrediente in ingredientes_adi:        
+
+        pdf.drawString(25, line, str(ingrediente.cantidad))
+        pdf.drawString(50, line, ingrediente.ingredientes.nombre)
+        pdf.drawString(80,line,ingrediente.producto.nombre)
+        valor1 = int(ingrediente.cantidad)*int(ingrediente.precio)
+        pdf.drawString(150, line, "$ "+str(valor1))
+        line -= 5
+        total1 += valor1
+    
+    total_pago=total+total1
+    pdf.setFont("Helvetica", 5)
+    pdf.drawString(120, line-5, "Subtotal")
+    pdf.drawString(150, line-5, "$ "+str(total1))
+
+    pdf.setFont("Helvetica", 4)
+    pdf.drawString(25, line-20, "-------------------------------------------------------")
+    pdf.setFont("Helvetica", 5)
+    pdf.drawString(120, line-20, "Total")    
+    pdf.drawString(150, line-20, "$ "+str(total_pago))
+
+    pdf.setFont("Helvetica", 3)
     pdf.drawString(25, 25, "Fecha de orden: ")
     pdf.drawString(70, 25, str(factura.fecha_creacion))
 
