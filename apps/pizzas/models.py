@@ -22,13 +22,14 @@ class Factura(models.Model):
    
 
 class Detalle(models.Model):
-    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
+    factura = models.ForeignKey(Factura,on_delete=models.CASCADE)
     producto = models.ForeignKey(Pizza, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(default=1)
     precio = models.FloatField()
 
 class IngredientesA(models.Model):
-    detalle=models.ForeignKey(Detalle,on_delete=models.CASCADE)
+    factura=models.ForeignKey(Factura,on_delete=models.CASCADE,default=1)
+    producto=models.ForeignKey(Pizza,on_delete=models.CASCADE,default=1)
     ingredientes= models.ForeignKey(Ingrediente, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(default=0)
     precio = models.FloatField()
