@@ -389,6 +389,8 @@ class CartListar(TemplateView):
                 adicionales_dic="{"+diccionario[:-1]+"}"                 
                 adicionales_dict = json.loads(adicionales_dic)  
                 context['adicionales']=adicionales_dict    
+            cantidades = self.request.session.get('cantidades', {}) 
+            context['cantidades'] = json.loads(cantidades) 
             context['ingredientes']= Ingrediente.objects.all() 
             context['franquicia']=self.request
             context['pizzas']=Pizza.objects.filter(enventa=True)
