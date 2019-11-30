@@ -188,9 +188,15 @@ function calcular_subtotal(){
     for(i=0; i<cantidad; i++){        
         total = parseInt(document.getElementById("cantidad_"+ids[i]).innerHTML) * precio_pizza;
         elemento = document.getElementById('precio_'+ids[i]);        
-        elemento.innerText = "";                    
+        elemento.innerText = "";      
+        if(total_ingredientes[i]==undefined){
+         elemento.innerText = total; 
+         total_adicionales=0;   
+        }      
+        else{      
         total_adicionales=parseInt(document.getElementById("cantidad_"+ids[i]).innerHTML) * total_ingredientes[i];
         elemento.innerText = total+"+"+total_adicionales; 
+        }
         elemento = document.getElementById('total_'+ids[i]);
         elemento.innerText = "";
         elemento.innerText = total+total_adicionales;

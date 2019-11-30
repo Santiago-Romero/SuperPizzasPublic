@@ -10,7 +10,7 @@ from apps.pizzas.forms import FacturaForm
 from django_tenants.utils import schema_context
 from django.contrib.auth.models import User
 from apps.usuarios.models import Usuario
-from apps.pizzas.models import Pizza,Factura,Detalle
+from apps.pizzas.models import Pizza,Factura,Detalle,IngredientesA
 from apps.ingredientes.models import Ingrediente
 from tenant_schemas.utils import *
 from django.http import HttpRequest
@@ -410,7 +410,10 @@ class CartDelete(TemplateView):
         if(request.tenant.working==True):
             id_producto = request.POST.get("id_producto", "")
             cart = request.session.get('cart', {})
+            ingredientes_add= request.session.get("ingredientes_add",{})
             del cart[id_producto]
+            del ingredientes_add[id_producto]
+            request.session['ingredientes_add']=ingredientes_add
             request.session['cart'] = cart
             respuesta = {'estado': True, 'mensaje': len(cart)}
             return JsonResponse(respuesta)
@@ -446,6 +449,7 @@ class CartComprar(TemplateView):
             adicionales = self.request.session.get('ingredientes_add', "")                
             diccionario=""
             adicionales_dic="" 
+            adicionales_dict={}
             if(adicionales != ""):
                 for key,adiciones in adicionales.items():                
                     diccionario+=adiciones[1 : -1]+","                                                             
@@ -482,7 +486,16 @@ class CartComprar(TemplateView):
         if(request.tenant.working==True):
             direccion = request.POST['form2-direccion']
             ciudad= request.POST['ciudad']            
-            customer = request.user        
+            customer = request.user  
+            adicionales = self.request.session.get('ingredientes_add', "")                
+            diccionario=""
+            adicionales_dic="" 
+            adicionales_dict={}
+            if(adicionales != ""):
+                for key,adiciones in adicionales.items():                
+                    diccionario+=adiciones[1 : -1]+","                                                             
+                adicionales_dic="{"+diccionario[:-1]+"}" 
+                adicionales_dict = json.loads(adicionales_dic)      
             if customer.is_authenticated:
                 cliente = Usuario.objects.get(user_id=customer.id)
                 factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente)
@@ -506,7 +519,13 @@ class CartComprar(TemplateView):
                 detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
                                     producto_id=v['id'])
                 detalle_item.save()
+            for k, v in adicionales_dict.items():
+                adicionales_item=Ingrediente.objects.filter(id=v['id']).values()[0]
+                adicion_item=IngredientesA(cantidad=v['cantidad'],precio=adicionales_item['valor'],detalle=detalle_item,
+                ingredientes_id=v['id'])
+                adicion_item.save()
             self.request.session['cart'] = {}
+            self.request.session['ingredientes_add']={}
             #return HttpResponseRedirect(self.get_success_url())
             return HttpResponseRedirect('/compra_exitosa?id='+str(factura.id))
         else:
