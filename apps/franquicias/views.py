@@ -10,7 +10,7 @@ from apps.pizzas.forms import FacturaForm
 from django_tenants.utils import schema_context
 from django.contrib.auth.models import User
 from apps.usuarios.models import Usuario
-from apps.pizzas.models import Pizza,Factura,Detalle
+from apps.pizzas.models import Pizza,Factura,Detalle,IngredientesA
 from apps.ingredientes.models import Ingrediente
 from tenant_schemas.utils import *
 from django.http import HttpRequest
@@ -380,10 +380,15 @@ class CartListar(TemplateView):
         if(self.request.tenant.working==True):
             context = super(CartListar, self).get_context_data(**kwargs)
             franquicia = Franquicia.objects.get(schema_name=self.request.tenant.schema_name)
-            adicionales = self.request.session.get('ingredientes_add', "")
-            if(adicionales != ""):                
-                adicionales_dict = json.loads(adicionales)
-                context['adicionales']=adicionales_dict     
+            adicionales = self.request.session.get('ingredientes_add', "")                
+            diccionario=""
+            adicionales_dic="" 
+            if(adicionales != ""):
+                for key,adiciones in adicionales.items():                
+                    diccionario+=adiciones[1 : -1]+","                                                             
+                adicionales_dic="{"+diccionario[:-1]+"}" 
+                adicionales_dict = json.loads(adicionales_dic)  
+                context['adicionales']=adicionales_dict    
             context['ingredientes']= Ingrediente.objects.all() 
             context['franquicia']=self.request
             context['pizzas']=Pizza.objects.filter(enventa=True)
@@ -394,7 +399,7 @@ class CartListar(TemplateView):
             context['tamanioletraXpix'] = int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3
             context['logo'] = franquicia.media
             cart = self.request.session.get('cart', {})
-            context['productos'] = cart
+            context['productos'] = cart            
             return context
         else:
             return render(self.request,"404.html",{})
@@ -405,7 +410,10 @@ class CartDelete(TemplateView):
         if(request.tenant.working==True):
             id_producto = request.POST.get("id_producto", "")
             cart = request.session.get('cart', {})
+            ingredientes_add= request.session.get("ingredientes_add",{})
             del cart[id_producto]
+            del ingredientes_add[id_producto]
+            request.session['ingredientes_add']=ingredientes_add
             request.session['cart'] = cart
             respuesta = {'estado': True, 'mensaje': len(cart)}
             return JsonResponse(respuesta)
@@ -437,7 +445,17 @@ class CartComprar(TemplateView):
             form_factura= FacturaForm(self.request.POST or None)
             admin_franquicia = Usuario.objects.get(user_id=1)
             cliente=None
-            customer = self.request.user        
+            customer = self.request.user 
+            adicionales = self.request.session.get('ingredientes_add', "")                
+            diccionario=""
+            adicionales_dic="" 
+            adicionales_dict={}
+            if(adicionales != ""):
+                for key,adiciones in adicionales.items():                
+                    diccionario+=adiciones[1 : -1]+","                                                             
+                adicionales_dic="{"+diccionario[:-1]+"}" 
+                adicionales_dict = json.loads(adicionales_dic)  
+                context['adicionales']=adicionales_dict         
             if customer.is_authenticated:
                 form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais': customer.usuario.pais,'direccion':customer.usuario.direccion})
                 cliente = Usuario.objects.get(user_id=customer.id)
@@ -458,6 +476,7 @@ class CartComprar(TemplateView):
             context['cliente']=cliente 
             context["form2"] = form
             context['admin_franquicia']=admin_franquicia
+            context['ingredientes']= Ingrediente.objects.all() 
 
             return context
         else:
@@ -467,7 +486,16 @@ class CartComprar(TemplateView):
         if(request.tenant.working==True):
             direccion = request.POST['form2-direccion']
             ciudad= request.POST['ciudad']            
-            customer = request.user        
+            customer = request.user  
+            adicionales = self.request.session.get('ingredientes_add', "")                
+            diccionario=""
+            adicionales_dic="" 
+            adicionales_dict={}
+            if(adicionales != ""):
+                for key,adiciones in adicionales.items():                
+                    diccionario+=adiciones[1 : -1]+","                                                             
+                adicionales_dic="{"+diccionario[:-1]+"}" 
+                adicionales_dict = json.loads(adicionales_dic)      
             if customer.is_authenticated:
                 cliente = Usuario.objects.get(user_id=customer.id)
                 factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente)
@@ -490,8 +518,15 @@ class CartComprar(TemplateView):
                 producto_item = Pizza.objects.filter(id=v['id']).values()[0]
                 detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
                                     producto_id=v['id'])
-                detalle_item.save()
+                detalle_item.save()            
+            for k, v in adicionales_dict.items():
+                adicionales_item=Ingrediente.objects.filter(id=v['id']).values()[0]  
+                adicion_item=IngredientesA(cantidad=v['cantidad'],precio=adicionales_item['valor'],detalle=detalle_item,
+                ingredientes_id=v['id'])
+                adicion_item.save()
+            
             self.request.session['cart'] = {}
+            self.request.session['ingredientes_add']={}
             #return HttpResponseRedirect(self.get_success_url())
             return HttpResponseRedirect('/compra_exitosa?id='+str(factura.id))
         else:
@@ -632,12 +667,15 @@ class VentaCantidades(TemplateView):
 class IngredientesAd(TemplateView):
 
     def post(self, request):
-        if(request.tenant.working==True):            
-            ingredientes = request.POST.get("ingredientes_add", "")
-            detalles = []
-            self.request.session['ingredientes_add'] = ingredientes
+        if(request.tenant.working==True):   
+            ingredientes = request.POST.get("ingredientes_add", "") 
+            id_pizza = request.POST.get("id_producto", "")
+            ingredientes_add = request.session.get('ingredientes_add', {})
+            ingredientes_add[id_pizza] = ingredientes
+            self.request.session['ingredientes_add'] = ingredientes_add  
             respuesta = {'estado': True, }
-            return JsonResponse(respuesta)
+            return JsonResponse(respuesta)                            
+            
         else:
             return render(request,"404.html",{})
 

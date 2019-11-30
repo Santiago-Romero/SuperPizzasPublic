@@ -1,4 +1,5 @@
 from django.db import models
+from apps.ingredientes.models import Ingrediente
 
 
 class Pizza(models.Model):
@@ -26,3 +27,8 @@ class Detalle(models.Model):
     cantidad = models.PositiveIntegerField(default=1)
     precio = models.FloatField()
 
+class IngredientesA(models.Model):
+    detalle=models.ForeignKey(Detalle,on_delete=models.CASCADE)
+    ingredientes= models.ForeignKey(Ingrediente, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=0)
+    precio = models.FloatField()

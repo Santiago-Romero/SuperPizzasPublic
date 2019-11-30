@@ -29,6 +29,7 @@
                                     <tr>
                                         <th>Nombre</th>
                                         <th>Cantidad</th>
+                                        <th>ingrendientes adicionales</th>
                                         <th>Precio</th>
                                         <th>Subtotal</th>
                                     </tr>
@@ -36,11 +37,14 @@
                                     <tbody>
                                     <script type="text/javascript">
                                             var ids = []
+                                            var ids_i=[]
+                                            var total_ingredientes=[]
                                     </script>
                                     {% for key, un_producto in productos.items %}
                                     <tr>
                                         <script type="text/javascript">
                                             ids.push({{un_producto.id}});
+                                            var precio_pizza={{un_producto.valor}};                                            
                                         </script>
                                         <td>{{ un_producto.nombre }}</td>
                                         {% for key, cantidad in cantidades.items %}
@@ -50,12 +54,30 @@
                                                 </td>
                                             {% endif %}
                                         {% endfor %}
-            
-                                        <td id="precio_{{un_producto.id}}">{{ un_producto.valor}}</td>
-                                        <td id="total_{{un_producto.id}}">{{ un_producto.valor}}</td>
+                                         <td>
+                                            {% for key,adiciones in adicionales.items %} 
+                                            {%if adiciones.id_pizza == un_producto.id%}
+                                            <script type="text/javascript">
+                                                if(ids_i.indexOf({{adiciones.id_pizza}}) == -1){
+                                                ids_i.push({{adiciones.id_pizza}}); 
+                                                total_ingredientes.push({{adiciones.total}});
+                                                }
+                                            </script>                                              
+                                            {% for ingrediente in ingredientes %}
+                                            {% if adiciones.id == ingrediente.id %}                                            
+                                            {{adiciones.cantidad}}
+                                            {{ingrediente.nombre}},                                             
+                                            {%endif%}                                           
+                                            {%endfor%} 
+                                            {%endif%}                                                                                                                                 
+                                            {%endfor%}                                              
+                                         </td>
+                                        <td id="precio_{{un_producto.id}}"></td>
+                                        <td id="total_{{un_producto.id}}"></td>
                                     </tr>
                                     {% endfor %}
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td class="font-weight-bold">Total:</td>
@@ -152,55 +174,6 @@
 </html>
 
 <script type="text/javascript">
-    function clic_cantidad(e, algo, precio){
-    e.preventDefault();
-    fieldName = $(algo).attr('data-field');
-    type      = $(algo).attr('data-type');
-    var input = $("input[name='"+fieldName+"']");
-    var currentVal = parseInt(input.val());
-    if (!isNaN(currentVal)) {
-        if(type == 'minus') {
-
-            if(currentVal > input.attr('min')) {
-                input.val(currentVal - 1).change();
-            }
-            if(parseInt(input.val()) == input.attr('min')) {
-                $(algo).attr('disabled', true);
-            }
-
-        } else if(type == 'plus') {
-
-            if(currentVal < input.attr('max')) {
-                input.val(currentVal + 1).change();
-            }
-            if(parseInt(input.val()) == input.attr('max')) {
-                $(algo).attr('disabled', true);
-            }
-        }
-        cambio_cantidad(fieldName, input, precio);
-    } else {
-        input.val(0);
-    }
-}
-$('.input-number').focusin(function(){
-   $(this).data('oldValue', $(this).val());
-});
-function cambio_cantidad(id, algo, precio) {
-    minValue =  parseInt($(algo).attr('min'));
-    maxValue =  parseInt($(algo).attr('max'));
-    valueCurrent = parseInt($(algo).val());
-    if(valueCurrent > minValue) {
-        $(".btn-number[data-type='minus'][data-field='"+id+"']").removeAttr('disabled')
-    } else {
-        $(this).val($(this).data('oldValue'));
-    }
-    if(valueCurrent <= maxValue) {
-        $(".btn-number[data-type='plus'][data-field='"+id+"']").removeAttr('disabled')
-    } else {
-        $(this).val($(this).data('oldValue'));
-    }
-    calcular_subtotal(id, algo, precio)
-}
 
 $(document).ready(function() {
     calcular_subtotal();    
@@ -209,11 +182,24 @@ $(document).ready(function() {
 function calcular_subtotal(){
     var cantidad = parseInt(document.getElementById("cantidad_pedido").innerHTML);
     var total = 0;
-    for(i=0; i<cantidad; i++){
-        total = parseInt(document.getElementById("cantidad_"+ids[i]).innerHTML) * parseInt(document.getElementById("precio_"+ids[i]).innerHTML);
+    var total_i=0;
+    var total_adicionales=0;
+
+    for(i=0; i<cantidad; i++){        
+        total = parseInt(document.getElementById("cantidad_"+ids[i]).innerHTML) * precio_pizza;
+        elemento = document.getElementById('precio_'+ids[i]);        
+        elemento.innerText = "";      
+        if(total_ingredientes[i]==undefined){
+         elemento.innerText = total; 
+         total_adicionales=0;   
+        }      
+        else{      
+        total_adicionales=parseInt(document.getElementById("cantidad_"+ids[i]).innerHTML) * total_ingredientes[i];
+        elemento.innerText = total+"+"+total_adicionales; 
+        }
         elemento = document.getElementById('total_'+ids[i]);
         elemento.innerText = "";
-        elemento.innerText = total;
+        elemento.innerText = total+total_adicionales;
     }
     calcular_total();
 }
@@ -221,34 +207,13 @@ function calcular_subtotal(){
 function calcular_total(){
     var cantidad = parseInt(document.getElementById("cantidad_pedido").innerHTML);
     var suma = 0;
-    for(i=0; i<cantidad; i++){
+    for(i=0; i<cantidad; i++){        
         suma += parseInt(document.getElementById("total_"+ids[i]).innerHTML);
     }
     elemento = document.getElementById('total');
     elemento.innerText = "";
     elemento.innerText = suma;
 }
-
-function del_to_cart(event,producto){
-        event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "{% url 'cart_eliminar' %}",
-            dataType: "json",
-            async: true,
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                id_producto: JSON.stringify(producto)
-            },
-            success: function(data){
-                window.location = "{% url 'cart_listar' %}";
-                if(data.estado){
-                	document.getElementById("cantidad_pedido").innerHTML=""+data.cantidad;
-                }else{
-                }
-            }
-        });
-    }
 
     function cant_to_cart(event){
         event.preventDefault();
