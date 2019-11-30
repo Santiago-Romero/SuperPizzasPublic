@@ -521,8 +521,8 @@ class CartComprar(TemplateView):
                 detalle_item.save()            
             for k, v in adicionales_dict.items():
                 adicionales_item=Ingrediente.objects.filter(id=v['id']).values()[0]  
-                adicion_item=IngredientesA(cantidad=v['cantidad'],precio=adicionales_item['valor'],detalle=detalle_item,
-                ingredientes_id=v['id'])
+                adicion_item=IngredientesA(cantidad=v['cantidad'],precio=adicionales_item['valor'],factura=factura,
+                ingredientes_id=v['id'], producto_id=v['id_pizza'])
                 adicion_item.save()
             
             self.request.session['cart'] = {}
