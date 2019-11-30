@@ -452,7 +452,7 @@ function del_to_cart(event,producto){
             var currentVal = parseInt(input.val());
             if (currentVal !=0){ 
             item = {'id': id_ingredientes[i], 'cantidad':currentVal, 'total':total_precio,'id_pizza':pizzas_adici}
-            inputs[id_ingredientes[i]]= item;
+            inputs[pizzas_adici+""+id_ingredientes[i]]= item;
         }}
         console.log(inputs);
         $.ajax({

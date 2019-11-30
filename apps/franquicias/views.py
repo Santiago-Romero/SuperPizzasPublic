@@ -386,7 +386,7 @@ class CartListar(TemplateView):
             if(adicionales != ""):
                 for key,adiciones in adicionales.items():                
                     diccionario+=adiciones[1 : -1]+","                                                             
-                adicionales_dic="{"+diccionario[:-1]+"}" 
+                adicionales_dic="{"+diccionario[:-1]+"}"                 
                 adicionales_dict = json.loads(adicionales_dic)  
                 context['adicionales']=adicionales_dict    
             context['ingredientes']= Ingrediente.objects.all() 
@@ -412,7 +412,10 @@ class CartDelete(TemplateView):
             cart = request.session.get('cart', {})
             ingredientes_add= request.session.get("ingredientes_add",{})
             del cart[id_producto]
-            del ingredientes_add[id_producto]
+            try:
+                del ingredientes_add[id_producto]
+            except:
+                print("error key")
             request.session['ingredientes_add']=ingredientes_add
             request.session['cart'] = cart
             respuesta = {'estado': True, 'mensaje': len(cart)}
