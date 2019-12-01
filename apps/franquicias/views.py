@@ -389,8 +389,9 @@ class CartListar(TemplateView):
                 adicionales_dic="{"+diccionario[:-1]+"}"                 
                 adicionales_dict = json.loads(adicionales_dic)  
                 context['adicionales']=adicionales_dict    
-            cantidades = self.request.session.get('cantidades', {}) 
-            context['cantidades'] = json.loads(cantidades) 
+            cantidades = self.request.session.get('cantidades',"")
+            if(cantidades != ""):
+                context['cantidades'] = cantidades 
             context['ingredientes']= Ingrediente.objects.all() 
             context['franquicia']=self.request
             context['pizzas']=Pizza.objects.filter(enventa=True)
@@ -412,13 +413,11 @@ class CartDelete(TemplateView):
         if(request.tenant.working==True):
             id_producto = request.POST.get("id_producto", "")
             cart = request.session.get('cart', {})
-            ingredientes_add= request.session.get("ingredientes_add",{})
-            del cart[id_producto]
-            try:
-                del ingredientes_add[id_producto]
-            except:
-                print("error key")
-            request.session['ingredientes_add']=ingredientes_add
+            ingredientes_add= request.session.get("ingredientes_add",{})             
+            del cart[id_producto]  
+            if id_producto in ingredientes_add:
+                del ingredientes_add[id_producto]      
+            request.session['ingredientes_add']=ingredientes_add            
             request.session['cart'] = cart
             respuesta = {'estado': True, 'mensaje': len(cart)}
             return JsonResponse(respuesta)
@@ -532,6 +531,7 @@ class CartComprar(TemplateView):
             
             self.request.session['cart'] = {}
             self.request.session['ingredientes_add']={}
+            self.request.session['cantidades']={}
             #return HttpResponseRedirect(self.get_success_url())
             return HttpResponseRedirect('/compra_exitosa?id='+str(factura.id))
         else:
@@ -646,7 +646,9 @@ def factura_PDF(request, id_factura=None):
         pdf.drawString(25, line, str(ingrediente.cantidad))
         pdf.drawString(50, line, ingrediente.ingredientes.nombre)
         pdf.drawString(80,line,ingrediente.producto.nombre)
-        valor1 = int(ingrediente.cantidad)*int(ingrediente.precio)
+        for detalle in detalles:
+            if (detalle.producto.id == ingrediente.producto.id):
+                valor1 = int(ingrediente.cantidad)*int(ingrediente.precio)*int(detalle.cantidad)
         pdf.drawString(150, line, "$ "+str(valor1))
         line -= 5
         total1 += valor1
