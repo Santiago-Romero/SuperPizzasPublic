@@ -39,12 +39,13 @@
                                             var ids = []
                                             var ids_i=[]
                                             var total_ingredientes=[]
+                                            var precio_pizza=[]
                                     </script>
                                     {% for key, un_producto in productos.items %}
                                     <tr>
                                         <script type="text/javascript">
                                             ids.push({{un_producto.id}});
-                                            var precio_pizza={{un_producto.valor}};                                            
+                                            precio_pizza.push({{un_producto.valor}});                                            
                                         </script>
                                         <td>{{ un_producto.nombre }}</td>
                                       
@@ -186,12 +187,12 @@ function calcular_subtotal(){
     var total_i=0;
     var total_adicionales=0;
 
-    for(i=0; i<cantidad; i++){ 
-        if (total_ingredientes[i]!= undefined){
-                for(j=0; j<cantidad; j++){                       
+    for(i=0; i<cantidad; i++){  
+        if (total_ingredientes[i]!= undefined){                         
+                for(j=0; j<cantidad; j++){                                                              
                     if(ids_i[i]==ids[j]){    
                     total_adicionales=parseInt(document.getElementById("cantidad_"+ids[j]).innerHTML)* total_ingredientes[i]; 
-                    total = parseInt(document.getElementById("cantidad_"+ids[j]).innerHTML) * precio_pizza;
+                    total = parseInt(document.getElementById("cantidad_"+ids[j]).innerHTML) * precio_pizza[i];
                     elemento = document.getElementById('precio_'+ids[j]);        
                     elemento.innerText = "";
 		            elemento.innerText = total+"+"+total_adicionales;
@@ -204,8 +205,8 @@ function calcular_subtotal(){
          }  
 
         for (i=0;i<cantidad;i++){            
-            if(document.getElementById('total_'+ids[i]).innerHTML==""){ 
-                total = parseInt(document.getElementById("cantidad_"+ids[i]).innerHTML) * precio_pizza;
+            if(document.getElementById('total_'+ids[i]).innerHTML==""){                  
+                total = parseInt(document.getElementById("cantidad_"+ids[i]).innerHTML) * precio_pizza[i];
                 elemento = document.getElementById('precio_'+ids[i]);        
                 elemento.innerText = "";
 		        elemento.innerText = total;
@@ -228,34 +229,7 @@ function calcular_total(){
     elemento.innerText = suma;
 }
 
-    function cant_to_cart(event){
-        event.preventDefault();
-        inputs = []
-        var cantidad = parseInt(document.getElementById("cantidad_pedido").innerHTML);
-        var suma = 0;
-        for(i=0; i<cantidad; i++){
-            var input = $("input[name='"+id[i]+"']");
-            var currentVal = parseInt(input.val());
-            inputs.push(currentVal);
-        }
-        $.ajax({
-            type: "POST",
-            url: "{% url 'cart_cantidades' %}",
-            dataType: "json",
-            async: true,
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                cantidades: JSON.stringify(inputs)
-            },
-            success: function(data){
-                window.location = "{% url 'cart_comprar' %}";
-                if(data.estado){
-                	document.getElementById("cantidad_pedido").innerHTML=""+data.cantidad;
-                }else{
-                }
-            }
-        });
-    }
+
 function direccioncita(){
     var fields = $( ".form-direccion :input" ).serializeArray();
     var campos = JSON.stringify(fields);
