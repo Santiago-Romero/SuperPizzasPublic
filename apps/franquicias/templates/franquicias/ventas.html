@@ -52,29 +52,28 @@ Registro de franquicias
                                         {% widthratio detalle.cantidad 1 detalle.precio %} <br>
                                     {% endif %}
                                 {% endfor %}</td>
-                            <!---->
                             <td>{% for ingrediente in ingredientesa %}
                                     {% if ingrediente.factura.id == factura.id %}
                                         {{ingrediente.ingredientes}} <br>
                                     {% endif %}
-                                {% endfor %}-</td>
+                                {% endfor %}</td>
 
                             <td>{% for ingrediente in ingredientesa %}
                                     {% if ingrediente.factura.id == factura.id %}
                                         {{ingrediente.cantidad}} <br>
                                     {% endif %}
-                                {% endfor %}-</td>
+                                {% endfor %}</td>
                             
                             <td>{% for ingrediente in ingredientesa %}
                                     {% if ingrediente.factura.id == factura.id %}
                                         {{ingrediente.precio}} <br>
                                     {% endif %}
-                                {% endfor %}-</td>
+                                {% endfor %}</td>
                             <td>{% for ingrediente in ingredientesa %}
                                     {% if ingrediente.factura.id == factura.id %}
                                         {% widthratio ingrediente.cantidad 1 ingrediente.precio %} <br>
                                     {% endif %}
-                                {% endfor %}-</td>
+                                {% endfor %}</td>
                             {% for total in totales %}
                             {% if forloop.counter == factura.id %}
                             <td>{{total}}</td>
