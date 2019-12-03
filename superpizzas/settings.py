@@ -138,7 +138,7 @@ DATABASES = {
         'NAME': 'superpizzas',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': 'cloudataops.com',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
