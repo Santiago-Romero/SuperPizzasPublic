@@ -19,23 +19,60 @@
                             <tr>
                                 <th>Imagen</th>
                                 <th>Detalles del pedido</th>
+                                <th>Adicionales</th>
                                 <th>Cantidad</th>
-                                <th>Precio</th>
-                                <th>Subtotal</th>
+                                <th>Subtotal</th>                                
+                                <th>SUBTOTAL</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>   
                                 <script type="text/javascript">
-                                 var ids = []                                 
+                                 var ids = []  ;
+                                 var id_ingredientes=[];  
+                                 var pizzas_adici=0  ;  
+                                 var ids_i=[];
+                                 var total_ingredientes=[] ; 
+                                 var precio_pizza=[]                           
                                  </script>                             
                                 {% for pizza in enventas %}
                                 <tr> 
                                         <script type="text/javascript">
                                             ids.push({{pizza.id}});
+                                            precio_pizza.push({{pizza.valor}}); 
                                         </script>                                    
                                     <td><img src="{% get_static_prefix %}{{pizza.imagen}}" alt="Foto Producto" height="150" width="150"></td>
-                                    <td>{{ pizza.nombre }}: {{ pizza.descripcion}}</td>
+                                    <td>{{ pizza.nombre }}
+                                    <br>    
+                                    ingredientes: <br>
+                                    {% for ingrediente in pizza.ingrediente.all %}                                           
+                                    {{ingrediente.nombre}},
+                                    {% endfor %}
+                                    
+                                    <br>
+                                    </td>
+                                    <td>
+                                            {% for key,adiciones in adicionales.items %} 
+                                            {%if adiciones.id_pizza == pizza.id%}  
+                                            <script type="text/javascript">
+                                                if(ids_i.indexOf({{adiciones.id_pizza}}) == -1){
+                                                ids_i.push({{adiciones.id_pizza}}); 
+                                                total_ingredientes.push({{adiciones.total}}); 
+                                                console.log({{adiciones.total}});                                               
+                                                }
+                                            </script>  
+                                            {% for ingrediente in ingredientes %}
+                                            {% if adiciones.id == ingrediente.id %}                                                                               
+                                            {{adiciones.cantidad}}
+                                            {{ingrediente.nombre}}
+                                            <br>
+                                            {%endif%}                                           
+                                            {%endfor%} 
+                                            {%endif%}                                                                                      
+                                            {%endfor%}
+
+
+                                    </td>
                                     <td>
                                         <div class="input-group mb-3">
                                               <div class="input-group-prepend">
@@ -52,11 +89,29 @@
                                               </div>
                                         </div>
                                     </td>
-                                    <td id="precio_{{pizza.id}}">{{ pizza.valor}}</td>
-                                    <td id="total_{{pizza.id}}">0</td>                                   
+                                    <td>                                     
+                                    <label id="total_{{pizza.id}}"></label>
+                                    <label>+</label>                                  
+                                    <label id="precio_ingredientes_{{pizza.id}}"></label>
+                                    </td>
+                                    <td id="total_pizza_adicional_{{pizza.id}}"></td>                                  
+                                </tr>
+                                <tr>                                                                  
+                                        <td colspan="2">
+                                            <div>                                                
+                                                <a class="bg-danger text-white" data-toggle="modal" data-target="#exampleModalCenter"onclick="pizzas_adici={{pizza.id}}" data-id="{{ pizza.id }}"> <span> Añadir ingredientes adicionales</span> 
+                                                                                               
+                                                </a>                                                
+                                              </div>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                       
                                 </tr>
                                 {% endfor  %}
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -77,6 +132,76 @@
             </div>
         </div>      
     </div>
+
+    <!--MODAL 1-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+                <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                 </div>
+            
+            <div class="modal-body">
+                    <div class="table-responsive">                        
+                            <table class="table table-hover">
+                                <thead >
+                                <tr>                                    
+                                    <th>Ingrediente</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Subtotal</th>                                  
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>                                                                  
+                                    {% for ingrediente in ingredientes %}
+                                    <script type="text/javascript">
+                                        id_ingredientes.push({{ingrediente.id}});
+                                    </script> 
+                                    <tr>                                                                       
+                                        <td>{{ ingrediente}}</td>
+                                        <td>
+                                            <div class="input-group mb-3">
+                                                  <div class="input-group-prepend">
+                                                        <span style="cursor:pointer" class="input-group-text" onclick="clic_cantidad(event,this,{{ingrediente.valor}})" data-type="minus" data-field="ig_{{ingrediente.id}}">
+                                                            <i class="fa fa-minus text-danger"></i>
+                                                        </span>
+                                                  </div>
+                                                  <input type="number" name="ig_{{ingrediente.id}}" class="form-control input-number" value="0"  min="0" max="3" disabled>
+                                                    <div class="input-group-append">
+                                                        <span style="cursor:pointer" class="input-group-text " onclick="clic_cantidad(event,this,{{ingrediente.valor}})" data-type="plus" data-field="ig_{{ingrediente.id}}">
+                                                            <i class="fa fa-plus text-success"></i>
+                                                        </span>
+                                                  </div>
+                                            </div>
+                                        </td>
+                                        <td id="precio_{{ingrediente.id}}">{{ ingrediente.valor}}</td>
+                                        <td id="total_ig_{{ingrediente.id}}">0</td>                                   
+                                    </tr>
+                                    {% endfor  %}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>                                        
+                                        <td class="font-weight-bold">Total:</td>
+                                        <td id="total_i" class="font-weight-bold"></td>                                        
+                                    </tr> 
+                            </table>
+                        </div> 
+                      
+            </div>
+            <div class="modal-footer">
+             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+             <button type="button" class="btn btn-primary " onclick="ingredientes_adicionales(event);">Guardar cambios</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
     <script src="{% static 'landing-tenant/js/jquery.min.js' %}"></script>
     <script type="text/javascript">
         function clic_cantidad(e, algo, precio){
@@ -130,31 +255,116 @@ $('.input-number').focusin(function(){
     }
     
     function calcular_subtotal(id, algo, precio){
-        var input = $("input[name='"+id+"']");
-        var currentVal = Number(input.val());
-        resultado = currentVal*precio;
-        elemento = document.getElementById('total_'+id);
-        elemento.innerText = "";
-        elemento.innerText = resultado;
-        calcular_total();
+    var input = $("input[name='"+id+"']");
+    var currentVal = Number(input.val());
+    var cantidad = {{enventas|length }}; 
+    var precio_total_i=0;
+    for(i=0; i<cantidad; i++){         
+        if (ids_i[i]==id){
+            precio_total_i=total_ingredientes[i];              
+        }    
     }
-  
+    if(precio_total_i==undefined){precio_total_i=0}
+    resultado = currentVal*precio;
+    resultado_i=currentVal*precio_total_i;  
+    totalPizza=resultado+resultado_i;
+    //
+    elemento = document.getElementById('total_'+id);
+    elemento.innerText = "";
+    elemento.innerText = resultado;
+    //
+    elemento1 = document.getElementById('precio_ingredientes_'+id);  
+    if(elemento1!=null){
+    elemento1.innerText = "";
+    elemento1.innerText = resultado_i;
+    }
+    //
+    elemento2= document.getElementById('total_pizza_adicional_'+id);
+    if (elemento2!=null){          
+    elemento2.innerText = "";
+    elemento2.innerText = totalPizza;
+    }
+    calcular_total();
+    calcular_total_i();
+}
+    
+    function subtotal_inicio(){
+    var cantidad = {{enventas|length }};      
+        var precio_ingredientes=0; 
+        var total_inicio_pizza=0;         
+        var total_adicionales=0;                    
+        for(i=0; i<cantidad; i++){   
+            var input = $("input[name='"+ids[i]+"']");
+            var currentVal = Number(input.val());  
+            total_inicio_pizza = currentVal* precio_pizza[i];    
+            elemento = document.getElementById('total_'+ids[i]);
+            elemento.innerText = "";
+            elemento.innerText = total_inicio_pizza;
+            /////////          
+            if (total_ingredientes[i]!= undefined){
+                for(j=0; j<cantidad; j++){                       
+                    if(ids_i[i]==ids[j]){    
+                    total_adicionales=currentVal * total_ingredientes[i];                      
+                    elemento1 = document.getElementById('precio_ingredientes_'+ids[j]);
+                    elemento1.innerText = "";
+                    elemento1.innerText = total_adicionales;
+                    }                                     
+                }            
+            } 
+            }         
+         for (i=0;i<cantidad;i++){            
+            if(document.getElementById('precio_ingredientes_'+ids[i]).innerHTML==""){             
+             document.getElementById('precio_ingredientes_'+ids[i]).innerText=0; 
+             var input = $("input[name='"+ids[i]+"']");
+             var currentVal = Number(input.val());              
+             total_inicio_pizza = currentVal* precio_pizza[i];    
+            }
+            elemento2 = document.getElementById('total_pizza_adicional_'+ids[i]);
+            elemento2.innerText = "";
+            elemento2.innerText = parseInt(document.getElementById("total_"+ids[i]).innerHTML)+ parseInt(document.getElementById("precio_ingredientes_"+ids[i]).innerHTML);
+                    
+         }  
+}
+
      
-   $(document).ready(function() {    
-        calcular_total();    
+   $(document).ready(function() { 
+    //valor_input_inicio();
+    subtotal_inicio();
+    calcular_total();
+    calcular_total_i();     
         
     });
     
-    function calcular_total(){        
-        var cantidad = {{enventas|length }};
-        var suma = 0;
-        for(i=0; i<cantidad; i++){
-            suma += parseInt(document.getElementById("total_"+ids[i]).innerHTML);
+    function calcular_total(){
+    var cantidad = {{enventas|length }};
+    var suma = 0;
+    for(i=0; i<cantidad; i++){
+        suma += parseInt(document.getElementById("total_pizza_adicional_"+ids[i]).innerHTML);
+    }
+    elemento = document.getElementById('total');
+    elemento.innerText = "";
+    elemento.innerText = suma;
+}   
+
+    function calcular_total_i(){
+    var cantidad = {{ingredientes|length }};    
+    var suma = 0;
+    for(i=0; i<cantidad; i++){
+        suma += parseInt(document.getElementById("total_ig_"+id_ingredientes[i]).innerHTML);        
+    }    
+    elemento = document.getElementById('total_i');
+    elemento.innerText = "";
+    elemento.innerText = suma;
+}
+
+function valor_input_inicio(){
+    var cantidad = parseInt(document.getElementById("cantidad_pedido").innerHTML);    
+    for(i=0; i<cantidad; i++){ 
+        var inputNombre = document.getElementById('input_'+ids[i]); 
+        if(cantidades[i]!=undefined){
+        inputNombre.value=cantidades[i];
         }
-        elemento = document.getElementById('total');
-        elemento.innerText = "";
-        elemento.innerText = suma;
-    }   
+}}
 
        function cant_to_cart(event){
         console.log("entro cantidad")
@@ -184,7 +394,42 @@ $('.input-number').focusin(function(){
                 window.location = "{% url 'vender_pago' %}";
             }
         });
-    }     
+    }    
+
+        function ingredientes_adicionales(event){
+        console.log("entro adicionales")
+        event.preventDefault();        
+        inputs = {}
+        var cantidad = {{ingredientes|length }};
+        var suma = 0;
+        var total_precio=document.getElementById("total_i").innerHTML;
+        for(i=0; i<cantidad; i++){
+            var item = {}
+            var input = $("input[name='"+"ig_"+id_ingredientes[i]+"']");        
+            var currentVal = parseInt(input.val());
+            if (currentVal !=0){ 
+            item = {'id': id_ingredientes[i], 'cantidad':currentVal, 'total':total_precio,'id_pizza':pizzas_adici}
+            inputs[pizzas_adici+""+id_ingredientes[i]]= item;
+        }}
+        console.log(inputs);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'ingredientes_cantidades_venta' %}",
+            dataType: "json",
+            async: true,
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                ingredientes_add_venta: JSON.stringify(inputs),
+                id_producto_venta: JSON.stringify(pizzas_adici)
+            },
+            
+            success: function(data){    
+           window.location = "{% url 'vender' %}";                    
+                            
+            }
+            
+        });
+    }  
        
     </script>
 
