@@ -682,16 +682,27 @@ def vender(request):
     else:
         if(request.user.usuario.rol=='v' and request.tenant.working==True):
             franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
+            adicionales = request.session.get('ingredientes_add_venta', "")                
+            diccionario=""
+            adicionales_dic="" 
+            adicionales_dict={}
+            if(adicionales != ""):
+                for key,adiciones in adicionales.items():                
+                    diccionario+=adiciones[1 : -1]+","                                                             
+                adicionales_dic="{"+diccionario[:-1]+"}" 
+                adicionales_dict = json.loads(adicionales_dic)                       
             context = {
                 'pizzas':Pizza.objects.all(),        
                 'enventas': Pizza.objects.filter(enventa=True),
+                'ingredientes': Ingrediente.objects.all(), 
+                'adicionales':adicionales_dict,
                 'franquicia':request,
                 'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
                 'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],
                 'tamanioletra': json.loads(franquicia.configuracion)['tamanioletra'],
                 'tamanioletraX2': int(json.loads(franquicia.configuracion)['tamanioletra'])*2,
                 'tamanioletraXpix': int(json.loads(franquicia.configuracion)['tamanioletra'])/10 +3,
-                'logo':  franquicia.media,
+                'logo':  franquicia.media,                
             }
             return render(request, 'tenant/vender.html', context)
         else:
@@ -717,10 +728,36 @@ class IngredientesAd(TemplateView):
             id_pizza = request.POST.get("id_producto", "")
             ingredientes_add = request.session.get('ingredientes_add', {})
             ingredientes_add[id_pizza] = ingredientes
-            self.request.session['ingredientes_add'] = ingredientes_add  
+            self.request.session['ingredientes_add'] = ingredientes_add              
             respuesta = {'estado': True, }
             return JsonResponse(respuesta)                            
             
+        else:
+            return render(request,"404.html",{})
+
+class IngredientesAd_venta(TemplateView):
+
+    def post(self, request):
+        if(request.tenant.working==True):   
+            ingredientes = request.POST.get("ingredientes_add_venta", "") 
+            id_pizza = request.POST.get("id_producto_venta", "")
+            ingredientes_add_venta = request.session.get('ingredientes_add_venta', {})
+            ingredientes_add_venta[id_pizza] = ingredientes
+            self.request.session['ingredientes_add_venta'] = ingredientes_add_venta            
+            respuesta = {'estado': True, }
+            return JsonResponse(respuesta)                            
+            
+        else:
+            return render(request,"404.html",{})
+
+
+def cancelar(request):
+    if request.user.is_anonymous:
+        return render(request,"404.html",{})
+    else:
+        if(request.user.usuario.rol=='v' and request.tenant.working==True):
+            request.session['ingredientes_add_venta']={}  
+            return redirect('vender')
         else:
             return render(request,"404.html",{})
 
@@ -730,6 +767,15 @@ def VenderPago(request):
     else:
         if(request.user.usuario.rol=='v' and request.tenant.working==True):
             franquicia = Franquicia.objects.get(schema_name=request.tenant.schema_name)
+            adicionales = request.session.get('ingredientes_add_venta', "")                
+            diccionario=""
+            adicionales_dic="" 
+            adicionales_dict={}
+            if(adicionales != ""):
+                for key,adiciones in adicionales.items():                
+                    diccionario+=adiciones[1 : -1]+","                                                             
+                adicionales_dic="{"+diccionario[:-1]+"}" 
+                adicionales_dict = json.loads(adicionales_dic)
             cantidades = request.session.get('cantidades_venta', {})
             cantidades_dict = json.loads(cantidades)  
             cliente=None
@@ -751,13 +797,23 @@ def VenderPago(request):
                     detalle_item = Detalle(cantidad=v['cantidad'], precio=producto_item['valor'], factura=factura,
                                         producto_id=v['id'])
                     detalle_item.save()
+
+                for k, v in adicionales_dict.items():
+                    adicionales_item=Ingrediente.objects.filter(id=v['id']).values()[0]  
+                    adicion_item=IngredientesA(cantidad=v['cantidad'],precio=adicionales_item['valor'],factura=factura,
+                    ingredientes_id=v['id'], producto_id=v['id_pizza'])
+                    adicion_item.save()
+
                 request.session['cantidades_venta'] = {}
+                request.session['ingredientes_add_venta']={}
                 messages.success(request, 'Venta realizada')
                 return redirect('vender')
             else:
                 context = {
                     'productos': pizza_item ,
                     'cantidades':cantidades_dict,
+                    'adicionales':adicionales_dict,
+                    'ingredientes': Ingrediente.objects.all(),
                     'franquicia':request,
                     'colorprimario': json.loads(franquicia.configuracion)['colorprimario'],
                     'colorsecundario': json.loads(franquicia.configuracion)['colorsecundario'],

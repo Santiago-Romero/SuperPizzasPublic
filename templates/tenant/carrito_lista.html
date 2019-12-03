@@ -18,6 +18,7 @@
                                     <tr>
                                         <th>Imagen</th>
                                         <th>Detalles del pedido</th>
+                                        <th>Adicionales</th>                                        
                                         <th>Cantidad</th>
                                         <th>Precio</th>
                                         <th>Subtotal</th>
@@ -28,8 +29,7 @@
                                     <tbody>
                                     <script type="text/javascript">
                                             var ids = []
-                                            var id_ingredientes=[]
-                                            var precio_i=0 
+                                            var id_ingredientes=[]                                            
                                             var pizzas_adici=0  
                                             var ids_i=[]
                                             var total_ingredientes=[]  
@@ -43,9 +43,10 @@
                                             precio_pizza.push({{un_producto.valor}});                                                                                                                                                                   
                                         </script>                                      
                                         <td><img src="{% get_static_prefix %}{{un_producto.imagen}}" alt="Foto Producto" height="150" width="150"></td>
-                                        <td>{{ un_producto.nombre }}: {{ un_producto.descripcion}}
+                                        <td><u>{{ un_producto.nombre }}:</u><br>
+                                             {{ un_producto.descripcion}}
                                             <br>    
-                                            ingredientes:                                          
+                                            ingredientes:                                                                                  
                                             {% for pizza in pizzas %}                 
                                             {% if un_producto.id == pizza.id%}       
                                             {% for ingrediente in pizza.ingrediente.all %}                                           
@@ -53,26 +54,28 @@
                                             {% endfor %}
                                             {%endif%}    
                                             {%endfor%}
-                                            <br>
-                                            adicionales:                                               
-                                            {% for key,adiciones in adicionales.items %} 
-                                            {%if adiciones.id_pizza == un_producto.id%}  
-                                            <script type="text/javascript">
-                                                if(ids_i.indexOf({{adiciones.id_pizza}}) == -1){
-                                                ids_i.push({{adiciones.id_pizza}}); 
-                                                total_ingredientes.push({{adiciones.total}});
-                                                precio_i={{adiciones.total}};
-                                                }
-                                            </script>  
-                                            {% for ingrediente in ingredientes %}
-                                            {% if adiciones.id == ingrediente.id %}                                            
-                                            {{adiciones.cantidad}}
-                                            {{ingrediente.nombre}}, 
-                                            {%endif%}                                           
-                                            {%endfor%} 
-                                            {%endif%}                                                                                      
-                                            {%endfor%}   
-                                        </td>     
+                                        </td> 
+                                        <td>
+                                                {% for key,adiciones in adicionales.items %} 
+                                                {%if adiciones.id_pizza == un_producto.id%}  
+                                                <script type="text/javascript">
+                                                    if(ids_i.indexOf({{adiciones.id_pizza}}) == -1){
+                                                    ids_i.push({{adiciones.id_pizza}}); 
+                                                    total_ingredientes.push({{adiciones.total}});                                                
+                                                    }
+                                                </script>  
+                                                {% for ingrediente in ingredientes %}
+                                                {% if adiciones.id == ingrediente.id %}                                            
+                                                {{adiciones.cantidad}}
+                                                {{ingrediente.nombre}}
+                                                <br>
+                                                {%endif%}                                           
+                                                {%endfor%} 
+                                                {%endif%}                                                                                      
+                                                {%endfor%}   
+
+
+                                        </td>    
                                         
                                         {% for key, cantidad in cantidades.items %}
                                         {% if cantidad.id == un_producto.id %}
@@ -100,8 +103,7 @@
                                         <td>{{ un_producto.valor}}</td>
                                         <td >
                                         <label id="total_{{un_producto.id}}"></label>  
-                                        <br>
-                                        <br>                                                                               
+                                        <label>+</label>                                                                              
                                         <label id="precio_ingredientes_{{un_producto.id}}"></label>
                                         </td>
                                         <td id="total_pizza_adicional_{{un_producto.id}}"></td>
@@ -111,9 +113,8 @@
                                             </a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td></td>
-                                            <td>
+                                    <tr>                                        
+                                        <td colspan="2">
                                                 <div>
                                                         <span class="text-danger"> Desea añadir ingredientes adicionales? </span>
                                                         <a class="btn btn-danger float-right mb-3 mr-2" data-toggle="modal" data-target="#exampleModalCenter"onclick="pizzas_adici={{un_producto.id}}" data-id="{{ un_producto.id }}"> <span> Si </span> 
@@ -121,10 +122,12 @@
                                                         </a>                                                
                                                       </div>
                                             </td>
-                                            
+                                            <td></td>
+                                            <td></td>
                                     </tr>
                                     {% endfor %}
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
