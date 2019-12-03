@@ -133,9 +133,8 @@ $.ajaxSetup({
 
             'form2-numero_tarjeta' : {
                 required: true,  
-                rangelength: [15, 16],
-                number:true,                
-                                                             
+                number:true,  
+                rangelength: [15, 16],                              
             },
 
             'form2-tipo_tarjeta' : {
