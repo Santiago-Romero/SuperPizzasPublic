@@ -896,21 +896,28 @@ def ventas(request):
             facturas=Factura.objects.all()
             detalles=Detalle.objects.all()
             ingredientesa=IngredientesA.objects.all()
-            losdetalles=0
-            losingredientes=0
+            total1=0
+            valor2=0
+            valor2=0
+            total2=0
             #totales={}
             totales=[]
+            cantidadp=1
+            vez=0
             for factura in facturas:
                 for detalle in detalles:
-                    if(detalle.factura.id==factura.id):
-                        losdetalles+=detalle.cantidad*detalle.precio
+                    if(detalle.factura.id == factura.id):
+                        valor1 = int(detalle.cantidad)*int(detalle.precio)
+                        total1 += valor1
                 for ingrediente in ingredientesa:
-                    if(ingrediente.factura.id==factura.id):
-                        losingredientes+=ingrediente.cantidad*ingrediente.precio
-                #totales.update( {str(factura.id) : losdetalles+losingredientes} )
-                totales.append(losdetalles+losingredientes)
-                losdetalles=0
-                losingredientes=0
+                    if(ingrediente.factura.id == factura.id):
+                        for detalle in detalles:
+                            if (detalle.producto.id == ingrediente.producto.id and detalle.factura.id == ingrediente.factura.id):
+                                valor2 = int(ingrediente.cantidad)*int(ingrediente.precio)*int(detalle.cantidad)
+                        total1 += valor2
+                totales.append(total1+total2)
+                total1=0
+                total2=0  
             context={'facturas':facturas,'detalles':detalles,'ingredientesa':ingredientesa,'totales':totales}
             return render(request,'franquicias/ventas.html',context)
         else:
