@@ -100,11 +100,6 @@ $.ajaxSetup({
                           }
                       }
                     },
-            },
-
-            'form2-pais' : {
-                required: true,
-                lettersonly:true,
             }, 
 
             'form3-username' : {
@@ -195,11 +190,6 @@ $.ajaxSetup({
                 remote: jQuery.validator.format("El email {0} ya está siendo usado"),
                 email: "Por favor digite un email válido!"
             },
-
-            'form2-pais' : {
-                required : "Por favor elija su país",
-                lettersonly: "Solo se permiten caracteres alfabéticos",
-            }, 
 
             'form3-username' : {
                 required : "Por favor digite su usuario",

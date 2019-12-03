@@ -7,7 +7,6 @@
 - django-tenant-schemas
 - django-allauth
 - pillow
-- django-countries
 - django-recaptcha
 - reportlab
 - *(usar **`pip install -r requirements.txt`** para ello)*

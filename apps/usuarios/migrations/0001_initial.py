@@ -4,7 +4,6 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-import django_countries.fields
 
 
 class Migration(migrations.Migration):
@@ -20,15 +19,14 @@ class Migration(migrations.Migration):
             name='Usuario',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cc', models.BigIntegerField(default=1234567890)),
-                ('telefono', models.BigIntegerField(default=1234567890)),
-                ('pais', django_countries.fields.CountryField(default='CO', max_length=2)),
+                ('cc', models.BigIntegerField()),
+                ('telefono', models.BigIntegerField()),
                 ('nombre_banco', models.CharField(choices=[('bancolombia', 'Bancolombia'), ('davivienda', 'Davivienda'), ('bogota', 'Banco de Bogotá'), ('bbva', 'BBVA')], default='bancolombia', max_length=50)),
                 ('fecha_vencimiento', models.DateField(default=django.utils.timezone.now)),
                 ('tipo_tarjeta', models.CharField(choices=[('visa', 'Visa'), ('master', 'Master Card')], default='visa', max_length=50)),
-                ('numero_tarjeta', models.BigIntegerField(default=123456789012345)),
-                ('cvv', models.IntegerField(default=123)),
-                ('direccion', models.CharField(blank=True, default='calle 100 100 av 100', max_length=200, null=True)),
+                ('numero_tarjeta', models.BigIntegerField()),
+                ('cvv', models.IntegerField()),
+                ('direccion', models.CharField(blank=True, max_length=200, null=True)),
                 ('rol', models.CharField(choices=[('d', 'Digitador'), ('v', 'Vendedor'), ('a', 'Admin'), ('c', 'Cliente')], max_length=1)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('fecha_creacion', models.DateField(auto_now_add=True)),

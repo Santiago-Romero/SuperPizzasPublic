@@ -14,7 +14,6 @@ class UsuarioForm(forms.ModelForm):
         fields = [
         'cc',
         'telefono',
-        'pais',
         'direccion',
         'nombre_banco',
         'fecha_vencimiento',
@@ -35,7 +34,6 @@ class UsuarioForm2(forms.ModelForm):
         fields = [
         'cc',
         'telefono',
-        'pais',
         'direccion',
         'nombre_banco',
         'fecha_vencimiento',

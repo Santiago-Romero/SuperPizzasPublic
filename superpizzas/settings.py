@@ -52,9 +52,6 @@ SHARED_APPS = (
     #provider google
 
     'allauth.socialaccount.providers.google',
-
-    #countries
-    'django_countries',
     
 )
 
@@ -84,9 +81,6 @@ TENANT_APPS = (
     #provider google
 
     'allauth.socialaccount.providers.google',
-    
-    #countries 
-    'django_countries',
     # your tenant-specific apps
 )
 

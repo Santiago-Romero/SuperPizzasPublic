@@ -94,11 +94,7 @@
                             </tbody>
                             <h4>Dirección de envío:</h4>
                             <form class="form-horizontal form-direccion" method="POST" enctype="multipart/form-data" onsubmit="direccioncita()">
-                                {% csrf_token %}                                  
-                                <div class="form-group mx-sm-3 mb-2">                               
-                                {%  bootstrap_field form2.pais layout="horizontal"%}                                
-                               
-                                </div>
+                                {% csrf_token %}
 
                                 <div class="form-group mx-sm-3 mb-2">                                
                                 {%  bootstrap_field form.ciudad layout="horizontal" %}                               
