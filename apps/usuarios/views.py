@@ -52,6 +52,7 @@ def gestionar_usuario(request, id_usuario=None):
                             user.last_name = request.POST['last_name']
                             user.email = request.POST['email']
                             user.username = request.POST['email']
+                            user.set_password(request.POST['password1'])
                             user.save()
                             messages.success(request, 'Usuario actualizado correctamente')
                             form = UsuarioForm2()

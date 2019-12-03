@@ -25,7 +25,6 @@
                             <label for="" class="form-label required">Email</label>
                             {{ form2.email }}
                         </div>
-                        {% if flag %}
                         <div class="form-group">
                             <label class="form-label required">Contraseña</label>
                             {{ form2.password1 }}
@@ -34,7 +33,6 @@
                             <label class="form-label required">Confirme Contraseña</label>
                             {{ form2.password2 }}
                         </div> 
-                        {% endif %}
                         
                         {% bootstrap_form form %}
                         
