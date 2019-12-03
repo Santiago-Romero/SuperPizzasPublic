@@ -25,7 +25,7 @@ SECRET_KEY = '-rbu5i_pp=89l1$s6+42q0e*(0er@8ku)9q(hq8vb1re#&+5_^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.localhost']
+ALLOWED_HOSTS = ['.cloudataops.com']
 
 SHARED_APPS = (
     'django_tenants',  # obligatorio
@@ -138,7 +138,7 @@ DATABASES = {
         'NAME': 'superpizzas',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'HOST': 'cloudataops.com',
         'PORT': '5432',
     }
 }
@@ -147,7 +147,7 @@ DATABASE_ROUTERS = (
     'django_tenants.routers.TenantSyncRouter',
 )
 
-DOMAIN = '.localhost'
+DOMAIN = '.cloudataops.com'
 
 
 # Password validation

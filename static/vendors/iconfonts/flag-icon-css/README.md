@@ -60,7 +60,7 @@ To build `*.less` files
 $ grunt build
 ```
 
-To serve it on `localhost:8000`
+To serve it on `cloudataops.com`
 
 ```bash
 $ grunt connect

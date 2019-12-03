@@ -14,7 +14,7 @@ def insertarDatos(apps, schema_editor):
 	 FrPublic = franquicia(schema_name = "public", nombre = "public", tipo_id = 1)
 	 FrPublic.save()
 	 dominio = apps.get_model('franquicias', 'dominio')
-	 DoGral = dominio(domain = "localhost", is_primary = True, tenant_id = 1)
+	 DoGral = dominio(domain = "cloudataops.com", is_primary = True, tenant_id = 1)
 	 DoGral.save()
 		 
 		 
