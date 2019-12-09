@@ -7,8 +7,7 @@ from django.conf.urls import url
 urlpatterns = [
     path('', inicio_tenants, name='inicio_t'),
     path('admin/', home, name='home'),
-    path('login/', inicio_sesion,name='login'), 
-    path('accounts/', include('allauth.urls')),
+    path('login/', inicio_sesion,name='login'),     
     path('', include('social_django.urls', namespace='social')),
     path('cerrar_sesion/',cerrar_sesion, name='cerrar_sesion'),
     path('admin/pizzas/', include('apps.pizzas.urls', namespace='pizzas')),
