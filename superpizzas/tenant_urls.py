@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', home, name='home'),
     path('login/', inicio_sesion,name='login'), 
     path('accounts/', include('allauth.urls')),
+    path('', include('social_django.urls', namespace='social')),
     path('cerrar_sesion/',cerrar_sesion, name='cerrar_sesion'),
     path('admin/pizzas/', include('apps.pizzas.urls', namespace='pizzas')),
     path('admin/usuarios/', include('apps.usuarios.urls', namespace='usuarios')),

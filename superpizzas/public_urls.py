@@ -8,6 +8,7 @@ urlpatterns = [
     path('', inicio_franquicia, name='inicio'),
     path('compra/<str:tipo>', compra_franquicia, name='compra'),
     path('accounts/', include('allauth.urls')),
+    path('', include('social_django.urls', namespace='social')),
     path('admin/', home_admin, name='home'),
     #path('admin/',admin.site.urls),
     path('login/', inicio_sesion_admin,name='login'), 
