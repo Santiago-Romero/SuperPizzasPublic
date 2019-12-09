@@ -6,8 +6,7 @@ from apps.usuarios.views import inicio_sesion_admin, cerrar_sesion, check_email
 
 urlpatterns = [
     path('', inicio_franquicia, name='inicio'),
-    path('compra/<str:tipo>', compra_franquicia, name='compra'),
-    path('accounts/', include('allauth.urls')),
+    path('compra/<str:tipo>', compra_franquicia, name='compra'),    
     path('', include('social_django.urls', namespace='social')),
     path('admin/', home_admin, name='home'),
     #path('admin/',admin.site.urls),

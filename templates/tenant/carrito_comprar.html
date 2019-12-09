@@ -12,7 +12,9 @@
                             <h2>Realizar el pedido</h2>
                             {% if user.is_authenticated%}
                             {% else %}
+                            {% if not backends.associated %}
                             <h5>Estas realizando el pedido como invitado. ¿Tienes una cuenta en Superpizzas {{request.tenant.nombre}}? <a href="{% url 'login' %}">Inicia Sesión</a> o <a href="{% url 'registro' %}">Regístrate</a></h5>
+                            {% endif %}                           
                             {% endif %}
             
                             <br>

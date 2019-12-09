@@ -1,7 +1,6 @@
 {% block body %}
 {% load static %}
-{% load socialaccount %}
-{% providers_media_js %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,8 +46,7 @@
         </div><br>
         <div class="submit-row">
             <label>&nbsp;</label><input class="btn btn-primary" type="submit" value="Entrar" />
-           <!-- <label>&nbsp;</label><input class="btn btn-second" style="background-color: {{ colorsecundario }} !important;" type="button" value="Inicia sesión con google"  onclick="location.href='{% provider_login_url 'google' %}';"/>-->
-          <!-- <label>&nbsp;</label><input class="btn btn-second" style="background-color: {{ colorsecundario }} !important;" type="button" value="Inicia sesión con google"  onclick="location.href='{% url "social:begin" "google-oauth2" %}';"/>-->
+        <!--   <label>&nbsp;</label><input class="btn btn-second" style="background-color: {{ colorsecundario }} !important;" type="button" value="Inicia sesión con google"  onclick="location.href='{% url "social:begin" "google-oauth2" %}';"/>-->
         </div>
     </form> 
   </div>

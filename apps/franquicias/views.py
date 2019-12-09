@@ -461,8 +461,9 @@ class CartComprar(TemplateView):
                 adicionales_dict = json.loads(adicionales_dic)  
                 context['adicionales']=adicionales_dict         
             if customer.is_authenticated:
-                form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais': customer.usuario.pais,'direccion':customer.usuario.direccion})
-                cliente = Usuario.objects.get(user_id=customer.id)
+                if not user.social_auth.exists():
+                    form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais': customer.usuario.pais,'direccion':customer.usuario.direccion})
+                    cliente = Usuario.objects.get(user_id=customer.id)
             else:
                 form = UsuarioForm(self.request.POST or None,prefix="form2")
             context["form"] = form_factura
@@ -500,10 +501,10 @@ class CartComprar(TemplateView):
                     diccionario+=adiciones[1 : -1]+","                                                             
                 adicionales_dic="{"+diccionario[:-1]+"}" 
                 adicionales_dict = json.loads(adicionales_dic)      
-            if customer.is_authenticated:
+            if customer.is_authenticated:   
                 cliente = Usuario.objects.get(user_id=customer.id)
                 factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente)
-                factura.save()
+                factura.save()                
             else:
                 if not User.objects.filter(email="anonimo@superpizzas.com").exists():
                     user_anonimo = User(username='anonimo@superpizzas.com',password="V7IyWywC9JZyno", email='anonimo@superpizzas.com', first_name='anonimo', last_name='anonimo')
