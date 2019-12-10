@@ -28,8 +28,13 @@ Registro de usuarios
                         <td>{{ usuario.username }}</td>
                         <td>{{ usuario.first_name }}</td>
                         <td>{{ usuario.last_name }}</td>
-                        <td>{{ usuario.usuario.fecha_creacion }}</td>
+                        <td>{% if usuario.usuario.id != '' %}
+                            {{ usuario.usuario.fecha_creacion }}
+                            {% else %}
+                            -
+                            {% endif %}</td>
                         <td>
+                            {% if usuario.usuario.id != '' %}
                             <div class="dropdown">
                                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -42,6 +47,9 @@ Registro de usuarios
                                         href="{% url 'usuarios:eliminar' usuario.id %}">Eliminar</a>
                                 </div>
                             </div>
+                            {% else %}
+                            -
+                            {% endif %}
                         </td>
                     </tr>
                     {% endif %}
