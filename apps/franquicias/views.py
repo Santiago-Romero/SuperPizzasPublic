@@ -460,11 +460,13 @@ class CartComprar(TemplateView):
                 adicionales_dic="{"+diccionario[:-1]+"}" 
                 adicionales_dict = json.loads(adicionales_dic)  
                 context['adicionales']=adicionales_dict
-            form=None 
+            
             if customer.is_authenticated:
                 if not self.request.user.social_auth.exists():
                     form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais':customer.usuario.pais,'direccion':customer.usuario.direccion})
                     cliente = Usuario.objects.get(user_id=customer.id)
+                else:
+                    form = UsuarioForm(self.request.POST or None,prefix="form2")
             else:
                 form = UsuarioForm(self.request.POST or None,prefix="form2")
             
