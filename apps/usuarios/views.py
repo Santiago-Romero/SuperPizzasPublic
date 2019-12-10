@@ -17,7 +17,7 @@ def gestionar_usuario(request, id_usuario=None):
         return render(request,"404.html",{})
     else:
         if(request.user.usuario.rol=='a' and request.tenant.working==True):
-            usuarios = User.objects.all()
+            usuarios = Usuario.objects.all()
             usuario = None
             if request.method == 'POST':
                 print(" ESTÁ POST -------------------")
