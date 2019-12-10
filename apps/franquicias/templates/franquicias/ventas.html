@@ -31,7 +31,7 @@ Registro de franquicias
                 <tbody>
                         {% for factura in facturas %}
                         <tr>
-                            <td>{{factura.cliente}}</td>
+                            <td>{{factura.cliente.user}}</td>
                             <td>{% for detalle in detalles %}
                                     {% if detalle.factura.id == factura.id %}
                                         {{detalle.producto}} <br>
