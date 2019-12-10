@@ -59,8 +59,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for usuario in usuarios %}
-                                {% if usuario.usuario.rol != 'c'%}
+                                {% for usuario in usuarios %}                               
+                                {% if usuario.usuario.rol != 'c' and usuario.usuario.id != ''%}
                                     <tr>
                                         <td>{{ usuario.username }}</td>
                                         <td>{{ usuario.first_name }}</td>
@@ -73,9 +73,10 @@
                                                         aria-haspopup="true" aria-expanded="false">
                                                     Opciones
                                                 </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="{% url 'usuarios:modificar' usuario.usuario.id %}">Modificar</a>
-                                                    <a class="dropdown-item" href="{% url 'usuarios:eliminar' usuario.usuario.id %}">Eliminar</a>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">                                                     
+                                                 <a class="dropdown-item" href="{% url 'usuarios:modificar' usuario.usuario.id %}">Modificar</a>
+                                                 <a class="dropdown-item" href="{% url 'usuarios:eliminar' usuario.usuario.id %}">Eliminar</a>
+                                                 
                                                 </div>
                                             </div>
                                         </td>
