@@ -25,7 +25,7 @@ SECRET_KEY = '-rbu5i_pp=89l1$s6+42q0e*(0er@8ku)9q(hq8vb1re#&+5_^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.cloudataops.com']
+ALLOWED_HOSTS = ['.cloudataops.com','3.230.107.187']
 
 SHARED_APPS = (
     'django_tenants',  # obligatorio
@@ -60,13 +60,12 @@ TENANT_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'bootstrap4',
-    'rolepermissions',    
+    'rolepermissions',
+    'social_django', 
     'apps.usuarios',
     'apps.pizzas',
     'apps.ingredientes',
     'captcha',
-    #social
-    'social_django',
     # your tenant-specific apps
 )
 
