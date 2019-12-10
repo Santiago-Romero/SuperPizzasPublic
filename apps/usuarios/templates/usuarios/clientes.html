@@ -23,7 +23,7 @@ Registro de usuarios
                 </thead>
                 <tbody>
                     {% for usuario in usuarios %}
-                    {% if usuario.usuario.rol == 'c' and usuario.usuario.id == ''%}
+                    {% if usuario.usuario.rol == 'c' or usuario.usuario.id == ''%}
                     <tr>
                         <td>{{ usuario.username }}</td>
                         <td>{{ usuario.first_name }}</td>
