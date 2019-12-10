@@ -462,8 +462,8 @@ class CartComprar(TemplateView):
                 context['adicionales']=adicionales_dict
             
             if customer.is_authenticated:
-                if not self.request.user.social_auth.exists():
-                    form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais':customer.usuario.pais,'direccion':customer.usuario.direccion})
+                if not customer.social_auth.exists():
+                    form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais': customer.usuario.pais,'direccion':customer.usuario.direccion})
                     cliente = Usuario.objects.get(user_id=customer.id)
                 else:
                     form = UsuarioForm(self.request.POST or None,prefix="form2")
@@ -505,10 +505,22 @@ class CartComprar(TemplateView):
                     diccionario+=adiciones[1 : -1]+","                                                             
                 adicionales_dic="{"+diccionario[:-1]+"}" 
                 adicionales_dict = json.loads(adicionales_dic)      
-            if customer.is_authenticated:   
-                cliente = Usuario.objects.get(user_id=customer.id)
-                factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente)
-                factura.save()                
+            if customer.is_authenticated:
+                if not customer.social_auth.exists():                   
+                    cliente = Usuario.objects.get(user_id=customer.id)
+                    factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente)
+                    factura.save()    
+                else:
+                    if not User.objects.filter(email="anonimo@superpizzas.com").exists():
+                        user_anonimo = User(username='anonimo@superpizzas.com',password="V7IyWywC9JZyno", email='anonimo@superpizzas.com', first_name='anonimo', last_name='anonimo')
+                        user_anonimo.save()
+                        assign_role(user_anonimo,'cliente')
+                        cliente_anonimo = Usuario(user=user_anonimo,cc=0000000000,telefono=0000000000,pais='CO',nombre_banco='bancolombia',fecha_vencimiento='2019-11-21',tipo_tarjeta='visa',numero_tarjeta=000000000000000,cvv=000,rol='c')
+                        cliente_anonimo.save()                        
+                    usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
+                    cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
+                    factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente_anonimo)
+                    factura.save()
             else:
                 if not User.objects.filter(email="anonimo@superpizzas.com").exists():
                     user_anonimo = User(username='anonimo@superpizzas.com',password="V7IyWywC9JZyno", email='anonimo@superpizzas.com', first_name='anonimo', last_name='anonimo')
