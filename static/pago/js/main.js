@@ -146,9 +146,8 @@ $.ajaxSetup({
             'form2-cvv' : {
                 required: true,  
                 rangelength: [3,4], 
-                number:true,
-                                                             
-            },
+                number:true,                                                             
+            },            
             
          },
          

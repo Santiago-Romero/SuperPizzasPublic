@@ -511,15 +511,12 @@ class CartComprar(TemplateView):
                     factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente)
                     factura.save()    
                 else:
-                    if not User.objects.filter(email="anonimo@superpizzas.com").exists():
-                        user_anonimo = User(username='anonimo@superpizzas.com',password="V7IyWywC9JZyno", email='anonimo@superpizzas.com', first_name='anonimo', last_name='anonimo')
-                        user_anonimo.save()
-                        assign_role(user_anonimo,'cliente')
-                        cliente_anonimo = Usuario(user=user_anonimo,cc=0000000000,telefono=0000000000,nombre_banco='bancolombia',fecha_vencimiento='2019-11-21',tipo_tarjeta='visa',numero_tarjeta=000000000000000,cvv=000,rol='c')
-                        cliente_anonimo.save()                        
-                    usuario_anonimo = User.objects.get(email="anonimo@superpizzas.com")
-                    cliente_anonimo = Usuario.objects.get(user_id=usuario_anonimo.id)
-                    factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente_anonimo)
+                    if not Usuario.objects.filter(user_id=customer.id).exists():   
+                        usuario_gmail=User.objects.get(id=customer.id)                     
+                        cliente_gmail = Usuario(user=usuario_gmail,cc=0000000000,telefono=0000000000,pais='CO',nombre_banco='bancolombia',fecha_vencimiento='2019-11-21',tipo_tarjeta='visa',numero_tarjeta=000000000000000,cvv=000,rol='c')
+                        cliente_gmail.save()  
+                    cliente_login = Usuario.objects.get(user_id=customer.id)
+                    factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente_login)
                     factura.save()
             else:
                 if not User.objects.filter(email="anonimo@superpizzas.com").exists():
