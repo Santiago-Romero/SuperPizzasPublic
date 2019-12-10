@@ -108,7 +108,9 @@
                                 
                               </div>  
                               {% if user.is_authenticated%}
+                              {% if not backends.associated %}
                               Si quieres cambiar tu información de pago ve a  <a href="modificarcliente/">Mi información</a>
+                              {% endif %}    
                               {% else %}
                               <h4>Información del pago:</h4>                              
 
