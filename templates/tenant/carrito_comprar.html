@@ -114,6 +114,28 @@
                               {% if user.is_authenticated%}
                               {% if not backends.associated %}
                               Si quieres cambiar tu información de pago ve a  <a href="modificarcliente/">Mi información</a>
+                              {%else%}
+                              <h4>Información del pago:</h4>                              
+
+                              <div class="form-group mx-sm-3 mb-2">                              
+                              {%  bootstrap_field form2.nombre_banco layout="horizontal" %}
+                              </div> 
+
+                              <div class="form-group mx-sm-3 mb-2"> 
+                                {%  bootstrap_field form2.fecha_vencimiento layout="horizontal" %}
+                            </div> 
+
+                            <div class="form-group mx-sm-3 mb-2"> 
+                                    {%  bootstrap_field form2.numero_tarjeta layout="horizontal" %}
+                                </div> 
+
+                                <div class="form-group mx-sm-3 mb-2">  
+                                        {%  bootstrap_field form2.tipo_tarjeta layout="horizontal"%}
+                                    </div> 
+
+                                    <div class="form-group mx-sm-3 mb-2">  
+                                            {%  bootstrap_field form2.cvv layout="horizontal"%}
+                                        </div> 
                               {% endif %}    
                               {% else %}
                               <h4>Información del pago:</h4>                              
