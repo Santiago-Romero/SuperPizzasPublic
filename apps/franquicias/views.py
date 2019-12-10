@@ -513,7 +513,7 @@ class CartComprar(TemplateView):
                 else:
                     if not Usuario.objects.filter(user_id=customer.id).exists():   
                         usuario_gmail=User.objects.get(id=customer.id)                     
-                        cliente_gmail = Usuario(user=usuario_gmail,cc=0000000000,telefono=0000000000,pais='CO',nombre_banco='bancolombia',fecha_vencimiento='2019-11-21',tipo_tarjeta='visa',numero_tarjeta=000000000000000,cvv=000,rol='c')
+                        cliente_gmail = Usuario(user=usuario_gmail,cc=0000000000,telefono=0000000000,nombre_banco='bancolombia',fecha_vencimiento='2019-11-21',tipo_tarjeta='visa',numero_tarjeta=000000000000000,cvv=000,rol='c')
                         cliente_gmail.save()  
                     cliente_login = Usuario.objects.get(user_id=customer.id)
                     factura = Factura(direccion=direccion, ciudad=ciudad, cliente=cliente_login)
