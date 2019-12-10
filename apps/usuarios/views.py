@@ -17,10 +17,11 @@ def gestionar_usuario(request, id_usuario=None):
         return render(request,"404.html",{})
     else:
         if(request.user.usuario.rol=='a' and request.tenant.working==True):
-            usuarios = Usuario.objects.all()
+            usuarios = User.objects.all()
             usuario = None
+            
             if request.method == 'POST':
-                print(" ESTÁ POST -------------------")
+                
                 if request.POST['user']=='':
                     form = UsuarioForm2(request.POST)
                     formUserDjango = UserForm(request.POST)
@@ -31,7 +32,7 @@ def gestionar_usuario(request, id_usuario=None):
                             usuario = User(username=request.POST['email'], email=request.POST['email'], first_name=request.POST['first_name'], last_name=request.POST['last_name'])
                             usuario.set_password(request.POST['password1'])
                             usuario.save()
-                            perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol'])
+                            perfil = Usuario(user=usuario,cc=request.POST['cc'],telefono=request.POST['telefono'],pais=request.POST['pais'],nombre_banco=request.POST['nombre_banco'],fecha_vencimiento=request.POST['fecha_vencimiento'],tipo_tarjeta=request.POST['tipo_tarjeta'],numero_tarjeta=request.POST['numero_tarjeta'],cvv=request.POST['cvv'],rol=request.POST['rol'])
                             perfil.save()
                         else:
                             messages.error(request, 'Ya existe ese usuario con ese correo')
@@ -63,7 +64,7 @@ def gestionar_usuario(request, id_usuario=None):
                 
                     else:
                         messages.error(request, 'Por favor verificar los campos en rojo')
-            
+
             if id_usuario:
                 usuario = get_object_or_404(Usuario, id=id_usuario)
                 user = User.objects.get(pk=usuario.user.id)
@@ -76,7 +77,7 @@ def gestionar_usuario(request, id_usuario=None):
                 form2 = UserForm()
                 flag = 1
 
-            print(" WTFFFFFFFFFFFFFFFF ESTÄ PASANDOOO -------------------", request,form,usuario,usuarios,form2,flag)
+
             return render(request, 'usuarios/gestionar_usuario.html', {'form': form, 'usuario': usuario, 'usuarios': usuarios, 'form2':form2,'flag':flag})
         else:
             return render(request,"404.html",{})
