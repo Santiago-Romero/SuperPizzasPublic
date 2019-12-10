@@ -42,9 +42,9 @@ Registro de usuarios
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item"
-                                        href="{% url 'usuarios:modificar' usuario.id %}">Modificar</a>
+                                        href="{% url 'usuarios:modificar' usuario.usuario.id %}">Modificar</a>
                                     <a class="dropdown-item"
-                                        href="{% url 'usuarios:eliminar' usuario.id %}">Eliminar</a>
+                                        href="{% url 'usuarios:eliminar' usuario.usuario.id %}">Eliminar</a>
                                 </div>
                             </div>
                             {% else %}
