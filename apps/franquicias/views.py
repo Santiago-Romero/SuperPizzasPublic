@@ -461,7 +461,7 @@ class CartComprar(TemplateView):
                 adicionales_dict = json.loads(adicionales_dic)  
                 context['adicionales']=adicionales_dict         
             if customer.is_authenticated:
-                if not user.social_auth.exists():
+                if not self.request.user.social_auth.exists():
                     form = UsuarioForm(self.request.POST or None,prefix="form2",initial={'pais':customer.usuario.pais,'direccion':customer.usuario.direccion})
                     cliente = Usuario.objects.get(user_id=customer.id)
             else:
