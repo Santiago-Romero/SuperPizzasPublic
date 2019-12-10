@@ -15,13 +15,15 @@ import json
 def gestionar_usuario(request, id_usuario=None):
     if request.user.is_anonymous:
         return render(request,"404.html",{})
+        print(" ES ANONIMO -------------------")
     else:
+        print(" NO ES ANONIMO -----------------------")
         if(request.user.usuario.rol=='a' and request.tenant.working==True):
             usuarios = User.objects.all()
             usuario = None
-            
+            print(" ES ADMIN -------------------")
             if request.method == 'POST':
-                
+                print(" ESTÁ POST -------------------")
                 if request.POST['user']=='':
                     form = UsuarioForm2(request.POST)
                     formUserDjango = UserForm(request.POST)
@@ -64,7 +66,7 @@ def gestionar_usuario(request, id_usuario=None):
                 
                     else:
                         messages.error(request, 'Por favor verificar los campos en rojo')
-
+            
             if id_usuario:
                 usuario = get_object_or_404(Usuario, id=id_usuario)
                 user = User.objects.get(pk=usuario.user.id)
@@ -80,6 +82,7 @@ def gestionar_usuario(request, id_usuario=None):
 
             return render(request, 'usuarios/gestionar_usuario.html', {'form': form, 'usuario': usuario, 'usuarios': usuarios, 'form2':form2,'flag':flag})
         else:
+            print(" NO ES ADMIN -------------------")
             return render(request,"404.html",{})
 
 def gestionar_cliente(request):
