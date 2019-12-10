@@ -43,16 +43,6 @@ SHARED_APPS = (
     'django.contrib.staticfiles',
     'bootstrap4',
     'rolepermissions',
-
-    #allauth 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-
-    #provider google
-
-    'allauth.socialaccount.providers.google',
-
     #social
     'social_django',
     
@@ -75,15 +65,6 @@ TENANT_APPS = (
     'apps.pizzas',
     'apps.ingredientes',
     'captcha',
-
-    #allauth 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-
-    #provider google
-
-    'allauth.socialaccount.providers.google',
     #social
     'social_django',
     # your tenant-specific apps
@@ -208,8 +189,7 @@ RECAPTCHA_PRIVATE_KEY = "6LdEWMUUAAAAAJqE8EN4AKMUOnlYxXuCo6iCnG1l"
 # Django all auth settings
 
 AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
+    "django.contrib.auth.backends.ModelBackend",    
     'social_core.backends.open_id.OpenIdAuth',
     'social_core.backends.google.GoogleOpenId',
     'social_core.backends.google.GoogleOAuth2',
@@ -223,6 +203,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_by_email', 
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
