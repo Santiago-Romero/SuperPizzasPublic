@@ -63,7 +63,7 @@ def gestionar_usuario(request, id_usuario=None):
                 
                     else:
                         messages.error(request, 'Por favor verificar los campos en rojo')
-            print(" WTFFFFFFFFFFFFFFFF -------------------", id_usuario)
+            
             if id_usuario:
                 usuario = get_object_or_404(Usuario, id=id_usuario)
                 user = User.objects.get(pk=usuario.user.id)
@@ -76,7 +76,7 @@ def gestionar_usuario(request, id_usuario=None):
                 form2 = UserForm()
                 flag = 1
 
-
+            print(" WTFFFFFFFFFFFFFFFF ESTÄ PASANDOOO -------------------", request,form,usuario,usuarios,form2,flag)
             return render(request, 'usuarios/gestionar_usuario.html', {'form': form, 'usuario': usuario, 'usuarios': usuarios, 'form2':form2,'flag':flag})
         else:
             return render(request,"404.html",{})
