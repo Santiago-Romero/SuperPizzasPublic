@@ -1,4 +1,4 @@
-Django==2.2.5
+Django==2.2.10
 django-tenants==2.2.3
 psycopg2==2.8.3
 django-bootstrap4==1.0.1
