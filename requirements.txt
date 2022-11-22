@@ -5,7 +5,7 @@ django-bootstrap4==1.0.1
 django-role-permissions==2.2.1
 django-tenant-schemas==1.9.0
 django-allauth==0.40.0
-Pillow==6.2.1
+Pillow==9.3.0
 django-countries==5.5
 django-recaptcha==2.0.5
 reportlab==3.5.32
